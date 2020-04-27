@@ -1,24 +1,15 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { connect } from 'react-redux';
-import { IAppState } from '../myRedux'
 
-interface Props {
-    app: IAppState
-}
-function Index(props: Props) {
-    console.log(props.app)
+
+export default function App() {
     return (
         <View style={styles.container}>
-            <Text>Anasayfa</Text>
+            <Text>Categories</Text>
         </View>
     );
 }
 
-const mapStateToProps = (state: IAppState) => ({
-    app: state
-})
-export default connect(mapStateToProps)(Index)
 const styles = StyleSheet.create({
     container: {
         flex: 1,

@@ -1,20 +1,27 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import HomeScreen from './screens/Home'
+import CategoryScreen from './screens/CategoryScreen'
+import CampaignScreen from './screens/CampaignScreen'
+import CartScreen from './screens/CartScreen'
+import theme from './theme'
+import { Provider } from 'react-redux'
+import { store } from './myRedux'
+const Tab = createBottomTabNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-    </View>
+    <Provider store={store}>
+      <NavigationContainer theme={theme}>
+        <Tab.Navigator>
+          <Tab.Screen name="Anasayfa" component={HomeScreen} />
+          <Tab.Screen name="Kategoriler" component={CategoryScreen} />
+          <Tab.Screen name="Kampanyalar" component={CampaignScreen} />
+          <Tab.Screen name="Sepetim" component={CartScreen} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </Provider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

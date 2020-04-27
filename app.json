@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Mobile App",
-    "slug": "mobile_app",
+    "name": "Market App",
+    "slug": "market_app",
     "platforms": [
       "ios",
       "android",
