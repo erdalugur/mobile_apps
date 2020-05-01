@@ -2,10 +2,10 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 
-export default function App() {
+export default function () {
     return (
         <View style={styles.container}>
-            <Text>Cart</Text>
+            <Text>Cart!</Text>
         </View>
     );
 }
