@@ -1,6 +1,6 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import PresentationScreen from 'screens/PresentationScreen'
+import PresentationScreen from 'screens/Signin'
 import theme from 'theme'
 import { Provider } from 'react-redux'
 import { store } from 'myRedux'

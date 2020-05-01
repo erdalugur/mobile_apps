@@ -11,7 +11,8 @@ module.exports = function (api) {
             theme: './src/theme',
             myRedux: './src/myRedux',
             components: './src/components',
-            api: './src/api'
+            api: './src/api',
+            config: "./src/config"
           }
         }
       ]
