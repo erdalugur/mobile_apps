@@ -14,25 +14,25 @@ export function Text({ color, children, component = "p" }: Props) {
     let _color = color || colors.text
     switch (component) {
         case "h1":
-            fontSize = 30;
+            fontSize = 46;
             break;
         case "h2":
-            fontSize = 26;
+            fontSize = 38;
             break;
         case "h3":
-            fontSize = 22;
+            fontSize = 30;
             break;
         case "h4":
-            fontSize = 20;
+            fontSize = 24;
             break;
         case "h5":
-            fontSize = 16;
+            fontSize = 20;
             break;
         case "h6":
-            fontSize = 14;
+            fontSize = 18;
             break;
         default:
-            fontSize = 12;
+            fontSize = 14;
             break;
     }
     return (
