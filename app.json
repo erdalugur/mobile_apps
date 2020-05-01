@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Vallet",
-    "slug": "vallet",
+    "name": "Pos",
+    "slug": "pos",
     "platforms": [
       "ios",
       "android",
