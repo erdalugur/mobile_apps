@@ -1,25 +1,15 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import HomeScreen from './screens/HomeScreen'
-import CategoryScreen from './screens/CategoryScreen'
-import CampaignScreen from './screens/CampaignScreen'
-import CartScreen from './screens/CartScreen'
-import theme from './theme'
+import PresentationScreen from 'screens/PresentationScreen'
+import theme from 'theme'
 import { Provider } from 'react-redux'
-import { store } from './myRedux'
-const Tab = createBottomTabNavigator();
+import { store } from 'myRedux'
 
-export default function App() {
+export default function () {
   return (
     <Provider store={store}>
       <NavigationContainer theme={theme}>
-        <Tab.Navigator>
-          <Tab.Screen name="Anasayfa" component={HomeScreen} />
-          <Tab.Screen name="Kategoriler" component={CategoryScreen} />
-          <Tab.Screen name="Kampanyalar" component={CampaignScreen} />
-          <Tab.Screen name="Sepetim" component={CartScreen} />
-        </Tab.Navigator>
+        <PresentationScreen />
       </NavigationContainer>
     </Provider>
   );

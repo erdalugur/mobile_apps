@@ -1,6 +1,20 @@
-module.exports = function(api) {
+module.exports = function (api) {
   api.cache(true);
   return {
     presets: ['babel-preset-expo'],
+    plugins: [
+      [
+        'module-resolver',
+        {
+          alias: {
+            screens: './src/screens',
+            theme: './src/theme',
+            myRedux: './src/myRedux',
+            components: './src/components',
+            api: './src/api'
+          }
+        }
+      ]
+    ]
   };
 };

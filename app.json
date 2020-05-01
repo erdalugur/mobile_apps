@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Market",
-    "slug": "market_app",
+    "name": "Vallet",
+    "slug": "vallet",
     "platforms": [
       "ios",
       "android",
