@@ -1,7 +1,25 @@
 import React from 'react'
-import { Card, Text, View, Button, FormRow, Input } from 'components'
-import { } from 'react-native'
+import { Card, View, Button, FormRow, Input } from 'components'
+import { RouteProp } from '@react-navigation/native';
+import { StackNavigationProp } from '@react-navigation/stack';
 
+type RootStackParamList = {
+    Home: undefined;
+    Signin: { userId: string };
+    Feed: { sort: 'latest' | 'top' } | undefined;
+};
+
+type SigninScreenRouteProp = RouteProp<RootStackParamList, 'Signin'>;
+
+type ProfileScreenNavigationProp = StackNavigationProp<
+    RootStackParamList,
+    'Signin'
+>;
+
+type Props = {
+    route: SigninScreenRouteProp;
+    navigation: ProfileScreenNavigationProp;
+};
 interface State {
     username: string
     password: string
@@ -9,8 +27,9 @@ interface State {
     errors: { [key: string]: string }
 }
 
-interface Props { }
+
 export default class extends React.PureComponent<Props, State> {
+
     state: State = {
         username: "",
         password: "",
@@ -26,7 +45,10 @@ export default class extends React.PureComponent<Props, State> {
             this.setState({ errors });
             return
         } else {
-            this.setState({ loading: true, errors: {} })
+            this.setState({ loading: true, errors: {} });
+            setTimeout(() => {
+                this.props.navigation.navigate("Home", undefined);
+            }, 2000);
         }
     }
     render() {
