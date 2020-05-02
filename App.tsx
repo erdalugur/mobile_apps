@@ -1,8 +1,8 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import theme from 'theme'
-import { Provider, connect, useSelector } from 'react-redux'
-import { store, AppState, IState } from 'myRedux'
+import { Provider, useSelector } from 'react-redux'
+import { store, AppState } from 'myRedux'
 import { getCredentials } from 'api'
 import { Apploading } from 'components';
 import { RootStack } from 'navigation'
@@ -12,24 +12,34 @@ const App = () => {
   const [isLoading, setLoading] = React.useState<boolean>(true);
   const [isAuthenticated, setIsAuthenticated] = React.useState<boolean>(false);
 
+  const token = useSelector((state: AppState) => state.app.token);
+
+  React.useEffect(() => {
+    handleIsAuthenticated();
+  }, [token]);
+
   React.useEffect(() => {
     handleIsAuthenticated();
   }, []);
 
-  const token = useSelector((state: AppState) => state.app.token);
 
   async function handleIsAuthenticated() {
     let result: boolean = false;
-    let cache = await getCredentials();
-    if (cache.value != "" || token != "")
-      result = true;
-    else
-      result = false;
+    try {
+      let cache = await getCredentials();
+      console.log(cache)
+      if (cache.value != "" || token != "")
+        result = true;
+      else
+        result = false;
+    } catch (error) {
+      result = token != ""
+    }
 
     setLoading(false);
     setIsAuthenticated(result);
   }
-  console.log("app")
+
   return (
     <NavigationContainer theme={theme}>
       {isLoading ? <Apploading /> :
