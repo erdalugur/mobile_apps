@@ -4,8 +4,22 @@ import { IAction, IState, } from './types'
 const InitialState: IState = {
     token: "",
     user: null,
-    balance: 0,
-    transactions: []
+    campaign: {
+        item: null,
+        items: []
+    },
+    cart: {
+        item: null,
+        items: []
+    },
+    product: {
+        item: null,
+        items: []
+    },
+    category: {
+        item: null,
+        items: []
+    }
 }
 
 export default function (state: IState = InitialState, action: IAction): IState {

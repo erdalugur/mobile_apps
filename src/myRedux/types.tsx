@@ -11,6 +11,8 @@ export interface SingleMultiType<Single, Multi> {
 export interface IState {
     token: string
     user: any
-    transactions: any[]
-    balance: number
+    category: SingleMultiType<any, Array<any>>
+    product: SingleMultiType<any, Array<any>>
+    campaign: SingleMultiType<any, Array<any>>
+    cart: SingleMultiType<any, Array<any>>
 }

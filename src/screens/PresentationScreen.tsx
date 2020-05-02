@@ -9,14 +9,13 @@ class Presentation extends React.PureComponent<PresentationProps, any>{
     render() {
         return (
             <View full>
-                {/* <Header {...props} /> */}
                 <View style={styles.container}>
                     <Card style={{ padding: 50 }}>
                         <Text component="h2">Presentation</Text>
                     </Card>
-                    <Button onPress={() => this.props.navigation.goBack()}>
+                    <Button onPress={() => this.props.navigation.navigate("Home")}>
                         Button
-            </Button>
+                    </Button>
                 </View>
             </View>
         );

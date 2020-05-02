@@ -35,6 +35,7 @@ class Index extends React.PureComponent<Props, State> {
             this.setState({ loading: true, errors: {} });
             await setCredentials("yes");
             this.props.setToken("yes");
+            this.props.navigation.goBack();
         }
     }
     render() {

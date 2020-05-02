@@ -2,6 +2,8 @@ import React from 'react';
 import PresentationScreen from 'screens/PresentationScreen'
 import HomeScreen from 'screens/HomeScreen'
 import SigninScreen from 'screens/SigninScreen'
+import { SignUpScreen } from 'screens/SignupScreen'
+
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import NotificationScreen from 'screens/NotificationScreen';
@@ -9,8 +11,9 @@ import SearchScreen from 'screens/SearchScreen';
 import CartScreen from 'screens/CartScreen'
 import ProfileScreen from 'screens/ProfileScreen';
 import { AntDesign } from '@expo/vector-icons';
-import { HomeOptions, ProfileOptions, CartOptions, NotificationOptions, SearchOptions } from './options'
-import { Text, CartButton } from 'components'
+import { HomeOptions, ProfileOptions, NotificationOptions, SearchOptions } from './options'
+import { CartButton } from 'components'
+import theme from 'theme';
 export const HomeStack = createStackNavigator();
 export const HomeStackScreen = () => (
     <HomeStack.Navigator screenOptions={{
@@ -61,11 +64,9 @@ const NotificationStackScreen = () => (
 const Tab = createBottomTabNavigator();
 
 
-interface Props {
-    isAuthenticated: boolean
-}
+
 export const HomeTabs = () => (
-    <Tab.Navigator>
+    <Tab.Navigator tabBarOptions={{ activeTintColor: theme.colors.text }}>
         <Tab.Screen
             options={{
                 title: "Anasayfa",
@@ -99,11 +100,25 @@ const CartStackScreen = () => (
         />
     </CartStack.Navigator>
 )
+
+const AuthStack = createStackNavigator();
+const AuthStackScreen = () => (
+    <AuthStack.Navigator headerMode="none">
+        <AuthStack.Screen
+            name="Signin" component={SigninScreen}
+        />
+        <AuthStack.Screen
+            name="Signup" component={SignUpScreen}
+        />
+    </AuthStack.Navigator>
+)
+
 const RootStack = createStackNavigator();
+interface Props {
+    isAuthenticated: boolean
+}
 export const App = (props: Props) => (
     <RootStack.Navigator headerMode="none">
-        <RootStack.Screen name="Home" component={HomeTabs} />
-        <RootStack.Screen name="Profile" component={ProfileScreen} />
         <RootStack.Screen
             options={{
                 header: () => null
@@ -111,6 +126,8 @@ export const App = (props: Props) => (
             name="Presentation"
             component={PresentationScreen}
         />
+        <RootStack.Screen name="Home" component={HomeTabs} />
+        <RootStack.Screen name="Profile" component={ProfileScreen} />
         <RootStack.Screen
             name="Cart"
             component={CartStackScreen}
@@ -121,6 +138,13 @@ export const App = (props: Props) => (
             }}
             component={NotificationStackScreen}
             name="Notification" />
+        <RootStack.Screen
+            options={{
+                title: "Kampanyalar",
+            }}
+            component={AuthStackScreen}
+            name="Signin" />
+
     </RootStack.Navigator>
 )
 
