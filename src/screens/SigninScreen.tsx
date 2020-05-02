@@ -1,11 +1,10 @@
 import React from 'react'
 import { Card, View, Button, FormRow, Input, Text } from 'components'
-import { RouteProp, NavigationProp, CommonActions } from '@react-navigation/native';
-import { StackNavigationProp, } from '@react-navigation/stack';
 import { setCredentials } from 'api';
 import { connect } from 'react-redux';
 import { AppState } from 'myRedux';
 import { Dispatch } from 'redux';
+import { NavigationProps } from 'types';
 
 interface State {
     username: string
@@ -14,8 +13,7 @@ interface State {
     errors: { [key: string]: string }
 }
 
-interface Props {
-    navigation: NavigationProp<any>
+interface Props extends NavigationProps {
     setToken: (token: string) => void
 }
 class Index extends React.PureComponent<Props, State> {
@@ -68,12 +66,8 @@ class Index extends React.PureComponent<Props, State> {
         )
     }
 }
-const mapStateToProps = (state: AppState) => ({
-    app: state.app,
-    isAuthenticated: () => state.app.token != ""
-})
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
     setToken: (token: string) => dispatch({ type: "SET_TOKEN", payload: token })
 })
-export default connect(mapStateToProps, mapDispatchToProps)(Index)
+export default connect(null, mapDispatchToProps)(Index)
