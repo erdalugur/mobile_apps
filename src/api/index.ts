@@ -181,8 +181,9 @@ export async function runScript(param: IScript) {
 
 
 
-export async function getCredentials(): Promise<{ token: string }> {
-    const data = await AsyncStorage.getItem("token");
+export async function getCredentials(): Promise<{ name: string, value: string, expiryDate: number }> {
+    let token: string = "token";
+    const data = await AsyncStorage.getItem(token);
     return new Promise((resolve, reject) => {
         if (data) {
             try {
@@ -190,13 +191,25 @@ export async function getCredentials(): Promise<{ token: string }> {
                 if (new Date().getTime() <= result.expiryDate) {
                     return resolve(result)
                 } else {
-                    return reject("expiry date");
+                    return reject({
+                        value: "",
+                        expiryDate: 0,
+                        name: token
+                    })
                 }
             } catch (error) {
-                return reject(error)
+                return reject({
+                    value: "",
+                    expiryDate: 0,
+                    name: token
+                })
             }
         } else {
-            return reject("token is missing")
+            return reject({
+                value: "",
+                expiryDate: 0,
+                name: token
+            })
         }
     })
 }

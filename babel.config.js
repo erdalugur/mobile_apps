@@ -12,7 +12,9 @@ module.exports = function (api) {
             myRedux: './src/myRedux',
             components: './src/components',
             api: './src/api',
-            config: "./src/config"
+            config: "./src/config",
+            context: "./src/context",
+            navigation: "./src/navigation"
           }
         }
       ]

@@ -1,25 +1,12 @@
 import React from 'react'
-import { Card, View, Button, FormRow, Input } from 'components'
-import { RouteProp } from '@react-navigation/native';
-import { StackNavigationProp } from '@react-navigation/stack';
+import { Card, View, Button, FormRow, Input, Text } from 'components'
+import { RouteProp, NavigationProp, CommonActions } from '@react-navigation/native';
+import { StackNavigationProp, } from '@react-navigation/stack';
+import { setCredentials } from 'api';
+import { connect } from 'react-redux';
+import { AppState } from 'myRedux';
+import { Dispatch } from 'redux';
 
-type RootStackParamList = {
-    Home: undefined;
-    Signin: { userId: string };
-    Feed: { sort: 'latest' | 'top' } | undefined;
-};
-
-type SigninScreenRouteProp = RouteProp<RootStackParamList, 'Signin'>;
-
-type ProfileScreenNavigationProp = StackNavigationProp<
-    RootStackParamList,
-    'Signin'
->;
-
-type Props = {
-    route: SigninScreenRouteProp;
-    navigation: ProfileScreenNavigationProp;
-};
 interface State {
     username: string
     password: string
@@ -27,9 +14,11 @@ interface State {
     errors: { [key: string]: string }
 }
 
-
-export default class extends React.PureComponent<Props, State> {
-
+interface Props {
+    navigation: NavigationProp<any>
+    setToken: (token: string) => void
+}
+class Index extends React.PureComponent<Props, State> {
     state: State = {
         username: "",
         password: "",
@@ -46,9 +35,8 @@ export default class extends React.PureComponent<Props, State> {
             return
         } else {
             this.setState({ loading: true, errors: {} });
-            setTimeout(() => {
-                this.props.navigation.navigate("Home", undefined);
-            }, 2000);
+            await setCredentials("yes");
+            this.props.setToken("yes");
         }
     }
     render() {
@@ -70,8 +58,22 @@ export default class extends React.PureComponent<Props, State> {
                     <FormRow style={{ marginBottom: 10, marginTop: 10 }}>
                         <Button loading={this.state.loading} onPress={this.submit}>Sign In</Button>
                     </FormRow>
+                    <FormRow style={{ borderWidth: 0 }}>
+                        <Button size="small" onPress={() => this.props.navigation.navigate("Signup")}>
+                            Buradan kayıt olabilirsiniz
+                        </Button>
+                    </FormRow>
                 </Card>
             </View>
         )
     }
 }
+const mapStateToProps = (state: AppState) => ({
+    app: state.app,
+    isAuthenticated: () => state.app.token != ""
+})
+
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+    setToken: (token: string) => dispatch({ type: "SET_TOKEN", payload: token })
+})
+export default connect(mapStateToProps, mapDispatchToProps)(Index)

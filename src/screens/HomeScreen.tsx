@@ -1,11 +1,10 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-
+import { StyleSheet } from 'react-native';
+import { View, Text } from 'components'
 
 export default function () {
-    console.log("home")
     return (
-        <View style={styles.container}>
+        <View full style={styles.container}>
             <Text>Home!</Text>
         </View>
     );
@@ -13,8 +12,6 @@ export default function () {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
     },

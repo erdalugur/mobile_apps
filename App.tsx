@@ -1,70 +1,102 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import PresentationScreen from 'screens/PresentationScreen'
-import HomeScreen from 'screens/HomeScreen'
-import SigninScreen from 'screens/SigninScreen'
-
 import theme from 'theme'
-import { Provider } from 'react-redux'
-import { store } from 'myRedux'
-import { createStackNavigator } from '@react-navigation/stack';
+import { Provider, connect } from 'react-redux'
+import { store, AppState, IState } from 'myRedux'
 import { getCredentials } from 'api'
 import { Apploading } from 'components';
-const Stack = createStackNavigator();
+import { RootStack } from 'navigation'
 
-const HomeStack = () => (
-  <Stack.Navigator initialRouteName="Home">
-    <Stack.Screen name="Home" component={HomeScreen} />
-    <Stack.Screen name="Presentation" component={PresentationScreen} />
-  </Stack.Navigator>
-)
-const AuthStack = () => (
-  <Stack.Navigator>
-    <Stack.Screen options={{ header: () => null }} name="Signin" component={SigninScreen} />
-  </Stack.Navigator>
-)
 interface State {
   loading: boolean,
   isAuthenticated: boolean
 }
-export default class extends React.Component<any, State> {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      loading: false,
-      isAuthenticated: false
-    }
 
+interface Props {
+  app: IState
+  isAuthenticated: () => boolean
+}
+
+class Indexs extends React.Component<Props, State> {
+  state: State = {
+    loading: true,
+    isAuthenticated: false
   }
 
   componentDidMount() {
-    this.setup();
+    this.isAuthenticated();
   }
+
   isAuthenticated = async () => {
+    let result: boolean;
     try {
       let cache = await getCredentials();
-      return cache.token != null
+      if (cache.value != "") {
+        result = true;
+      } else if (this.props.isAuthenticated()) {
+        result = true;
+      } else {
+        result = false;
+      }
     } catch (error) {
-      return false;
+      result = false;
     }
+    this.setState({ loading: false, isAuthenticated: false });
   }
-
-  setup = async () => {
-    let isAuthenticated = await this.isAuthenticated();
-    this.setState({ isAuthenticated, loading: false });
-  }
-
   render() {
     if (this.state.loading) {
       return <Apploading />
     }
     return (
-      <Provider store={store}>
-        <NavigationContainer theme={theme}>
-          {this.state.isAuthenticated ? <HomeStack /> : <AuthStack />}
-        </NavigationContainer>
-      </Provider>
-    );
+      <NavigationContainer theme={theme}>
+        <RootStack
+          isAuthenticated={this.props.isAuthenticated()}
+        />
+      </NavigationContainer>
+    )
   }
 }
 
+const Index = (props: Props) => {
+  const [isLoading, setLoading] = React.useState<boolean>(true);
+
+  React.useEffect(() => {
+    setup();
+  }, [isAuthenticated]);
+
+  function setup() {
+    setLoading(false);
+    isAuthenticated();
+  }
+
+  async function isAuthenticated(): Promise<boolean> {
+    let cache = await getCredentials();
+    if (cache.value != "" || props.isAuthenticated())
+      return true;
+    else
+      return false;
+  }
+  return (
+    <NavigationContainer theme={theme}>
+      {isLoading ? <Apploading /> :
+        <RootStack
+          isAuthenticated={props.isAuthenticated()}
+        />}
+    </NavigationContainer>
+  )
+}
+
+const mapStateToProps = (state: AppState) => ({
+  app: state.app,
+  isAuthenticated: () => state.app.token != ""
+})
+
+const App = connect(mapStateToProps)(Index);
+
+export default () => {
+  return (
+    <Provider store={store}>
+      <App />
+    </Provider>
+  );
+}
