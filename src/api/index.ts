@@ -46,7 +46,7 @@ export async function runQuery(params: any, customUrl?: string): Promise<IRespon
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json;charset=UTF-8',
-                "authorization": `Bearer ${typeof (c) === "object" ? c.token : ""}`
+                "authorization": `Bearer ${typeof (c) === "object" ? c.value : ""}`
             },
             mode: "cors",
             method: "POST",
