@@ -1,12 +1,14 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
+import { View, Text, Button } from 'components'
 import { NavigationProps } from 'types';
-import { View, Text, Header } from 'components'
 interface Props extends NavigationProps { }
+
 export default function (props: Props) {
     return (
         <View full>
-            <Text>Cart!</Text>
+            <Text>Search!</Text>
+            <Button onPress={() => props.navigation.navigate("Cart")}>Cart</Button>
         </View>
     );
 }

@@ -46,3 +46,16 @@ const styles = StyleSheet.create({
 
     }
 });
+
+export function SmallButton(props: ButtonProps) {
+    return (
+        <TouchableOpacity
+            disabled={props.loading}
+            activeOpacity={props.activeOpacity || 0.9}
+            onPress={props.onPress}
+            {...props.nativeProps}
+            style={[styles["small"], props.style]}>
+            <Text>{props.children}</Text>
+        </TouchableOpacity>
+    )
+}

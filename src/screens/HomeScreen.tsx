@@ -7,13 +7,12 @@ interface Props extends NavigationProps { }
 export default function (props: Props) {
     return (
         <View full>
-            <Header
-                title="Home"
-                navigation={props.navigation}
-                route={props.route} />
             <Text>Home!</Text>
             <Button size={"small"} onPress={() => props.navigation.navigate("Presentation")}>
                 Presentation
+            </Button>
+            <Button size={"small"} onPress={() => props.navigation.navigate("Cart")}>
+                Cart
             </Button>
         </View>
     );
