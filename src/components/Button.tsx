@@ -41,8 +41,8 @@ const styles = StyleSheet.create({
         borderRadius: 2
     },
     small: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: 45
+        // justifyContent: 'center',
+        // alignItems: 'center',
+
     }
 });

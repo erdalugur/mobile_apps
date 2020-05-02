@@ -6,6 +6,7 @@ import { store, AppState } from 'myRedux'
 import { getCredentials } from 'api'
 import { Apploading } from 'components';
 import { RootStack } from 'navigation'
+import { StatusBar } from 'react-native';
 
 
 const App = () => {
@@ -35,7 +36,7 @@ const App = () => {
     } catch (error) {
       result = token != ""
     }
-
+    StatusBar.setBarStyle("light-content")
     setLoading(false);
     setIsAuthenticated(result);
   }
