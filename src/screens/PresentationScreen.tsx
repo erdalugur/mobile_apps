@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
 import theme from 'theme';
-import { Text, Card } from 'components'
+import { Text, Card, Button } from 'components'
 interface PresentationProps { }
 
 const Presentation = (props: PresentationProps) => {
@@ -10,7 +10,9 @@ const Presentation = (props: PresentationProps) => {
             <Card style={{ padding: 50 }}>
                 <Text component="h2">Presentation</Text>
             </Card>
-
+            <Button onPress={() => null}>
+                Button
+            </Button>
         </View>
     );
 };

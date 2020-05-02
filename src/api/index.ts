@@ -1,6 +1,7 @@
 import { AsyncStorage } from 'react-native'
 import { IResponse, ISelect, IMultiCreate, ICreate, IDelete, IUpdate, IScript, ILogin, IFilter, IJoin, IProc, IRegister } from './types'
-
+import constans from 'expo-constants'
+import config from 'config';
 interface IConfiguration {
     endpoint: string,
     beforeScript: Function | null,
@@ -38,11 +39,8 @@ async function toJSON(e: any) {
 
 export async function runQuery(params: any, customUrl?: string): Promise<IResponse> {
     try {
-        try { configuration.beforeScript && typeof (configuration.beforeScript) === "function" ? configuration.beforeScript() : null; } catch (error) { };
 
-        if (!configuration.endpoint) { throw new Error("endpoint is missing") };
-
-        const endpoint = customUrl || configuration.endpoint;
+        const endpoint = customUrl || config.endpoint;
         const c = await getCredentials();
         const options: RequestInit = {
             headers: {
@@ -183,8 +181,9 @@ export async function runScript(param: IScript) {
 
 
 
-export async function getCredentials(): Promise<{ token: string }> {
-    const data = await AsyncStorage.getItem("token");
+export async function getCredentials(): Promise<{ name: string, value: string, expiryDate: number }> {
+    let token: string = "token";
+    const data = await AsyncStorage.getItem(token);
     return new Promise((resolve, reject) => {
         if (data) {
             try {
@@ -192,13 +191,25 @@ export async function getCredentials(): Promise<{ token: string }> {
                 if (new Date().getTime() <= result.expiryDate) {
                     return resolve(result)
                 } else {
-                    return reject("expiry date");
+                    return reject({
+                        value: "",
+                        expiryDate: 0,
+                        name: token
+                    })
                 }
             } catch (error) {
-                return reject(error)
+                return reject({
+                    value: "",
+                    expiryDate: 0,
+                    name: token
+                })
             }
         } else {
-            return reject("token is missing")
+            return reject({
+                value: "",
+                expiryDate: 0,
+                name: token
+            })
         }
     })
 }

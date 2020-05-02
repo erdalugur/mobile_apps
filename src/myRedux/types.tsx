@@ -8,7 +8,8 @@ export interface SingleMultiType<Single, Multi> {
     item: Single
     items: Multi
 }
-export interface IAppState {
+export interface IState {
+    token: string
     user: any
     transactions: any[]
     balance: number

@@ -11,7 +11,11 @@ module.exports = function (api) {
             theme: './src/theme',
             myRedux: './src/myRedux',
             components: './src/components',
-            api: './src/api'
+            api: './src/api',
+            config: "./src/config",
+            context: "./src/context",
+            navigation: "./src/navigation",
+            types: "./src/navigation"
           }
         }
       ]
