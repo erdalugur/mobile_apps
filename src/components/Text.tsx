@@ -1,5 +1,5 @@
 import React from 'react'
-import { Text as TextBase } from 'react-native'
+import { Text as TextBase, StyleProp, TextStyle } from 'react-native'
 import theme from '../theme'
 
 const { colors } = theme;
@@ -8,8 +8,9 @@ interface Props {
     children: string
     color?: string
     component?: "p" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
+    style?: StyleProp<TextStyle>
 }
-export function Text({ color, children, component = "p" }: Props) {
+export function Text({ color, children, component = "p", style }: Props) {
     let fontSize: number = 20;
     let _color = color || colors.text
     switch (component) {
@@ -36,10 +37,10 @@ export function Text({ color, children, component = "p" }: Props) {
             break;
     }
     return (
-        <TextBase style={{
+        <TextBase style={[{
             color: _color,
             fontSize
-        }}>
+        }, style]}>
             {children}
         </TextBase>
     )

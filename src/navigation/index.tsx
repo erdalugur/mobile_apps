@@ -9,7 +9,8 @@ import SearchScreen from 'screens/SearchScreen';
 import CartScreen from 'screens/CartScreen'
 import ProfileScreen from 'screens/ProfileScreen';
 import { AntDesign } from '@expo/vector-icons';
-import { HomeOptions, ProfileOptions, CartOptions, NotificationOptions, } from './options'
+import { HomeOptions, ProfileOptions, CartOptions, NotificationOptions, SearchOptions } from './options'
+
 export const HomeStack = createStackNavigator();
 export const HomeStackScreen = () => (
     <HomeStack.Navigator>
@@ -35,7 +36,7 @@ const SearchStack = createStackNavigator();
 const SearchStackScreen = () => (
     <SearchStack.Navigator>
         <SearchStack.Screen
-            options={{ header: () => null }}
+            options={SearchOptions}
             name="Search"
             component={SearchScreen}
         />
@@ -71,41 +72,50 @@ const NotificationStackScreen = () => (
 
 const Tab = createBottomTabNavigator();
 
-interface RootProps {
+const HomeTabs = () => (
+    <Tab.Navigator initialRouteName="Notification">
+        <Tab.Screen
+            options={{
+                title: "Anasayfa",
+                tabBarIcon: ({ color }) => <AntDesign color={color} size={20} name="appstore1" />
+            }}
+            component={HomeStackScreen}
+            name="Home" />
+        <Tab.Screen
+            options={{
+                title: "Kampanyalar",
+                tabBarIcon: ({ color }) => <AntDesign color={color} size={20} name="notification" />
+            }}
+            component={NotificationStackScreen}
+            name="Notification" />
+        <Tab.Screen
+            options={{
+                tabBarVisible: false,
+                title: "Ürün Ara",
+                tabBarIcon: ({ color }) => <AntDesign color={color} size={20} name="search1" />
+            }}
+            component={SearchStackScreen}
+            name="Search" />
+        <Tab.Screen
+            options={{
+                tabBarVisible: false,
+                title: "Hesabım",
+                tabBarIcon: ({ color }) => <AntDesign color={color} size={20} name="user" />
+            }}
+            component={ProfileStackScreen}
+
+            name="Profile" />
+    </Tab.Navigator>
+)
+
+const RootStack = createStackNavigator();
+
+
+interface Props {
     isAuthenticated: boolean
 }
-export const RootStack = (props: RootProps) => {
+export const App = (props: Props) => {
     return (
-        <Tab.Navigator
-            tabBarOptions={{}}>
-            <Tab.Screen
-                options={{
-                    title: "Anasayfa",
-                    tabBarIcon: ({ color }) => <AntDesign color={color} size={20} name="appstore1" />
-                }}
-                component={HomeStackScreen}
-                name="Home" />
-            <Tab.Screen
-                options={{
-                    title: "Kampanyalar",
-                    tabBarIcon: ({ color }) => <AntDesign color={color} size={20} name="notification" />
-                }}
-                component={NotificationStackScreen}
-                name="Notification" />
-            <Tab.Screen
-                options={{
-                    title: "Ürün Ara",
-                    tabBarIcon: ({ color }) => <AntDesign color={color} size={20} name="search1" />
-                }}
-                component={SearchStackScreen}
-                name="Search" />
-            <Tab.Screen
-                options={{
-                    title: "Hesabım",
-                    tabBarIcon: ({ color }) => <AntDesign color={color} size={20} name="user" />
-                }}
-                component={ProfileStackScreen}
-                name="Profile" />
-        </Tab.Navigator>
+        <HomeTabs />
     )
 }

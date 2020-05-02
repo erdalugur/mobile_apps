@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { View, Text, Button } from 'components'
+import { View, Text, Button, Header } from 'components'
 import { NavigationProps } from 'types';
 interface Props extends NavigationProps { }
 
@@ -16,8 +16,5 @@ export default function (props: Props) {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
     },
 });

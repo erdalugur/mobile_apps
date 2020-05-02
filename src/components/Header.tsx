@@ -15,11 +15,26 @@ export class Header extends React.PureComponent<HeaderProps, any>{
         switch (this.props.route?.name) {
             case "Home":
                 return (
-                    <Button size="small">test</Button>
+                    <Button style={{
+
+                    }} size="small">test</Button>
                 );
+            case "Profile":
+                return (
+                    <Button
+                        textColor={theme.colors.primary}
+                        style={{ padding: 0 }}
+                        size="small"
+                        onPress={() => this.props.navigation.goBack()}>
+                        Back
+                    </Button>
+                )
             default:
                 return (
-                    <Button style={{ padding: 0 }} size="small" onPress={() => this.props.navigation.goBack()}>
+                    <Button
+                        textColor={theme.colors.primary}
+                        style={{ padding: 0, width: '100%' }} size="small"
+                        onPress={() => this.props.navigation.goBack()}>
                         Back
                     </Button>
                 )
@@ -28,7 +43,7 @@ export class Header extends React.PureComponent<HeaderProps, any>{
     renderCenter = () => {
         return (
             <View style={styles.center}>
-                <Text>{this.props.title || ""}</Text>
+                <Text style={{ fontWeight: '600' }} component="h6">{this.props.title || ""}</Text>
             </View>
         )
     }
@@ -69,11 +84,12 @@ export class Header extends React.PureComponent<HeaderProps, any>{
 
 const styles = StyleSheet.create({
     container: {
-        height: 70,
+        height: 88,
         backgroundColor: theme.colors.card,
         width: '100%',
         justifyContent: 'flex-end',
-        paddingBottom: 10,
+        paddingBottom: 8,
+        paddingTop: 8,
         paddingHorizontal: 10
     },
     center: {

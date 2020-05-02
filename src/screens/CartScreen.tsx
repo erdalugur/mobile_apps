@@ -4,6 +4,7 @@ import { NavigationProps } from 'types';
 import { View, Text, Header } from 'components'
 interface Props extends NavigationProps { }
 export default function (props: Props) {
+
     return (
         <View full>
             <Text>Cart!</Text>

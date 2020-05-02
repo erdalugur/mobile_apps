@@ -12,6 +12,7 @@ interface ButtonProps {
     children: string
     activeOpacity?: number
     loading?: boolean
+    textColor?: string
 }
 
 export function Button(props: ButtonProps) {
@@ -23,7 +24,7 @@ export function Button(props: ButtonProps) {
             {...props.nativeProps}
             style={[styles[props.size || "full"], props.style]}>
             {props.loading ? <ActivityIndicator /> :
-                <Text>{props.children}</Text>
+                <Text color={props.textColor}>{props.children}</Text>
             }
         </TouchableOpacity>
     );
