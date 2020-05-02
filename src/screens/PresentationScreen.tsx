@@ -1,20 +1,26 @@
 import * as React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import theme from 'theme';
-import { Text, Card, Button } from 'components'
-interface PresentationProps { }
+import { Text, Card, Button, Header, View } from 'components'
+import { NavigationProps } from 'types';
+interface PresentationProps extends NavigationProps { }
 
-const Presentation = (props: PresentationProps) => {
-    return (
-        <View style={styles.container}>
-            <Card style={{ padding: 50 }}>
-                <Text component="h2">Presentation</Text>
-            </Card>
-            <Button onPress={() => null}>
-                Button
+class Presentation extends React.PureComponent<PresentationProps, any>{
+    render() {
+        return (
+            <View full>
+                {/* <Header {...props} /> */}
+                <View style={styles.container}>
+                    <Card style={{ padding: 50 }}>
+                        <Text component="h2">Presentation</Text>
+                    </Card>
+                    <Button onPress={() => null}>
+                        Button
             </Button>
-        </View>
-    );
+                </View>
+            </View>
+        );
+    }
 };
 
 export default Presentation;
