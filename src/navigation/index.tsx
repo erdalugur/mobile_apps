@@ -10,25 +10,17 @@ import CartScreen from 'screens/CartScreen'
 import ProfileScreen from 'screens/ProfileScreen';
 import { AntDesign } from '@expo/vector-icons';
 import { HomeOptions, ProfileOptions, CartOptions, NotificationOptions, SearchOptions } from './options'
-
+import { Text, CartButton } from 'components'
 export const HomeStack = createStackNavigator();
 export const HomeStackScreen = () => (
-    <HomeStack.Navigator>
+    <HomeStack.Navigator screenOptions={{
+        headerRight: ({ tintColor }) => <CartButton />
+    }}>
         <HomeStack.Screen
             options={HomeOptions}
             name="Home"
             component={HomeScreen} />
-        <HomeStack.Screen
-            options={CartOptions}
-            name="Cart"
-            component={CartScreen} />
-        <HomeStack.Screen
-            options={{
-                header: () => null
-            }}
-            name="Presentation"
-            component={PresentationScreen}
-        />
+
     </HomeStack.Navigator>
 )
 
@@ -40,11 +32,7 @@ const SearchStackScreen = () => (
             name="Search"
             component={SearchScreen}
         />
-        <SearchStack.Screen
-            options={CartOptions}
-            name="Cart"
-            component={CartScreen}
-        />
+
     </SearchStack.Navigator>
 )
 
@@ -72,8 +60,12 @@ const NotificationStackScreen = () => (
 
 const Tab = createBottomTabNavigator();
 
-const HomeTabs = () => (
-    <Tab.Navigator initialRouteName="Notification">
+
+interface Props {
+    isAuthenticated: boolean
+}
+export const HomeTabs = () => (
+    <Tab.Navigator>
         <Tab.Screen
             options={{
                 title: "Anasayfa",
@@ -81,16 +73,9 @@ const HomeTabs = () => (
             }}
             component={HomeStackScreen}
             name="Home" />
+
         <Tab.Screen
             options={{
-                title: "Kampanyalar",
-                tabBarIcon: ({ color }) => <AntDesign color={color} size={20} name="notification" />
-            }}
-            component={NotificationStackScreen}
-            name="Notification" />
-        <Tab.Screen
-            options={{
-                tabBarVisible: false,
                 title: "Ürün Ara",
                 tabBarIcon: ({ color }) => <AntDesign color={color} size={20} name="search1" />
             }}
@@ -98,24 +83,44 @@ const HomeTabs = () => (
             name="Search" />
         <Tab.Screen
             options={{
-                tabBarVisible: false,
                 title: "Hesabım",
                 tabBarIcon: ({ color }) => <AntDesign color={color} size={20} name="user" />
             }}
             component={ProfileStackScreen}
-
             name="Profile" />
     </Tab.Navigator>
 )
-
+const CartStack = createStackNavigator();
+const CartStackScreen = () => (
+    <CartStack.Navigator>
+        <CartStack.Screen
+            name="Cart"
+            component={CartScreen}
+        />
+    </CartStack.Navigator>
+)
 const RootStack = createStackNavigator();
+export const App = (props: Props) => (
+    <RootStack.Navigator headerMode="none">
+        <RootStack.Screen name="Home" component={HomeTabs} />
+        <RootStack.Screen name="Profile" component={ProfileScreen} />
+        <RootStack.Screen
+            options={{
+                header: () => null
+            }}
+            name="Presentation"
+            component={PresentationScreen}
+        />
+        <RootStack.Screen
+            name="Cart"
+            component={CartStackScreen}
+        />
+        <RootStack.Screen
+            options={{
+                title: "Kampanyalar",
+            }}
+            component={NotificationStackScreen}
+            name="Notification" />
+    </RootStack.Navigator>
+)
 
-
-interface Props {
-    isAuthenticated: boolean
-}
-export const App = (props: Props) => {
-    return (
-        <HomeTabs />
-    )
-}

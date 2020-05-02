@@ -16,10 +16,7 @@ export const CartOptions: IScreenOptions = {
 }
 
 export const ProfileOptions: IScreenOptions = {
-    title: "Hesabım",
-    header: ({ navigation, mode, styleInterpolator }) => (
-        <Header navigation={navigation} title="Hesabım" />
-    )
+    title: "Hesabım"
 }
 
 export const NotificationOptions: IScreenOptions = {
@@ -28,7 +25,6 @@ export const NotificationOptions: IScreenOptions = {
 
 export const SearchOptions: IScreenOptions = {
     title: "Ara",
-    header: ({ navigation, mode, styleInterpolator }) => (
-        <Header navigation={navigation} title="Ürün Ara" />
-    )
+    headerShown: true
+    // headerShown: false
 }

@@ -8,7 +8,6 @@ export default function (props: Props) {
     return (
         <View full>
             <Text>Search!</Text>
-            <Button onPress={() => props.navigation.navigate("Cart")}>Cart</Button>
         </View>
     );
 }

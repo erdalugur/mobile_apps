@@ -14,7 +14,7 @@ class Presentation extends React.PureComponent<PresentationProps, any>{
                     <Card style={{ padding: 50 }}>
                         <Text component="h2">Presentation</Text>
                     </Card>
-                    <Button onPress={() => null}>
+                    <Button onPress={() => this.props.navigation.goBack()}>
                         Button
             </Button>
                 </View>
