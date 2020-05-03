@@ -1,6 +1,7 @@
 import React from 'react'
-import { Feather, FontAwesome } from '@expo/vector-icons'
+import { Feather, FontAwesome, Ionicons } from '@expo/vector-icons'
 import theme from 'theme'
+import { TouchableOpacity } from 'react-native';
 
 interface IconProps {
     size?: number
@@ -12,4 +13,12 @@ export function Map({ color = theme.colors.text, size = 30, onPress }: IconProps
 }
 export function Calendar({ color = theme.colors.text, size = 30, onPress }: IconProps) {
     return <FontAwesome onPress={onPress} color={color} size={size} name="calendar" />
+}
+
+export function Back({ color = theme.colors.text, size = 30, onPress }: IconProps) {
+    return <Ionicons onPress={onPress} color={color} size={size} name="ios-arrow-round-back" />
+}
+
+export function HeaderBack() {
+    return <TouchableOpacity style={{ marginLeft: 5 }}><Back /></TouchableOpacity>
 }

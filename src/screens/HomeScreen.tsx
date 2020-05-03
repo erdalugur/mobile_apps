@@ -17,9 +17,9 @@ export default function (props: Props) {
             <ScrollView showsHorizontalScrollIndicator>
                 <TopActions />
                 <Slider />
-                <ProductScrollView />
-                <ProductScrollView title="En İyi Fiyatlar" />
-                <ProductScrollView title="Elektronik" />
+                <ProductScrollView {...props} />
+                <ProductScrollView {...props} title="En İyi Fiyatlar" />
+                <ProductScrollView {...props} title="Elektronik" />
             </ScrollView>
         </View>
     );

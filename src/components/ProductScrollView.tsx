@@ -4,7 +4,7 @@ import { View } from './View'
 import theme from 'theme'
 import { Text } from './Text'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { Product } from 'types'
+import { Product, NavigationProps } from 'types'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { IAction } from 'myRedux/types'
@@ -18,7 +18,7 @@ interface State {
 
 }
 
-interface Props {
+interface Props extends NavigationProps {
     title: string
     categoryId: number
     items: Array<Product>
@@ -40,7 +40,7 @@ class Index extends React.PureComponent<Props, State>{
         return this.props.items.map(x => (
             <View key={x.ID} style={{ marginRight: 5, width: 120 }}>
                 <View style={{ padding: 5 }}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate("Product")}>
                         <Image source={{ uri: x.IMAGE_URL }} style={[styles.image]} />
                         <View style={[styles.productName]}>
                             <Text style={{ textTransform: "capitalize" }}>{x.NAME}</Text>
@@ -66,7 +66,7 @@ class Index extends React.PureComponent<Props, State>{
             <View style={[styles.container]}>
                 <View style={[styles.title]}>
                     <Text>{this.props.title}</Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate("Category")}>
                         <Text>
                             Tümünü Gör
                         </Text>

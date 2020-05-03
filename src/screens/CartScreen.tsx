@@ -9,7 +9,6 @@ import theme from 'theme';
 interface Props { }
 export default function (props: Props) {
     const cart = useSelector((state: AppState) => state.app.cart);
-    console.log(cart)
 
     const RenderItems = () => {
         return Object.keys(cart.items).map(x => (

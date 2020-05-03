@@ -3,30 +3,64 @@ import PresentationScreen from 'screens/PresentationScreen'
 import HomeScreen from 'screens/HomeScreen'
 import SigninScreen from 'screens/SigninScreen'
 import { SignUpScreen } from 'screens/SignupScreen'
-
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, TransitionPresets, CardStyleInterpolators } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import NotificationScreen from 'screens/NotificationScreen';
 import SearchScreen from 'screens/SearchScreen';
 import CartScreen from 'screens/CartScreen'
+import CategoryScreen from 'screens/CategoryScreen'
+import ProductScreen from 'screens/ProductScreen';
+
 import ProfileScreen from 'screens/ProfileScreen';
 import { AntDesign } from '@expo/vector-icons';
 import { HomeOptions, ProfileOptions, NotificationOptions, SearchOptions } from './options'
 import { CartButton } from 'components'
 import theme from 'theme';
+import { HeaderBack } from 'icons'
+
 export const HomeStack = createStackNavigator();
-export const HomeStackScreen = () => (
-    <HomeStack.Navigator screenOptions={{
-        headerRight: ({ tintColor }) => <CartButton />
-    }}>
-        <HomeStack.Screen
-            options={HomeOptions}
-            name="Home"
-            component={HomeScreen} />
+export const HomeStackScreen = ({ navigation, route }: any) => {
+    if (route.state) {
+        navigation.setOptions({
+            tabBarVisible: route.state.index > 0 ? false : true
+        })
+    }
+    return (
+        <HomeStack.Navigator screenOptions={{
+            headerRight: ({ tintColor }) => <CartButton />,
+            headerBackTitleVisible: false,
+            headerBackTitleStyle: { color: theme.colors.text },
+            headerBackImage: ({ tintColor }) => <HeaderBack />
+        }}>
+            <HomeStack.Screen
+                options={HomeOptions}
+                name="Home"
+                component={HomeScreen} />
+            <HomeStack.Screen
+                options={{
+                    title: 'Sepetim'
+                }}
+                name="Cart"
+                component={CartScreen}
+            />
+            <HomeStack.Screen
+                options={{
+                    title: 'Kategoriler'
+                }}
+                name="Category"
+                component={CategoryScreen}
+            />
+            <HomeStack.Screen
+                options={{
+                    title: 'Ürünler'
+                }}
+                name="Product"
+                component={ProductScreen}
+            />
 
-    </HomeStack.Navigator>
-)
-
+        </HomeStack.Navigator>
+    )
+}
 const SearchStack = createStackNavigator();
 const SearchStackScreen = () => (
     <SearchStack.Navigator>
@@ -65,32 +99,45 @@ const Tab = createBottomTabNavigator();
 
 
 
-export const HomeTabs = () => (
-    <Tab.Navigator tabBarOptions={{ activeTintColor: theme.colors.text }}>
-        <Tab.Screen
-            options={{
-                title: "Anasayfa",
-                tabBarIcon: ({ color }) => <AntDesign color={color} size={20} name="appstore1" />
-            }}
-            component={HomeStackScreen}
-            name="Home" />
+export const HomeTabs = ({ navigation, route }: { navigation: any, route: any }) => {
+    return (
+        <Tab.Navigator
+            screenOptions={({ route, navigation }) => ({
+                tabBarIcon: ({ color, size }) => {
+                    let iconName: string = "";
+                    if (route.name === 'Home')
+                        iconName = 'appstore1'
+                    else if (route.name === 'Search')
+                        iconName = 'search1';
+                    else if (route.name === 'Profile')
+                        iconName = 'user'
 
-        <Tab.Screen
-            options={{
-                title: "Ürün Ara",
-                tabBarIcon: ({ color }) => <AntDesign color={color} size={20} name="search1" />
-            }}
-            component={SearchStackScreen}
-            name="Search" />
-        <Tab.Screen
-            options={{
-                title: "Hesabım",
-                tabBarIcon: ({ color }) => <AntDesign color={color} size={20} name="user" />
-            }}
-            component={ProfileStackScreen}
-            name="Profile" />
-    </Tab.Navigator>
-)
+                    return <AntDesign color={color} size={size} name={iconName} />
+                }
+            })}
+            tabBarOptions={{ activeTintColor: theme.colors.text }}>
+            <Tab.Screen
+                options={{
+                    title: "Anasayfa",
+                }}
+                component={HomeStackScreen}
+                name="Home" />
+
+            <Tab.Screen
+                options={{
+                    title: "Ürün Ara",
+                }}
+                component={SearchStackScreen}
+                name="Search" />
+            <Tab.Screen
+                options={{
+                    title: "Hesabım",
+                }}
+                component={ProfileStackScreen}
+                name="Profile" />
+        </Tab.Navigator>
+    )
+}
 const CartStack = createStackNavigator();
 const CartStackScreen = () => (
     <CartStack.Navigator>
@@ -118,7 +165,13 @@ interface Props {
     isAuthenticated: boolean
 }
 export const App = (props: Props) => (
-    <RootStack.Navigator headerMode="none" initialRouteName="Home">
+    <RootStack.Navigator
+        screenOptions={{
+            gestureEnabled: true,
+            gestureDirection: 'horizontal',
+            ...TransitionPresets.SlideFromRightIOS
+        }}
+        headerMode="none" initialRouteName="Home">
         <RootStack.Screen
             options={{
                 header: () => null
