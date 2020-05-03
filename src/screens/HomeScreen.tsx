@@ -1,9 +1,10 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
-import { View, Text, Button } from 'components'
+import { StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, TopActions, Slider } from 'components'
 import { NavigationProps } from 'types'
 import { useSelector } from 'react-redux';
 import { AppState } from 'myRedux';
+import theme from 'theme';
 
 interface Props extends NavigationProps { }
 
@@ -12,19 +13,8 @@ export default function (props: Props) {
     console.log("app", app)
     return (
         <View full>
-            <Text>Home!</Text>
-            <Button size={"small"} onPress={() => props.navigation.navigate("Presentation")}>
-                Presentation
-            </Button>
-            <Button size={"small"} onPress={() => props.navigation.navigate("Cart")}>
-                Cart
-            </Button>
-            <Button size={"small"} onPress={() => props.navigation.navigate("Notification")}>
-                Kampanyalar
-            </Button>
-            <Button size={"small"} onPress={() => props.navigation.navigate("Signin")}>
-                Sign In
-            </Button>
+            <TopActions />
+            <Slider />
         </View>
     );
 }
@@ -32,4 +22,12 @@ export default function (props: Props) {
 const styles = StyleSheet.create({
     container: {
     },
+    button: {
+        backgroundColor: theme.colors.card,
+        height: 60,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
+        borderRadius: 5
+    }
 });

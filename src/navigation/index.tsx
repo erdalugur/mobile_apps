@@ -118,7 +118,7 @@ interface Props {
     isAuthenticated: boolean
 }
 export const App = (props: Props) => (
-    <RootStack.Navigator headerMode="none">
+    <RootStack.Navigator headerMode="none" initialRouteName="Home">
         <RootStack.Screen
             options={{
                 header: () => null
