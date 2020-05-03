@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import { View, Text } from 'components'
+import { Text } from './Text'
+import { View } from './View'
+
 import theme from 'theme';
 import { Map, Calendar } from 'icons'
 import { useNavigation } from '@react-navigation/native';

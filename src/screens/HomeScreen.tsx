@@ -1,10 +1,11 @@
 import React from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
-import { View, Text, TopActions, Slider } from 'components'
+import { View, Text, TopActions, Slider, ProductScrollView } from 'components'
 import { NavigationProps } from 'types'
 import { useSelector } from 'react-redux';
 import { AppState } from 'myRedux';
 import theme from 'theme';
+import { ScrollView } from 'react-native-gesture-handler';
 
 interface Props extends NavigationProps { }
 
@@ -13,8 +14,13 @@ export default function (props: Props) {
     console.log("app", app)
     return (
         <View full>
-            <TopActions />
-            <Slider />
+            <ScrollView showsHorizontalScrollIndicator>
+                <TopActions />
+                <Slider />
+                <ProductScrollView />
+                <ProductScrollView title="En İyi Fiyatlar" />
+                <ProductScrollView title="Elektronik" />
+            </ScrollView>
         </View>
     );
 }
