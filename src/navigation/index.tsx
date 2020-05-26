@@ -122,7 +122,7 @@ export const HomeTabs = ({ navigation, route }: { navigation: any, route: any })
             tabBarOptions={{ activeTintColor: theme.colors.text }}>
             <Tab.Screen
                 options={{
-                    title: "Anasayfa",
+                    title: "Menü",
 
                 }}
                 component={HomeStackScreen}
@@ -130,7 +130,7 @@ export const HomeTabs = ({ navigation, route }: { navigation: any, route: any })
 
             <Tab.Screen
                 options={{
-                    title: "Ürün Ara",
+                    title: "Garson",
                 }}
                 component={SearchStackScreen}
                 name="Search" />

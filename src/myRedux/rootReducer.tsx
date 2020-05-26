@@ -9,19 +9,41 @@ export default function (state: IState = InitialState, action: IAction): IState 
         case 'FETCH_ALL':
             return { ...state, menu: { ...action.payload } }
         case "SET_TOKEN":
-            return setToken(state, action.payload);
+            return SET_TOKEN(state, action.payload);
         case "ADD_TO_CART":
-            return addToCart(state, action.payload);
+            return ADD_TO_CART(state, action.payload);
+        case "INCREMENT":
+            return INCREMENT(state, action.payload);
+        case "DECREMENT":
+            return DECREMENT(state, action.payload);
         default:
             return state
     }
 }
 
-function setToken(state: IState = InitialState, payload: string) {
+function INCREMENT(state: IState = InitialState, payload: string) {
+    state.cart.items[payload].quantity++;
+    state.cart.items[payload].totalPrice = state.cart.items[payload].quantity * state.cart.items[payload].PRICE
+    return { ...state, cart: { ...state.cart } }
+}
+
+function DECREMENT(state: IState = InitialState, payload: string) {
+    let q = state.cart.items[payload].quantity
+    if (q > 1) {
+        state.cart.items[payload].quantity--;
+        state.cart.items[payload].totalPrice = state.cart.items[payload].quantity * state.cart.items[payload].PRICE
+
+    }
+    else
+        delete state.cart.items[payload];
+    return { ...state, cart: { ...state.cart } }
+}
+
+function SET_TOKEN(state: IState = InitialState, payload: string) {
     return { ...state, token: payload };
 }
 
-function addToCart(state: IState = InitialState, payload: CartItem) {
+function ADD_TO_CART(state: IState = InitialState, payload: CartItem) {
     const { ID } = payload;
     if (!state.cart.items[ID])
         payload.quantity = 1;

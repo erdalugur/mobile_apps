@@ -1,5 +1,5 @@
 import React from 'react'
-import { Feather, FontAwesome, Ionicons } from '@expo/vector-icons'
+import { Feather, FontAwesome, Ionicons, AntDesign } from '@expo/vector-icons'
 import theme from 'theme'
 import { TouchableOpacity } from 'react-native';
 
@@ -24,3 +24,11 @@ export function HeaderBack() {
         style={{ marginLeft: 15 }}>
         <Back size={40} /></TouchableOpacity>
 }
+
+export function Plus(props: IconProps) {
+    return <AntDesign name="plussquareo" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}
+export function Minus(props: IconProps) {
+    return <AntDesign name="minussquareo" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}
+
