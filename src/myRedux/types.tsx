@@ -1,4 +1,4 @@
-import { CartItem } from "types";
+import { CartItem, FetchAllModel, UserModel } from "types";
 
 export interface IAction {
     type: string
@@ -11,10 +11,10 @@ export interface SingleMultiType<Single, Multi> {
     items: Multi
 }
 export interface IState {
-    token: string
-    user: any
+    user: UserModel | null
     category: SingleMultiType<any, Array<any>>
     product: SingleMultiType<any, Array<any>>
     campaign: SingleMultiType<any, Array<any>>
     cart: SingleMultiType<any, { [key: string]: CartItem }>
+    menu: FetchAllModel
 }

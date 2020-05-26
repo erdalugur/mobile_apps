@@ -8,43 +8,31 @@ import { Product, NavigationProps } from 'types'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { IAction } from 'myRedux/types'
-let Products: Product[] = [
-    { ID: 1, NAME: "dankek lokmalık hindistan cevizli 160 g", PRICE: 3.75, DESCRIPTION: "", IMAGE_URL: "https://migros-dali-storage-prod.global.ssl.fastly.net/sanalmarket/product/05090023/05090023-f4ba19.jpg" },
-    { ID: 2, NAME: "dankek lokmalık hindistan cevizli 160 g", PRICE: 3.75, DESCRIPTION: "", IMAGE_URL: "https://migros-dali-storage-prod.global.ssl.fastly.net/sanalmarket/product/05090023/05090023-f4ba19.jpg" },
-    { ID: 3, NAME: "dankek lokmalık hindistan cevizli 160 g", PRICE: 3.75, DESCRIPTION: "", IMAGE_URL: "https://migros-dali-storage-prod.global.ssl.fastly.net/sanalmarket/product/05090023/05090023-f4ba19.jpg" },
-    { ID: 4, NAME: "dankek lokmalık hindistan cevizli 160 g", PRICE: 3.75, DESCRIPTION: "", IMAGE_URL: "https://migros-dali-storage-prod.global.ssl.fastly.net/sanalmarket/product/05090023/05090023-f4ba19.jpg" }
-]
+
 interface State {
 
 }
 
 interface Props extends NavigationProps {
     title: string
-    categoryId: number
+    categoryId: string
     items: Array<Product>
     dispatch: Dispatch<IAction>
 }
 
 
 class Index extends React.PureComponent<Props, State>{
-    static defaultProps = {
-        title: "Kendini Şımart",
-        categoryId: 1,
-        items: Products
-    }
     state: State = {}
-
-
     renderItems = () => {
 
         return this.props.items.map(x => (
-            <View key={x.ID} style={{ marginRight: 5, width: 120 }}>
+            <View key={x.ID} style={{ marginRight: 5, width: 140 }}>
                 <View style={{ padding: 5 }}>
                     <TouchableOpacity onPress={() => this.props.navigation.navigate("Product")}>
-                        <Image source={{ uri: x.IMAGE_URL }} style={[styles.image]} />
+                        <Image source={{ uri: x.PREVIEW }} style={[styles.image]} />
                         <View style={[styles.productName]}>
-                            <Text style={{ textTransform: "capitalize" }}>{x.NAME}</Text>
-                            <Text>{x.PRICE.toString()}</Text>
+                            <Text style={{ textTransform: "capitalize", textAlign: 'center' }}>{x.NAME.slice(0, 100)}</Text>
+                            <Text style={{ textAlign: 'center' }}>{`${x.PRICE.toFixed(2).toString()} ₺`}</Text>
                         </View>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -86,21 +74,22 @@ export const ProductScrollView = connect()(Index)
 const styles = StyleSheet.create({
     container: {
         backgroundColor: theme.colors.card,
-        height: 320,
+        height: 300,
         paddingBottom: 5,
         marginBottom: 10
     },
     title: {
         flexDirection: 'row',
         justifyContent: 'space-between',
+        alignItems: 'center',
         width: '100%',
         paddingHorizontal: 10,
-        marginBottom: 10
+        paddingBottom: 10
     },
     image: {
-        width: 110,
+        width: 130,
         height: 150,
-        resizeMode: 'stretch'
+        resizeMode: 'cover'
     },
     basket: {
         justifyContent: 'center', alignItems: 'center',
@@ -109,5 +98,5 @@ const styles = StyleSheet.create({
         height: 30,
         borderRadius: 2
     },
-    productName: { justifyContent: 'space-around', height: 100, width: '100%' }
+    productName: { justifyContent: 'space-around', height: 70, width: '100%' }
 })

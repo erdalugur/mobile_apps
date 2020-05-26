@@ -1,6 +1,8 @@
-import { IResponse } from './types'
+import { IResponse, IProc } from './types'
 import config from 'config';
 import { userManager } from 'utils';
+import { FetchAllModel } from 'types';
+import { getInitialState } from 'myRedux/rootReducer';
 
 async function toJSON(e: any) {
     try {
@@ -68,4 +70,26 @@ export function handleError(statusCode: string, orginalError: any) {
 
 export async function QueryableIO<T>(param: T): Promise<IResponse> {
     return await runQuery(param);
+}
+
+
+export const dataManager = {
+    loadAll: async function () {
+        console.log("dataManager")
+        let { data, statusCode, error } = await QueryableIO<IProc>({
+            model: 'MPOS_GET_ALL',
+            action: 'public',
+            parameters: []
+        });
+        return new Promise<FetchAllModel>((resolve, reject) => {
+            if (statusCode === 200 && data && data.length > 0) {
+                let __data__ = data[0];
+                const { menu } = getInitialState(__data__);
+                return resolve({ domain: menu.domain, tree: menu.tree, status: "success" })
+            } else if (error) {
+                return reject(error);
+            }
+        })
+
+    }
 }

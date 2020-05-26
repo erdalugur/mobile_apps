@@ -1,40 +1,63 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity } from 'react-native';
-import { View, Text, TopActions, Slider, ProductScrollView } from 'components'
+import { View, TopActions, Slider, ProductScrollView } from 'components'
 import { NavigationProps } from 'types'
-import { useSelector } from 'react-redux';
-import { AppState } from 'myRedux';
-import theme from 'theme';
+import { connect } from 'react-redux';
+import { AppState, IState } from 'myRedux';
 import { ScrollView } from 'react-native-gesture-handler';
+import { QueryableIO, dataManager } from 'api';
+import { IProc } from 'api/types';
+import { IAction } from 'myRedux/types';
 
-interface Props extends NavigationProps { }
-
-export default function (props: Props) {
-    const app = useSelector((state: AppState) => state.app);
-    console.log("app", app)
-    return (
-        <View full>
-            <ScrollView showsHorizontalScrollIndicator>
-                <TopActions />
-                <Slider />
-                <ProductScrollView {...props} />
-                <ProductScrollView {...props} title="En İyi Fiyatlar" />
-                <Slider />
-                <ProductScrollView {...props} title="Elektronik" />
-            </ScrollView>
-        </View>
-    );
+interface Props extends NavigationProps {
+    app: IState
+    dispatch: (param: IAction) => void
 }
 
-const styles = StyleSheet.create({
-    container: {
-    },
-    button: {
-        backgroundColor: theme.colors.card,
-        height: 60,
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'row',
-        borderRadius: 5
+interface State {
+    loading: boolean
+}
+
+class Home extends React.PureComponent<Props, State> {
+    state: State = { loading: false };
+
+    componentDidMount = async () => {
+        if (this.props.app.menu.tree.length === 0)
+            this.loadAsync();
+        else {
+            console.log("menuItems", this.props.app.menu.tree.length)
+            return;
+        }
     }
-});
+
+    loadAsync = async () => {
+        console.log("fetchAllStart")
+        let result = await dataManager.loadAll();
+        this.props.dispatch({ type: 'FETCH_ALL', payload: result });
+        console.log("fetchAllEnd", result.tree.length)
+    }
+
+    render() {
+        return (
+            <View full>
+                <ScrollView showsHorizontalScrollIndicator>
+                    <TopActions />
+                    <Slider />
+                    {this.props.app.menu.tree.map(x => (
+                        <ProductScrollView
+                            categoryId={x.PRODUCTS[0].CATEGORYID}
+                            key={x.ID}
+                            title={x.NAME}
+                            items={x.PRODUCTS}
+                            navigation={this.props.navigation}
+                            route={this.props.route}
+                        />
+                    ))}
+                </ScrollView>
+            </View>
+        );
+    }
+}
+const mapState = (state: AppState) => ({
+    app: state.app
+})
+export default connect(mapState)(Home)

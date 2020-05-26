@@ -1,30 +1,13 @@
 import { IAction, IState, } from './types'
-import { Product, CartItem } from 'types';
+import { CartItem } from 'types';
 
 
-const InitialState: IState = {
-    token: "",
-    user: null,
-    campaign: {
-        item: null,
-        items: []
-    },
-    cart: {
-        item: null,
-        items: {}
-    },
-    product: {
-        item: null,
-        items: []
-    },
-    category: {
-        item: null,
-        items: []
-    }
-}
+const InitialState: IState = getInitialState({});
 
 export default function (state: IState = InitialState, action: IAction): IState {
     switch (action.type) {
+        case 'FETCH_ALL':
+            return { ...state, menu: { ...action.payload } }
         case "SET_TOKEN":
             return setToken(state, action.payload);
         case "ADD_TO_CART":
@@ -50,3 +33,29 @@ function addToCart(state: IState = InitialState, payload: CartItem) {
     return { ...state };
 }
 
+export function getInitialState(__data__: any): IState {
+    return {
+        user: __data__.USER || null,
+        campaign: {
+            item: null,
+            items: []
+        },
+        cart: {
+            item: null,
+            items: {}
+        },
+        product: {
+            item: null,
+            items: []
+        },
+        category: {
+            item: null,
+            items: []
+        },
+        menu: {
+            domain: __data__.DOMAIN && JSON.parse(__data__.DOMAIN) || {},
+            tree: __data__.JSON && JSON.parse(__data__.JSON) || [],
+            status: "fetching"
+        }
+    }
+}

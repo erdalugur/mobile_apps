@@ -164,40 +164,41 @@ const RootStack = createStackNavigator();
 interface Props {
     isAuthenticated: boolean
 }
-export const App = (props: Props) => (
-    <RootStack.Navigator
-        screenOptions={{
-            gestureEnabled: true,
-            gestureDirection: 'horizontal',
-            ...TransitionPresets.SlideFromRightIOS
-        }}
-        headerMode="none" initialRouteName="Home">
-        <RootStack.Screen
-            options={{
-                header: () => null
+export const App = (props: Props) => {
+    return (
+        <RootStack.Navigator
+            screenOptions={{
+                gestureEnabled: true,
+                gestureDirection: 'horizontal',
+                ...TransitionPresets.SlideFromRightIOS
             }}
-            name="Presentation"
-            component={PresentationScreen}
-        />
-        <RootStack.Screen name="Home" component={HomeTabs} />
-        <RootStack.Screen name="Profile" component={ProfileScreen} />
-        <RootStack.Screen
-            name="Cart"
-            component={CartStackScreen}
-        />
-        <RootStack.Screen
-            options={{
-                title: "Kampanyalar",
-            }}
-            component={NotificationStackScreen}
-            name="Notification" />
-        <RootStack.Screen
-            options={{
-                title: "Kampanyalar",
-            }}
-            component={AuthStackScreen}
-            name="Signin" />
+            headerMode="none" initialRouteName="Home">
+            <RootStack.Screen
+                options={{
+                    header: () => null
+                }}
+                name="Presentation"
+                component={PresentationScreen}
+            />
+            <RootStack.Screen name="Home" component={HomeTabs} />
+            <RootStack.Screen name="Profile" component={ProfileScreen} />
+            <RootStack.Screen
+                name="Cart"
+                component={CartStackScreen}
+            />
+            <RootStack.Screen
+                options={{
+                    title: "Kampanyalar",
+                }}
+                component={NotificationStackScreen}
+                name="Notification" />
+            <RootStack.Screen
+                options={{
+                    title: "",
+                }}
+                component={AuthStackScreen}
+                name="Signin" />
 
-    </RootStack.Navigator>
-)
-
+        </RootStack.Navigator>
+    )
+}

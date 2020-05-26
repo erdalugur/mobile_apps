@@ -103,7 +103,7 @@ export interface IKeyValuePair<key, value> {
 }
 
 export interface IProc {
-    action: "procedure",
+    action: "procedure" | "public",
     model: string,
     parameters?: IKeyValuePair<string, string>[]
 }
