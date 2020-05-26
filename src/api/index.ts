@@ -1,7 +1,7 @@
 import { IResponse, IProc } from './types'
 import config from 'config';
 import { userManager } from 'utils';
-import { FetchAllModel } from 'types';
+import { FetchAllModel, SetCartRequest } from 'types';
 import { getInitialState } from 'myRedux/rootReducer';
 
 async function toJSON(e: any) {
@@ -90,6 +90,18 @@ export const dataManager = {
                 return reject(error);
             }
         })
-
+    },
+    setCart: async function (param: SetCartRequest) {
+        return await QueryableIO<IProc>({
+            model: 'MPOS_SET_CART',
+            action: 'public',
+            parameters: [
+                { key: 'TABLEID', value: param.TABLEID },
+                { key: 'STOREID', value: param.STOREID },
+                { key: 'USERID', value: param.USERID },
+                { key: 'JSON', value: JSON.stringify(param.JSON) }
+            ]
+        })
     }
 }
+

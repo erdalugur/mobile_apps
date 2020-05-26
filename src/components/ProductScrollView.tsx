@@ -9,6 +9,7 @@ import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
 import { IAction, actionTypes } from 'myRedux/types'
 import { screens } from 'navigation'
+import { messageBox, messages } from 'utils'
 
 interface State {
 
@@ -25,24 +26,24 @@ interface Props extends NavigationProps<any, any> {
 class Index extends React.PureComponent<Props, State>{
     state: State = {}
     renderItems = () => {
-
         return this.props.items.map(x => (
-            <View key={x.ID} style={{ marginRight: 5, width: 140 }}>
-                <View style={{ padding: 5 }}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate(screens.product, { item: x })}>
-                        <Image source={{ uri: x.PREVIEW }} style={[styles.image]} />
-                        <View style={[styles.productName]}>
-                            <Text style={{ textTransform: "capitalize", textAlign: 'center' }}>{x.NAME.slice(0, 100)}</Text>
-                            <Text style={{ textAlign: 'center' }}>{`${x.PRICE.toFixed(2).toString()} ₺`}</Text>
-                        </View>
-                    </TouchableOpacity>
+            <View key={x.ID} style={{ marginRight: 5, width: 140, marginTop: 5 }}>
+                <TouchableOpacity onPress={() => this.props.navigation.navigate(screens.product, { item: x })}>
+                    <Image source={{ uri: x.PREVIEW }} style={[styles.image]} />
+                </TouchableOpacity>
+                <View style={{ paddingHorizontal: 5 }}>
+                    <View style={[styles.productName]}>
+                        <Text style={{ textTransform: "capitalize", textAlign: 'center' }}>{x.NAME.slice(0, 100)}</Text>
+                        <Text style={{ textAlign: 'center' }}>{`${x.PRICE.toFixed(2).toString()} ₺`}</Text>
+                    </View>
                     <TouchableOpacity
                         onPress={() => {
                             this.props.dispatch({ type: actionTypes.ADD_TO_CART, payload: x });
+                            messageBox(messages.ADD_TO_CART_SUCCESS.replace('{0}', x.NAME))
                         }}
                         style={[styles.basket]}>
                         <Text>
-                            Sepete Ekle
+                            {messages.ADD_TO_CART}
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -56,12 +57,14 @@ class Index extends React.PureComponent<Props, State>{
                 <View style={[styles.title]}>
                     <Text style={{ fontSize: 20 }}>{this.props.title}</Text>
                     <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate(screens.category, {
-                            title: this.props.title,
-                            items: this.props.items
-                        })}>
-                        <Text style={{ fontSize: 20 }}>
-                            Tümünü Gör
+                        onPress={() => {
+                            this.props.navigation.navigate(screens.category, {
+                                title: this.props.title,
+                                items: this.props.items
+                            })
+                        }}>
+                        <Text style={{ fontSize: 16 }}>
+                            {messages.SEE_ALL}
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -92,7 +95,7 @@ const styles = StyleSheet.create({
         paddingBottom: 10
     },
     image: {
-        width: 130,
+        width: '100%',
         height: 150,
         resizeMode: 'cover'
     },

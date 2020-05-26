@@ -1,6 +1,6 @@
-import { AsyncStorage } from 'react-native'
+import { AsyncStorage, Alert } from 'react-native'
 import { UserModel, CacheResponse } from 'types'
-
+export { messages } from './messages'
 export const cacheKeys = {
     user: "user",
 }
@@ -50,4 +50,8 @@ export const userManager = {
     remove: function () {
         cacheService.remove(cacheKeys.user);
     }
+}
+
+export function messageBox(message: string) {
+    return Alert.alert(message);
 }

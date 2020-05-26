@@ -23,6 +23,7 @@ export const actionTypes = {
     FETCH_ALL: 'FETCH_ALL',
     SET_TOKEN: 'SET_TOKEN',
     ADD_TO_CART: 'ADD_TO_CART',
+    REMOVE_CART: 'REMOVE_CART',
     INCREMENT: 'INCREMENT',
     DECREMENT: 'DECREMENT'
 }

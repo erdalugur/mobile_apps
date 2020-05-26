@@ -9,8 +9,10 @@ import theme from 'theme';
 import { SingleMultiType, IAction, actionTypes } from 'myRedux/types';
 import { Plus, Minus } from 'icons';
 import { screens } from 'navigation';
+import { messageBox, messages } from 'utils';
+import { dataManager } from 'api';
 
-const { height } = Dimensions.get('window')
+
 interface Props extends NavigationProps<any, any> {
     cart: SingleMultiType<any, {
         [key: string]: CartItem;
@@ -44,7 +46,7 @@ class Index extends React.PureComponent<Props, any> {
                 <View style={[styles.cartInfo]}>
                     <Text style={{ textTransform: 'capitalize', fontSize: 20 }}>{cart.items[x].NAME}</Text>
                     <Text>{`Fiyat → ${cart.items[x].PRICE.toFixed(2).toString()} ₺`}</Text>
-                    <Text>{`Adet → ${cart.items[x].quantity.toString()} ₺`}</Text>
+                    <Text>{`Adet → ${cart.items[x].quantity.toString()}`}</Text>
                     <Text>{`Toplam Fiyat → ${cart.items[x].totalPrice.toFixed(2).toString()} ₺`}</Text>
                 </View>
                 <View style={[styles.buttonContainer]}>
@@ -56,6 +58,32 @@ class Index extends React.PureComponent<Props, any> {
             </View>
         ));
     }
+
+    complete = async () => {
+        let { items } = this.props.cart
+        if (Object.keys(items).length === 0) {
+            messageBox(messages.EMPTY_CART_MESSAGE)
+        } else {
+            let { statusCode, data, error } = await dataManager.setCart({
+                STOREID: "1",
+                TABLEID: '1',
+                USERID: '1',
+                JSON: Object.keys(items).map(x => {
+                    return {
+                        PRODUCTID: items[x].ID.toString(),
+                        QUANTITY: items[x].quantity.toString()
+                    }
+                })
+            });
+            if (statusCode === 200) {
+                messageBox(messages.SEND_CART_SUCCESS);
+                this.props.dispatch({ type: actionTypes.REMOVE_CART, payload: {} })
+            } else {
+
+            }
+        }
+    }
+
     render() {
         return (
             <View full>
@@ -70,7 +98,9 @@ class Index extends React.PureComponent<Props, any> {
                         </Text>
                     </View>
                     <View style={{ width: 1, backgroundColor: theme.colors.border, height: 70 }}></View>
-                    <TouchableOpacity style={[styles.bottomButton]}>
+                    <TouchableOpacity
+                        onPress={this.complete}
+                        style={[styles.bottomButton]}>
                         <Text style={{ textAlign: 'center', fontSize: 10 }}>Sipariş</Text>
                         <Text style={{ fontSize: 20 }}>
                             Gönder

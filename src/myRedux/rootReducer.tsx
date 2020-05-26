@@ -1,7 +1,6 @@
 import { IAction, IState, actionTypes } from './types'
 import { CartItem } from 'types';
 
-
 const InitialState: IState = getInitialState({});
 
 export default function (state: IState = InitialState, action: IAction): IState {
@@ -16,6 +15,8 @@ export default function (state: IState = InitialState, action: IAction): IState 
             return INCREMENT(state, action.payload);
         case actionTypes.DECREMENT:
             return DECREMENT(state, action.payload);
+        case actionTypes.REMOVE_CART:
+            return { ...state, cart: { items: {}, item: null } };
         default:
             return state
     }

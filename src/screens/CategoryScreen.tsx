@@ -6,6 +6,7 @@ import { NavigationProps, Product } from 'types';
 import theme from 'theme';
 import { screens } from 'navigation';
 import { IAction, actionTypes } from 'myRedux/types';
+import { messageBox, messages } from 'utils';
 
 
 interface Props extends NavigationProps<{
@@ -29,7 +30,6 @@ class Index extends React.PureComponent<Props, State> {
     }
 
     renderItem = (x: Product, index: number) => {
-        console.log(index)
         return (
             <TouchableOpacity
                 key={index}
@@ -37,14 +37,11 @@ class Index extends React.PureComponent<Props, State> {
                     this.props.navigation.navigate(screens.product, { item: x });
                 }}
                 style={[styles.itemContainer, {
-                    paddingLeft: index % 2 === 0 ? 10 : 5,
-                    paddingRight: index % 2 === 0 ? 5 : 10
+                    paddingLeft: index % 2 === 0 ? 5 : 2.5,
+                    paddingRight: index % 2 === 0 ? 2.5 : 5
                 }]}>
-                <View style={{
-                    width: '100%',
-                }}>
-                    <Image
-                        source={{ uri: x.PREVIEW }}
+                <View style={{ width: '100%' }}>
+                    <Image source={{ uri: x.PREVIEW }}
                         style={{
                             resizeMode: 'cover',
                             height: 200
@@ -55,15 +52,16 @@ class Index extends React.PureComponent<Props, State> {
                     </View>
                     <TouchableOpacity onPress={() => {
                         this.props.dispatch({ type: actionTypes.ADD_TO_CART, payload: x })
+                        messageBox(messages.ADD_TO_CART_SUCCESS.replace('{0}', x.NAME))
                     }} style={[styles.basket]}>
-                        <Text>Sepete Ekle</Text>
+                        <Text>{messages.ADD_TO_CART}</Text>
                     </TouchableOpacity>
                 </View>
             </TouchableOpacity>
         )
     }
 
-    renderItems = () => {
+    render() {
         let { items } = this.props.route.params
         return (
             <FlatList
@@ -76,14 +74,6 @@ class Index extends React.PureComponent<Props, State> {
             />
         )
     }
-
-    render() {
-        return (
-            <View style={styles.container}>
-                {this.renderItems()}
-            </View>
-        );
-    }
 }
 
 export default connect()(Index);
@@ -93,7 +83,7 @@ const styles = StyleSheet.create({
     itemContainer: {
         width: '50%',
         alignItems: 'center',
-        paddingTop: 10
+        paddingTop: 5
     },
     priceContainer: {
         position: 'absolute',

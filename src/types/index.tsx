@@ -65,3 +65,13 @@ export interface ProductTreeModel {
     NAME: string,
     PRODUCTS: Product[]
 }
+
+export interface SetCartRequest {
+    TABLEID: string
+    STOREID: string
+    USERID: string
+    JSON: Array<{
+        PRODUCTID: string
+        QUANTITY: string
+    }>
+}

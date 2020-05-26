@@ -6,7 +6,7 @@ import theme from 'theme';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { IAction, actionTypes } from 'myRedux/types';
 import { connect } from 'react-redux';
-
+import { messageBox, messages } from 'utils'
 interface Props extends NavigationProps<{
     item: Product
 }, any> {
@@ -32,7 +32,7 @@ class Index extends React.PureComponent<Props, any> {
                 <View style={{ flex: 1 }}>
                     <Image source={{ uri: x.PREVIEW }} style={[styles.image]} />
                 </View>
-                <ScrollView style={{ flex: 1 }}>
+                <ScrollView style={{ flex: 1, marginBottom: 70 }}>
                     <Html html={x.DESCRIPTION} />
                 </ScrollView>
                 <View style={[styles.buttonContainer]}>
@@ -44,10 +44,11 @@ class Index extends React.PureComponent<Props, any> {
                     <TouchableOpacity
                         onPress={() => {
                             this.props.dispatch({ type: actionTypes.ADD_TO_CART, payload: x });
+                            messageBox(messages.ADD_TO_CART_SUCCESS.replace('{0}', x.NAME))
                         }}
                         style={[styles.button]}>
                         <Text style={{ fontSize: 20 }}>
-                            Sepete Ekle
+                            {messages.ADD_TO_CART}
                         </Text>
                     </TouchableOpacity>
                 </View>
