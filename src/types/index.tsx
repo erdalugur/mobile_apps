@@ -16,3 +16,17 @@ export interface CartItem extends Product {
     quantity: number
     totalPrice: number
 }
+
+
+export interface CacheResponse {
+    name: string
+    value: string
+    expiryDate: number
+}
+
+export interface UserModel {
+    token: string
+    ID: string
+    USERNAME: string
+    PASSWORD: string
+}

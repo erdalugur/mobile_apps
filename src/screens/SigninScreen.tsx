@@ -1,6 +1,5 @@
 import React from 'react'
 import { Card, View, Button, FormRow, Input, Text } from 'components'
-import { setCredentials } from 'api';
 import { connect } from 'react-redux';
 import { AppState } from 'myRedux';
 import { Dispatch } from 'redux';
@@ -33,7 +32,6 @@ class Index extends React.PureComponent<Props, State> {
             return
         } else {
             this.setState({ loading: true, errors: {} });
-            await setCredentials("yes");
             this.props.setToken("yes");
             this.props.navigation.goBack();
         }

@@ -16,7 +16,8 @@ module.exports = function (api) {
             context: "./src/context",
             navigation: "./src/navigation",
             types: "./src/types",
-            icons: "./src/icons"
+            icons: "./src/icons",
+            utils: "./src/utils"
           }
         }
       ]
