@@ -7,7 +7,7 @@ import { AppState, IState } from 'myRedux';
 import { dataManager } from 'api';
 import { IAction } from 'myRedux/types';
 
-interface Props extends NavigationProps {
+interface Props extends NavigationProps<any, any> {
     app: IState
     dispatch: (param: IAction) => void
 }

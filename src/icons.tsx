@@ -20,5 +20,7 @@ export function Back({ color = theme.colors.text, size = 30, onPress }: IconProp
 }
 
 export function HeaderBack() {
-    return <TouchableOpacity style={{ marginLeft: 5 }}><Back /></TouchableOpacity>
+    return <TouchableOpacity
+        style={{ marginLeft: 15 }}>
+        <Back size={40} /></TouchableOpacity>
 }

@@ -11,10 +11,9 @@ export function CartButton(props: Props) {
     const navigation = useNavigation();
     return (
         <TouchableOpacity
-            style={{ flexDirection: 'row', marginRight: 5 }}
+            style={{ flexDirection: 'row', marginRight: 10 }}
             onPress={() => navigation.navigate("Cart")}>
-            <AntDesign name="shoppingcart" size={22} color={theme.colors.text} />
-            {/* <Text style={{position: 'absolute', top: 10}}>0</Text> */}
+            <AntDesign name="shoppingcart" size={25} color={theme.colors.text} />
         </TouchableOpacity>
     )
 }

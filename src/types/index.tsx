@@ -1,7 +1,13 @@
-import { NavigationProp, RouteProp } from '@react-navigation/native';
-export interface NavigationProps {
+import { NavigationProp } from '@react-navigation/native';
+export interface NavigationProps<TRoute, TNavigation> {
     navigation: NavigationProp<any>
-    route: RouteProp<any, any>
+    route: RouteProps<TRoute>
+}
+
+export interface RouteProps<T> {
+    key: string
+    name: string
+    params: T
 }
 
 export interface Product {

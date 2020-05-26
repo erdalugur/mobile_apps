@@ -13,7 +13,7 @@ interface State {
 
 }
 
-interface Props extends NavigationProps {
+interface Props extends NavigationProps<any, any> {
     title: string
     categoryId: string
     items: Array<Product>
@@ -28,7 +28,7 @@ class Index extends React.PureComponent<Props, State>{
         return this.props.items.map(x => (
             <View key={x.ID} style={{ marginRight: 5, width: 140 }}>
                 <View style={{ padding: 5 }}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate("Product")}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate("Product", { item: x })}>
                         <Image source={{ uri: x.PREVIEW }} style={[styles.image]} />
                         <View style={[styles.productName]}>
                             <Text style={{ textTransform: "capitalize", textAlign: 'center' }}>{x.NAME.slice(0, 100)}</Text>
@@ -54,7 +54,11 @@ class Index extends React.PureComponent<Props, State>{
             <View style={[styles.container]}>
                 <View style={[styles.title]}>
                     <Text>{this.props.title}</Text>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate("Category")}>
+                    <TouchableOpacity
+                        onPress={() => this.props.navigation.navigate("Category", {
+                            title: this.props.title,
+                            items: this.props.items
+                        })}>
                         <Text>
                             Tümünü Gör
                         </Text>

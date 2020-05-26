@@ -27,6 +27,7 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
     }
     return (
         <HomeStack.Navigator screenOptions={{
+            // header: () => null
             headerRight: ({ tintColor }) => <CartButton />,
             headerBackTitleVisible: false,
             headerBackTitleStyle: { color: theme.colors.text },
@@ -52,7 +53,8 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
             />
             <HomeStack.Screen
                 options={{
-                    title: 'Ürünler'
+                    title: 'Ürünler',
+
                 }}
                 name="Product"
                 component={ProductScreen}
@@ -103,6 +105,7 @@ export const HomeTabs = ({ navigation, route }: { navigation: any, route: any })
     return (
         <Tab.Navigator
             screenOptions={({ route, navigation }) => ({
+
                 tabBarIcon: ({ color, size }) => {
                     let iconName: string = "";
                     if (route.name === 'Home')
@@ -113,12 +116,14 @@ export const HomeTabs = ({ navigation, route }: { navigation: any, route: any })
                         iconName = 'user'
 
                     return <AntDesign color={color} size={size} name={iconName} />
-                }
+                },
+                header: () => null
             })}
             tabBarOptions={{ activeTintColor: theme.colors.text }}>
             <Tab.Screen
                 options={{
                     title: "Anasayfa",
+
                 }}
                 component={HomeStackScreen}
                 name="Home" />
