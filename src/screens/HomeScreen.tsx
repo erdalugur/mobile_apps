@@ -1,11 +1,10 @@
 import React from 'react';
+import { RefreshControl, ScrollView } from 'react-native'
 import { View, TopActions, Slider, ProductScrollView } from 'components'
 import { NavigationProps } from 'types'
 import { connect } from 'react-redux';
 import { AppState, IState } from 'myRedux';
-import { ScrollView } from 'react-native-gesture-handler';
-import { QueryableIO, dataManager } from 'api';
-import { IProc } from 'api/types';
+import { dataManager } from 'api';
 import { IAction } from 'myRedux/types';
 
 interface Props extends NavigationProps {
@@ -31,15 +30,24 @@ class Home extends React.PureComponent<Props, State> {
 
     loadAsync = async () => {
         console.log("fetchAllStart")
+        this.setState({ loading: true });
         let result = await dataManager.loadAll();
         this.props.dispatch({ type: 'FETCH_ALL', payload: result });
         console.log("fetchAllEnd", result.tree.length)
+        this.setState({ loading: false });
+
     }
 
     render() {
         return (
             <View full>
-                <ScrollView showsHorizontalScrollIndicator>
+                <ScrollView
+                    refreshControl={
+                        <RefreshControl
+                            refreshing={this.state.loading}
+                            onRefresh={this.loadAsync} />
+                    }
+                    showsHorizontalScrollIndicator>
                     <TopActions />
                     <Slider />
                     {this.props.app.menu.tree.map(x => (
