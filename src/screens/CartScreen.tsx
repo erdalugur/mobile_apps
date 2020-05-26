@@ -122,6 +122,7 @@ const styles = StyleSheet.create({
         marginBottom: 5
     },
     bottomButtonContainer: {
+        backgroundColor: theme.colors.card,
         position: 'absolute',
         bottom: 0,
         height: 70,
@@ -130,6 +131,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around'
     },
     bottomButton: {
+        backgroundColor: theme.colors.card,
         height: 70,
         alignContent: 'center',
         justifyContent: 'center',

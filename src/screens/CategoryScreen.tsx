@@ -5,13 +5,14 @@ import { connect } from 'react-redux';
 import { NavigationProps, Product } from 'types';
 import theme from 'theme';
 import { screens } from 'navigation';
+import { IAction, actionTypes } from 'myRedux/types';
 
 
 interface Props extends NavigationProps<{
     title: string
     items: Product[]
 }, any> {
-
+    dispatch: (param: IAction) => void
 }
 interface State {
 
@@ -41,11 +42,7 @@ class Index extends React.PureComponent<Props, State> {
                 }]}>
                 <View style={{
                     width: '100%',
-                    backgroundColor: theme.colors.card
                 }}>
-                    <View style={[styles.priceContainer]}>
-                        <Text style={{ fontSize: 16 }}>{`${x.PRICE.toFixed(2)} ₺`}</Text>
-                    </View>
                     <Image
                         source={{ uri: x.PREVIEW }}
                         style={{
@@ -53,8 +50,14 @@ class Index extends React.PureComponent<Props, State> {
                             height: 200
                         }} />
                     <View style={[styles.nameContainer]}>
-                        <Text style={{ fontSize: 20 }}>{x.NAME}</Text>
+                        <Text style={{ fontSize: 14 }}>{x.NAME}</Text>
+                        <Text style={{ fontSize: 14 }}>{`${x.PRICE.toFixed(2)} ₺`}</Text>
                     </View>
+                    <TouchableOpacity onPress={() => {
+                        this.props.dispatch({ type: actionTypes.ADD_TO_CART, payload: x })
+                    }} style={[styles.basket]}>
+                        <Text>Sepete Ekle</Text>
+                    </TouchableOpacity>
                 </View>
             </TouchableOpacity>
         )
@@ -90,7 +93,7 @@ const styles = StyleSheet.create({
     itemContainer: {
         width: '50%',
         alignItems: 'center',
-        paddingTop: 10,
+        paddingTop: 10
     },
     priceContainer: {
         position: 'absolute',
@@ -104,13 +107,25 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     nameContainer: {
-        position: 'absolute',
+        paddingHorizontal: 2,
+        //backgroundColor: theme.colors.card,
+        //position: 'absolute',
         width: '100%',
-        bottom: 0,
+        //bottom: 0,
         zIndex: 1,
-        opacity: 0.7,
-        height: 40,
-        alignItems: 'center',
-        justifyContent: 'center'
-    }
+        //opacity: 0.7,
+        height: 60,
+        //alignItems: 'center',
+        justifyContent: 'space-around',
+    },
+    basket: {
+        backgroundColor: theme.colors.background,
+        justifyContent: 'center', alignItems: 'center',
+        borderWidth: 1,
+        borderColor: theme.colors.text,
+        height: 30,
+        borderRadius: 2,
+        opacity: 0.8,
+        marginHorizontal: 2
+    },
 });

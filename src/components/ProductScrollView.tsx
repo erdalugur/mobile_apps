@@ -54,13 +54,13 @@ class Index extends React.PureComponent<Props, State>{
         return (
             <View style={[styles.container]}>
                 <View style={[styles.title]}>
-                    <Text>{this.props.title}</Text>
+                    <Text style={{ fontSize: 20 }}>{this.props.title}</Text>
                     <TouchableOpacity
                         onPress={() => this.props.navigation.navigate(screens.category, {
                             title: this.props.title,
                             items: this.props.items
                         })}>
-                        <Text>
+                        <Text style={{ fontSize: 20 }}>
                             Tümünü Gör
                         </Text>
                     </TouchableOpacity>
@@ -101,7 +101,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: theme.colors.text,
         height: 30,
-        borderRadius: 2
+        borderRadius: 2,
+        opacity: 0.8
     },
     productName: { justifyContent: 'space-around', height: 70, width: '100%' }
 })
