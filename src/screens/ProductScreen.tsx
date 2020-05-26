@@ -5,7 +5,7 @@ import { View, Text } from 'components'
 export default function () {
     return (
         <View style={styles.container}>
-            <Text>Kategoriler!</Text>
+            <Text>Ürün!</Text>
         </View>
     );
 }

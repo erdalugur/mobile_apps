@@ -5,11 +5,11 @@ import { Provider, useSelector } from 'react-redux'
 import { store, AppState } from 'myRedux'
 import { getCredentials } from 'api'
 import { Apploading } from 'components';
-import { RootStack } from 'navigation'
+import { App } from 'navigation'
 import { StatusBar } from 'react-native';
 
 
-const App = () => {
+const Main = () => {
   const [isLoading, setLoading] = React.useState<boolean>(true);
   const [isAuthenticated, setIsAuthenticated] = React.useState<boolean>(false);
 
@@ -44,7 +44,7 @@ const App = () => {
   return (
     <NavigationContainer theme={theme}>
       {isLoading ? <Apploading /> :
-        <RootStack
+        <App
           isAuthenticated={isAuthenticated}
         />}
     </NavigationContainer>
@@ -53,7 +53,7 @@ const App = () => {
 export default () => {
   return (
     <Provider store={store}>
-      <App />
+      <Main />
     </Provider>
   );
 }

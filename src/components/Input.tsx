@@ -10,7 +10,7 @@ export class Input extends React.PureComponent<Props, any> {
         return (
             <TextInput
                 {...this.props}
-                style={styles.container}
+                style={[styles.container, this.props.style]}
                 placeholderTextColor={styles.placeholder.color}
             />
         )

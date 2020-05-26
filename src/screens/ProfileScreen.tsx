@@ -1,16 +1,17 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
-import { View, Text } from 'components'
+import { Text, View } from 'components'
 
 export default function () {
     return (
         <View style={styles.container}>
-            <Text>Kategoriler!</Text>
+            <Text>Profile!</Text>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
+        flex: 1,
     },
 });

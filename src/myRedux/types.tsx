@@ -1,3 +1,5 @@
+import { CartItem } from "types";
+
 export interface IAction {
     type: string
     payload: any
@@ -11,6 +13,8 @@ export interface SingleMultiType<Single, Multi> {
 export interface IState {
     token: string
     user: any
-    transactions: any[]
-    balance: number
+    category: SingleMultiType<any, Array<any>>
+    product: SingleMultiType<any, Array<any>>
+    campaign: SingleMultiType<any, Array<any>>
+    cart: SingleMultiType<any, { [key: string]: CartItem }>
 }

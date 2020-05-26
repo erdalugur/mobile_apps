@@ -15,7 +15,9 @@ module.exports = function (api) {
             config: "./src/config",
             context: "./src/context",
             navigation: "./src/navigation",
-            types: "./src/navigation"
+            types: "./src/types",
+            icons: "./src/icons",
+            utils: "./src/utils"
           }
         }
       ]

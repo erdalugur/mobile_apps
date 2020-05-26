@@ -65,28 +65,28 @@ export interface IRequest {
 }
 
 export interface IUpdate {
-    action?: "update"
+    action: "update"
     model: string,
     row: IRow[],
     filters?: IFilter[]
 }
 
 export interface IDelete {
-    action?: "delete",
+    action: "delete",
     filters: IFilter[],
     model: string
 
 }
 
 export interface ICreate {
-    action?: "create",
+    action: "create",
     model: string,
     row?: IRow[],
     afterSelect?: string[]
 }
 
 export interface IMultiCreate {
-    action?: "multipleCreate",
+    action: "multipleCreate",
     model: string,
     rows: string[][],
     keys: string[]
@@ -103,13 +103,13 @@ export interface IKeyValuePair<key, value> {
 }
 
 export interface IProc {
-    action?: "procedure",
+    action: "procedure",
     model: string,
     parameters?: IKeyValuePair<string, string>[]
 }
 
 export interface ILogin {
-    action?: "login",
+    action: "login",
     model: string,
     keyField: IKeyValuePair<string, string>,
     valueField: IKeyValuePair<string, string>
