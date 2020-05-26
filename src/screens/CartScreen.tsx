@@ -1,15 +1,16 @@
 import React from 'react';
-import { StyleSheet, Image } from 'react-native';
-import { CartItem } from 'types';
+import { StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { CartItem, NavigationProps } from 'types';
 import { View, Text } from 'components'
 import { connect } from 'react-redux';
 import { AppState } from 'myRedux';
 import { ScrollView } from 'react-native-gesture-handler';
 import theme from 'theme';
-import { SingleMultiType, IAction } from 'myRedux/types';
+import { SingleMultiType, IAction, actionTypes } from 'myRedux/types';
 import { Plus, Minus } from 'icons';
+import { screens } from 'navigation';
 
-interface Props {
+interface Props extends NavigationProps<any, any> {
     cart: SingleMultiType<any, {
         [key: string]: CartItem;
     }>
@@ -23,9 +24,14 @@ class Index extends React.PureComponent<Props, any> {
             <View
                 style={[styles.itemContainer]}
                 key={cart.items[x].ID}>
-                <View style={[styles.imageContainer]}>
+                <TouchableOpacity
+                    activeOpacity={0.8}
+                    onPress={() => {
+                        this.props.navigation.navigate(screens.product, { item: cart.items[x] })
+                    }}
+                    style={[styles.imageContainer]}>
                     <Image source={{ uri: cart.items[x].PREVIEW }} style={[styles.image]} />
-                </View>
+                </TouchableOpacity>
                 <View style={[styles.cartInfo]}>
                     <Text style={{ textTransform: 'capitalize', fontSize: 20 }}>{cart.items[x].NAME}</Text>
                     <Text>{`Fiyat → ${cart.items[x].totalPrice.toFixed(2).toString()} ₺`}</Text>
@@ -34,9 +40,9 @@ class Index extends React.PureComponent<Props, any> {
                 </View>
                 <View style={[styles.buttonContainer]}>
                     <Plus color={theme.colors.text}
-                        onPress={() => this.props.dispatch({ type: 'INCREMENT', payload: cart.items[x].ID })} />
+                        onPress={() => this.props.dispatch({ type: actionTypes.INCREMENT, payload: cart.items[x].ID })} />
                     <Minus color={theme.colors.text}
-                        onPress={() => this.props.dispatch({ type: 'DECREMENT', payload: cart.items[x].ID })} />
+                        onPress={() => this.props.dispatch({ type: actionTypes.DECREMENT, payload: cart.items[x].ID })} />
                 </View>
             </View>
         ));

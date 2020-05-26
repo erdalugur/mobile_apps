@@ -4,7 +4,7 @@ import { View, Text, Html } from 'components'
 import { NavigationProps, Product } from 'types';
 import theme from 'theme';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
-import { IAction } from 'myRedux/types';
+import { IAction, actionTypes } from 'myRedux/types';
 import { connect } from 'react-redux';
 
 interface Props extends NavigationProps<{
@@ -29,30 +29,21 @@ class Index extends React.PureComponent<Props, any> {
         const x = this.props.route.params.item
         return (
             <View style={styles.container}>
-                <View
-                    style={{ flex: 1 }}>
-                    <Image
-                        source={{ uri: x.PREVIEW }}
-                        style={[styles.image]}
-                    />
+                <View style={{ flex: 1 }}>
+                    <Image source={{ uri: x.PREVIEW }} style={[styles.image]} />
                 </View>
                 <ScrollView style={{ flex: 1 }}>
-                    <Html
-                        html={x.DESCRIPTION}
-                    />
+                    <Html html={x.DESCRIPTION} />
                 </ScrollView>
                 <View style={[styles.buttonContainer]}>
                     <View style={[styles.button]}>
-                        <Text style={{
-                            fontSize: 20
-                        }}>
+                        <Text style={{ fontSize: 20 }}>
                             {`${x.PRICE.toFixed(2)} ₺`}
                         </Text>
                     </View>
-
                     <TouchableOpacity
                         onPress={() => {
-                            this.props.dispatch({ type: "ADD_TO_CART", payload: x });
+                            this.props.dispatch({ type: actionTypes.ADD_TO_CART, payload: x });
                         }}
                         style={[styles.button]}>
                         <Text style={{ fontSize: 20 }}>

@@ -35,7 +35,6 @@ class Home extends React.PureComponent<Props, State> {
         this.props.dispatch({ type: 'FETCH_ALL', payload: result });
         console.log("fetchAllEnd", result.tree.length)
         this.setState({ loading: false });
-
     }
 
     render() {

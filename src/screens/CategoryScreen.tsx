@@ -1,9 +1,10 @@
 import React from 'react';
-import { StyleSheet, ScrollView, FlatList, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
 import { View, Text } from 'components'
 import { connect } from 'react-redux';
 import { NavigationProps, Product } from 'types';
 import theme from 'theme';
+import { screens } from 'navigation';
 
 
 interface Props extends NavigationProps<{
@@ -32,7 +33,7 @@ class Index extends React.PureComponent<Props, State> {
             <TouchableOpacity
                 key={index}
                 onPress={() => {
-                    this.props.navigation.navigate('Product', { item: x });
+                    this.props.navigation.navigate(screens.product, { item: x });
                 }}
                 style={[styles.itemContainer, {
                     paddingLeft: index % 2 === 0 ? 10 : 5,
@@ -43,7 +44,7 @@ class Index extends React.PureComponent<Props, State> {
                     backgroundColor: theme.colors.card
                 }}>
                     <View style={[styles.priceContainer]}>
-                        <Text>{`${x.PRICE.toFixed(2)} ₺`}</Text>
+                        <Text style={{ fontSize: 16 }}>{`${x.PRICE.toFixed(2)} ₺`}</Text>
                     </View>
                     <Image
                         source={{ uri: x.PREVIEW }}
@@ -52,7 +53,7 @@ class Index extends React.PureComponent<Props, State> {
                             height: 200
                         }} />
                     <View style={[styles.nameContainer]}>
-                        <Text>{x.NAME}</Text>
+                        <Text style={{ fontSize: 20 }}>{x.NAME}</Text>
                     </View>
                 </View>
             </TouchableOpacity>

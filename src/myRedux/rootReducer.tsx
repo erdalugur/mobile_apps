@@ -1,4 +1,4 @@
-import { IAction, IState, } from './types'
+import { IAction, IState, actionTypes } from './types'
 import { CartItem } from 'types';
 
 
@@ -6,15 +6,15 @@ const InitialState: IState = getInitialState({});
 
 export default function (state: IState = InitialState, action: IAction): IState {
     switch (action.type) {
-        case 'FETCH_ALL':
+        case actionTypes.FETCH_ALL:
             return { ...state, menu: { ...action.payload } }
-        case "SET_TOKEN":
+        case actionTypes.SET_TOKEN:
             return SET_TOKEN(state, action.payload);
-        case "ADD_TO_CART":
+        case actionTypes.ADD_TO_CART:
             return ADD_TO_CART(state, action.payload);
-        case "INCREMENT":
+        case actionTypes.INCREMENT:
             return INCREMENT(state, action.payload);
-        case "DECREMENT":
+        case actionTypes.DECREMENT:
             return DECREMENT(state, action.payload);
         default:
             return state

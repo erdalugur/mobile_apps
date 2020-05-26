@@ -18,3 +18,11 @@ export interface IState {
     cart: SingleMultiType<any, { [key: string]: CartItem }>
     menu: FetchAllModel
 }
+
+export const actionTypes = {
+    FETCH_ALL: 'FETCH_ALL',
+    SET_TOKEN: 'SET_TOKEN',
+    ADD_TO_CART: 'ADD_TO_CART',
+    INCREMENT: 'INCREMENT',
+    DECREMENT: 'DECREMENT'
+}

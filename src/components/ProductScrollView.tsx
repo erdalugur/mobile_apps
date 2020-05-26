@@ -7,7 +7,8 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { Product, NavigationProps } from 'types'
 import { connect } from 'react-redux'
 import { Dispatch } from 'redux'
-import { IAction } from 'myRedux/types'
+import { IAction, actionTypes } from 'myRedux/types'
+import { screens } from 'navigation'
 
 interface State {
 
@@ -28,7 +29,7 @@ class Index extends React.PureComponent<Props, State>{
         return this.props.items.map(x => (
             <View key={x.ID} style={{ marginRight: 5, width: 140 }}>
                 <View style={{ padding: 5 }}>
-                    <TouchableOpacity onPress={() => this.props.navigation.navigate("Product", { item: x })}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate(screens.product, { item: x })}>
                         <Image source={{ uri: x.PREVIEW }} style={[styles.image]} />
                         <View style={[styles.productName]}>
                             <Text style={{ textTransform: "capitalize", textAlign: 'center' }}>{x.NAME.slice(0, 100)}</Text>
@@ -37,7 +38,7 @@ class Index extends React.PureComponent<Props, State>{
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
-                            this.props.dispatch({ type: "ADD_TO_CART", payload: x });
+                            this.props.dispatch({ type: actionTypes.ADD_TO_CART, payload: x });
                         }}
                         style={[styles.basket]}>
                         <Text>
@@ -55,7 +56,7 @@ class Index extends React.PureComponent<Props, State>{
                 <View style={[styles.title]}>
                     <Text>{this.props.title}</Text>
                     <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate("Category", {
+                        onPress={() => this.props.navigation.navigate(screens.category, {
                             title: this.props.title,
                             items: this.props.items
                         })}>
