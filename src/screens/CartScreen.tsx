@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-native';
 import { CartItem, NavigationProps } from 'types';
 import { View, Text } from 'components'
 import { connect } from 'react-redux';
@@ -10,6 +10,7 @@ import { SingleMultiType, IAction, actionTypes } from 'myRedux/types';
 import { Plus, Minus } from 'icons';
 import { screens } from 'navigation';
 
+const { height } = Dimensions.get('window')
 interface Props extends NavigationProps<any, any> {
     cart: SingleMultiType<any, {
         [key: string]: CartItem;
@@ -17,6 +18,14 @@ interface Props extends NavigationProps<any, any> {
     dispatch: (param: IAction) => void
 }
 class Index extends React.PureComponent<Props, any> {
+
+    totalPrice = (): string => {
+        let { items } = this.props.cart, price = 0;
+        Object.keys(items).forEach(key => {
+            price = price + items[key].totalPrice
+        })
+        return `${price.toFixed(2)} ₺`
+    }
 
     RenderItems = () => {
         let { cart } = this.props
@@ -34,7 +43,7 @@ class Index extends React.PureComponent<Props, any> {
                 </TouchableOpacity>
                 <View style={[styles.cartInfo]}>
                     <Text style={{ textTransform: 'capitalize', fontSize: 20 }}>{cart.items[x].NAME}</Text>
-                    <Text>{`Fiyat → ${cart.items[x].totalPrice.toFixed(2).toString()} ₺`}</Text>
+                    <Text>{`Fiyat → ${cart.items[x].PRICE.toFixed(2).toString()} ₺`}</Text>
                     <Text>{`Adet → ${cart.items[x].quantity.toString()} ₺`}</Text>
                     <Text>{`Toplam Fiyat → ${cart.items[x].totalPrice.toFixed(2).toString()} ₺`}</Text>
                 </View>
@@ -50,9 +59,24 @@ class Index extends React.PureComponent<Props, any> {
     render() {
         return (
             <View full>
-                <ScrollView>
+                <ScrollView style={{ marginBottom: 70 }}>
                     {this.RenderItems()}
                 </ScrollView>
+                <View style={[styles.bottomButtonContainer]}>
+                    <View style={[styles.bottomButton]}>
+                        <Text style={{ marginLeft: 5, fontSize: 10 }}>Toplam Fiyat</Text>
+                        <Text style={{ fontSize: 20 }}>
+                            {this.totalPrice()}
+                        </Text>
+                    </View>
+                    <View style={{ width: 1, backgroundColor: theme.colors.border, height: 70 }}></View>
+                    <TouchableOpacity style={[styles.bottomButton]}>
+                        <Text style={{ textAlign: 'center', fontSize: 10 }}>Sipariş</Text>
+                        <Text style={{ fontSize: 20 }}>
+                            Gönder
+                        </Text>
+                    </TouchableOpacity>
+                </View>
             </View>
         );
     }
@@ -96,5 +120,18 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: 120,
         marginBottom: 5
-    }
+    },
+    bottomButtonContainer: {
+        position: 'absolute',
+        bottom: 0,
+        height: 70,
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-around'
+    },
+    bottomButton: {
+        height: 70,
+        alignContent: 'center',
+        justifyContent: 'center',
+    },
 });
