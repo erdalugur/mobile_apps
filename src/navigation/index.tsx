@@ -3,7 +3,7 @@ import PresentationScreen from 'screens/PresentationScreen'
 import HomeScreen from 'screens/HomeScreen'
 import SigninScreen from 'screens/SigninScreen'
 import { SignUpScreen } from 'screens/SignupScreen'
-import { createStackNavigator, TransitionPresets, CardStyleInterpolators } from '@react-navigation/stack';
+import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import NotificationScreen from 'screens/NotificationScreen';
 import SearchScreen from 'screens/SearchScreen';
@@ -63,7 +63,7 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
 }
 const SearchStack = createStackNavigator();
 const SearchStackScreen = () => (
-    <SearchStack.Navigator>
+    <SearchStack.Navigator headerMode="none">
         <SearchStack.Screen
             options={SearchOptions}
             name="Search"

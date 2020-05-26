@@ -24,7 +24,8 @@ export const NotificationOptions: IScreenOptions = {
 }
 
 export const SearchOptions: IScreenOptions = {
-    title: "Ara",
-    headerShown: true
+    title: "",
+    //headerShown: true
     // headerShown: false
+    header: () => null
 }

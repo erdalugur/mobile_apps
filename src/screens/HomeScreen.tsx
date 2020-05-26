@@ -19,6 +19,7 @@ export default function (props: Props) {
                 <Slider />
                 <ProductScrollView {...props} />
                 <ProductScrollView {...props} title="En İyi Fiyatlar" />
+                <Slider />
                 <ProductScrollView {...props} title="Elektronik" />
             </ScrollView>
         </View>
