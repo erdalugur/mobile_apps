@@ -65,9 +65,7 @@ class Index extends React.PureComponent<Props, any> {
             messageBox(messages.EMPTY_CART_MESSAGE)
         } else {
             let { statusCode, data, error } = await dataManager.setCart({
-                STOREID: "1",
                 TABLEID: '1',
-                USERID: '1',
                 JSON: Object.keys(items).map(x => {
                     return {
                         PRODUCTID: items[x].ID.toString(),
@@ -78,8 +76,8 @@ class Index extends React.PureComponent<Props, any> {
             if (statusCode === 200) {
                 messageBox(messages.SEND_CART_SUCCESS);
                 this.props.dispatch({ type: actionTypes.REMOVE_CART, payload: {} })
-            } else {
-
+            } else if (error) {
+                messageBox(error)
             }
         }
     }

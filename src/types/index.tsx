@@ -38,6 +38,7 @@ export interface UserModel {
     ID: string
     USERNAME: string
     PASSWORD: string
+    STOREID: string
 }
 
 export interface FetchAllModel {
@@ -68,8 +69,6 @@ export interface ProductTreeModel {
 
 export interface SetCartRequest {
     TABLEID: string
-    STOREID: string
-    USERID: string
     JSON: Array<{
         PRODUCTID: string
         QUANTITY: string

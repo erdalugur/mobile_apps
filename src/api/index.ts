@@ -1,6 +1,6 @@
 import { IResponse, IProc } from './types'
 import config from 'config';
-import { userManager } from 'utils';
+import { userManager, messages } from 'utils';
 import { FetchAllModel, SetCartRequest } from 'types';
 import { getInitialState } from 'myRedux/rootReducer';
 
@@ -92,16 +92,31 @@ export const dataManager = {
         })
     },
     setCart: async function (param: SetCartRequest) {
-        return await QueryableIO<IProc>({
-            model: 'MPOS_SET_CART',
-            action: 'public',
-            parameters: [
-                { key: 'TABLEID', value: param.TABLEID },
-                { key: 'STOREID', value: param.STOREID },
-                { key: 'USERID', value: param.USERID },
-                { key: 'JSON', value: JSON.stringify(param.JSON) }
-            ]
-        })
+        const user = await userManager.get();
+        if (user) {
+            try {
+                return await QueryableIO<IProc>({
+                    model: 'MPOS_SET_CART',
+                    action: 'public',
+                    parameters: [
+                        { key: 'TABLEID', value: param.TABLEID },
+                        { key: 'STOREID', value: user.STOREID },
+                        { key: 'USERID', value: user.ID },
+                        { key: 'JSON', value: JSON.stringify(param.JSON) }
+                    ]
+                })
+            } catch (error) {
+                return await errorPromise(error);
+            }
+
+        } else {
+            return await errorPromise(messages.PLEASE_LOGIN_FIRST)
+        }
     }
 }
 
+async function errorPromise(message: string) {
+    return new Promise<IResponse>((resolve, reject) => {
+        return resolve({ data: [], statusCode: 400, error: message, })
+    })
+}
