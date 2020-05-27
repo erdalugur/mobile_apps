@@ -1,15 +1,15 @@
 import React from 'react';
 import { RefreshControl, ScrollView } from 'react-native'
 import { View, TopActions, Slider, ProductScrollView } from 'components'
-import { NavigationProps } from 'types'
+import { NavigationProps, FetchAllModel } from 'types'
 import { connect } from 'react-redux';
 import { AppState, IState } from 'myRedux';
-import { dataManager } from 'api';
 import { IAction } from 'myRedux/types';
+import { dataManager } from 'api';
 
 interface Props extends NavigationProps<any, any> {
     app: IState
-    dispatch: (param: IAction) => void
+    dispatch: (param: IAction<FetchAllModel>) => void
 }
 
 interface State {

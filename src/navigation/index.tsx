@@ -190,7 +190,7 @@ export const App = (props: Props) => {
                 gestureDirection: 'horizontal',
                 ...TransitionPresets.SlideFromRightIOS
             }}
-            headerMode="none" initialRouteName={screens.home}>
+            headerMode="none" initialRouteName={props.isAuthenticated ? screens.home : screens.signin}>
             <RootStack.Screen
                 options={{
                     header: () => null
@@ -215,7 +215,7 @@ export const App = (props: Props) => {
                     title: "",
                 }}
                 component={AuthStackScreen}
-                name={screens.signup} />
+                name={screens.signin} />
 
         </RootStack.Navigator>
     )

@@ -1,8 +1,9 @@
 import { AsyncStorage, Alert } from 'react-native'
-import { UserModel, CacheResponse } from 'types'
+import { UserModel, CacheResponse, DomainSettingModel } from 'types'
 export { messages } from './messages'
 export const cacheKeys = {
     user: "user",
+    config: 'config'
 }
 
 export const cacheService = {
@@ -41,14 +42,26 @@ export const cacheService = {
 
 
 export const userManager = {
-    get: function () {
+    get: async function () {
         return cacheService.get<UserModel>(cacheKeys.user);
     },
-    set: function (data: UserModel) {
+    set: async function (data: UserModel) {
         cacheService.set(cacheKeys.user, data, 7);
     },
-    remove: function () {
+    remove: async function () {
         cacheService.remove(cacheKeys.user);
+    }
+}
+
+export const configurationManager = {
+    get: async function () {
+        return cacheService.get<DomainSettingModel>(cacheKeys.config)
+    },
+    set: async function (param: DomainSettingModel) {
+        cacheService.set(cacheKeys.config, param);
+    },
+    remove: function () {
+        cacheService.remove(cacheKeys.config);
     }
 }
 

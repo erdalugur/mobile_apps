@@ -48,7 +48,7 @@ export interface FetchAllModel {
 }
 
 export interface DomainSettingModel {
-    ID: number,
+    ID: string,
     NAME: string,
     IS_DISABLED: boolean,
     CREATED_DATE: string,
@@ -59,6 +59,7 @@ export interface DomainSettingModel {
     DOMAIN: string,
     USE_REPORT: boolean,
     USE_MENU: boolean
+    DEFAULT_CLIENT_ID: string
 }
 
 export interface ProductTreeModel {

@@ -1,8 +1,8 @@
 import { CartItem, FetchAllModel, UserModel } from "types";
 
-export interface IAction {
+export interface IAction<T> {
     type: string
-    payload: any
+    payload: T
 }
 
 

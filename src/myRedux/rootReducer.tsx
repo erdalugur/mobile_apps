@@ -1,9 +1,9 @@
 import { IAction, IState, actionTypes } from './types'
-import { CartItem } from 'types';
+import { CartItem, UserModel } from 'types';
 
 const InitialState: IState = getInitialState({});
 
-export default function (state: IState = InitialState, action: IAction): IState {
+export default function (state: IState = InitialState, action: IAction<any>): IState {
     switch (action.type) {
         case actionTypes.FETCH_ALL:
             return { ...state, menu: { ...action.payload } }
@@ -40,8 +40,8 @@ function DECREMENT(state: IState = InitialState, payload: string) {
     return { ...state, cart: { ...state.cart } }
 }
 
-function SET_TOKEN(state: IState = InitialState, payload: string) {
-    return { ...state, token: payload };
+function SET_TOKEN(state: IState = InitialState, payload: UserModel) {
+    return { ...state, user: payload };
 }
 
 function ADD_TO_CART(state: IState = InitialState, payload: CartItem) {

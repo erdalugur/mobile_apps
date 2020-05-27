@@ -7,6 +7,7 @@ import { getCredentials } from 'api'
 import { Apploading } from 'components';
 import { App } from 'navigation'
 import { StatusBar } from 'react-native';
+import { userManager } from 'utils';
 
 
 const Main = () => {
@@ -27,14 +28,14 @@ const Main = () => {
   async function handleIsAuthenticated() {
     let result: boolean = false;
     try {
-      let cache = await getCredentials();
-      console.log(cache)
-      if (cache.value != "" || token != "")
+      let user = await userManager.get();
+      console.log(user)
+      if (user != null && user.token != "")
         result = true;
       else
         result = false;
     } catch (error) {
-      result = token != ""
+      result = false
     }
     StatusBar.setBarStyle("light-content")
     setLoading(false);

@@ -1,6 +1,6 @@
-import { IResponse, IProc } from './types'
+import { IResponse, IProc, ILogin } from './types'
 import config from 'config';
-import { userManager, messages } from 'utils';
+import { messages, userManager, configurationManager } from 'utils';
 import { FetchAllModel, SetCartRequest } from 'types';
 import { getInitialState } from 'myRedux/rootReducer';
 
@@ -93,6 +93,7 @@ export const dataManager = {
     },
     setCart: async function (param: SetCartRequest) {
         const user = await userManager.get();
+        const config = await configurationManager.get();
         if (user) {
             try {
                 return await QueryableIO<IProc>({
@@ -101,7 +102,7 @@ export const dataManager = {
                     parameters: [
                         { key: 'TABLEID', value: param.TABLEID },
                         { key: 'STOREID', value: user.STOREID },
-                        { key: 'USERID', value: user.ID },
+                        { key: 'USERID', value: config?.DEFAULT_CLIENT_ID || user.ID },
                         { key: 'JSON', value: JSON.stringify(param.JSON) }
                     ]
                 })
@@ -112,6 +113,20 @@ export const dataManager = {
         } else {
             return await errorPromise(messages.PLEASE_LOGIN_FIRST)
         }
+    },
+    login: async function (username: string, password: string, store: string) {
+        return await QueryableIO<ILogin>({
+            action: 'login',
+            keyField: {
+                key: 'USERNAME', value: username
+            },
+            valueField: {
+                key: 'PASSWORD', value: password
+            },
+            model: 'USERS',
+            fields: ['ID'],
+            filters: [{ key: 'STOREID', value: store, operator: '=' }],
+        })
     }
 }
 

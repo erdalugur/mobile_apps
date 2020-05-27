@@ -1,30 +1,36 @@
 import React from 'react'
 import { Card, View, Button, FormRow, Input, Text } from 'components'
 import { connect } from 'react-redux';
-import { AppState } from 'myRedux';
 import { Dispatch } from 'redux';
-import { NavigationProps } from 'types';
+import { NavigationProps, UserModel } from 'types';
+import { dataManager } from 'api';
+import { screens } from 'navigation';
+import { IAction, actionTypes } from 'myRedux/types';
+import { messageBox } from 'utils';
 
 interface State {
     username: string
     password: string
+    storeId: string
     loading: boolean
     errors: { [key: string]: string }
 }
 
-interface Props extends NavigationProps {
+interface Props extends NavigationProps<any, any> {
     setToken: (token: string) => void
+    dispatch: (param: IAction<UserModel>) => void
 }
 class Index extends React.PureComponent<Props, State> {
     state: State = {
         username: "",
         password: "",
+        storeId: "1",
         loading: false,
         errors: {}
     }
     submit = async () => {
         let errors: { [key: string]: string } = {};
-        const { username, password } = this.state
+        const { username, password, storeId } = this.state
         username ? null : errors["username"] = "Required";
         password ? null : errors["password"] = "Required";
         if (Object.keys(errors).length) {
@@ -32,8 +38,25 @@ class Index extends React.PureComponent<Props, State> {
             return
         } else {
             this.setState({ loading: true, errors: {} });
-            this.props.setToken("yes");
-            this.props.navigation.goBack();
+            let { token, data, error } = await dataManager.login(username, password, storeId);
+            console.log(token)
+            if (token && data && data.length > 0) {
+                let __data__ = data[0];
+                this.props.dispatch({
+                    type: actionTypes.SET_TOKEN,
+                    payload: {
+                        ID: __data__.ID,
+                        PASSWORD: password,
+                        USERNAME: username,
+                        STOREID: storeId,
+                        token: token
+                    }
+                })
+                this.props.navigation.navigate(screens.home)
+            } else {
+                messageBox(error);
+                this.setState({ loading: false })
+            }
         }
     }
     render() {
@@ -48,6 +71,7 @@ class Index extends React.PureComponent<Props, State> {
                     </FormRow>
                     <FormRow errorMessage={this.state.errors["password"]} style={{ marginBottom: 10, marginTop: 10 }}>
                         <Input
+                            textContentType="password"
                             value={this.state.password.toString()}
                             onChangeText={(password) => this.setState({ password: password })}
                             placeholder="Password" />
@@ -66,7 +90,4 @@ class Index extends React.PureComponent<Props, State> {
     }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({
-    setToken: (token: string) => dispatch({ type: "SET_TOKEN", payload: token })
-})
-export default connect(null, mapDispatchToProps)(Index)
+export default connect(null)(Index)

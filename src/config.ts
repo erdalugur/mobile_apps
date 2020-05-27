@@ -3,7 +3,7 @@ interface IAppConfig {
 }
 
 const config: IAppConfig = {
-    endpoint: "http://api.queryableio.com/query"
+    endpoint: "https://api.queryableio.com/query"
 }
 
 export default config;
