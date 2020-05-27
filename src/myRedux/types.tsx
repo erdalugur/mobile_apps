@@ -11,7 +11,7 @@ export interface SingleMultiType<Single, Multi> {
     items: Multi
 }
 export interface IState {
-    user: UserModel | null
+    token: string
     category: SingleMultiType<any, Array<any>>
     product: SingleMultiType<any, Array<any>>
     campaign: SingleMultiType<any, Array<any>>

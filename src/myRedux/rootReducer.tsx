@@ -40,8 +40,8 @@ function DECREMENT(state: IState = InitialState, payload: string) {
     return { ...state, cart: { ...state.cart } }
 }
 
-function SET_TOKEN(state: IState = InitialState, payload: UserModel) {
-    return { ...state, user: payload };
+function SET_TOKEN(state: IState = InitialState, payload: string) {
+    return { ...state, token: payload };
 }
 
 function ADD_TO_CART(state: IState = InitialState, payload: CartItem) {
@@ -58,7 +58,7 @@ function ADD_TO_CART(state: IState = InitialState, payload: CartItem) {
 
 export function getInitialState(__data__: any): IState {
     return {
-        user: __data__.USER || null,
+        token: __data__.token || "",
         campaign: {
             item: null,
             items: []

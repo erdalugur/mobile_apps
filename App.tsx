@@ -1,13 +1,13 @@
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import theme from 'theme'
-import { Provider, useSelector } from 'react-redux'
+import { Provider, useSelector, useDispatch } from 'react-redux'
 import { store, AppState } from 'myRedux'
-import { getCredentials } from 'api'
 import { Apploading } from 'components';
 import { App } from 'navigation'
 import { StatusBar } from 'react-native';
 import { userManager } from 'utils';
+import { IAction, actionTypes } from 'myRedux/types';
 
 
 const Main = () => {
@@ -15,7 +15,7 @@ const Main = () => {
   const [isAuthenticated, setIsAuthenticated] = React.useState<boolean>(false);
 
   const token = useSelector((state: AppState) => state.app.token);
-
+  const dispatch = useDispatch<any>();
   React.useEffect(() => {
     handleIsAuthenticated();
   }, [token]);
@@ -26,28 +26,27 @@ const Main = () => {
 
 
   async function handleIsAuthenticated() {
-    let result: boolean = false;
+    let result: string = "";
     try {
       let user = await userManager.get();
       console.log(user)
-      if (user != null && user.token != "")
-        result = true;
+      if (user != null && user.token != "") {
+        result = user.token;
+        dispatch({ type: actionTypes.SET_TOKEN, payload: user.token })
+        setIsAuthenticated(result != "");
+      }
       else
-        result = false;
+        result = "";
     } catch (error) {
-      result = false
+      result = ""
     }
-    StatusBar.setBarStyle("light-content")
     setLoading(false);
-    setIsAuthenticated(result);
   }
 
   return (
     <NavigationContainer theme={theme}>
       {isLoading ? <Apploading /> :
-        <App
-          isAuthenticated={isAuthenticated}
-        />}
+        <App isAuthenticated={isAuthenticated} />}
     </NavigationContainer>
   )
 }

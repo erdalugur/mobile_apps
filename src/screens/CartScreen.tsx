@@ -17,7 +17,7 @@ interface Props extends NavigationProps<any, any> {
     cart: SingleMultiType<any, {
         [key: string]: CartItem;
     }>
-    dispatch: (param: IAction<number>) => void
+    dispatch: (param: IAction<number | any>) => void
 }
 class Index extends React.PureComponent<Props, any> {
 

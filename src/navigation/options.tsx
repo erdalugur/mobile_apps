@@ -8,7 +8,7 @@ interface IScreenOptions extends StackNavigationOptions {
 }
 
 export const HomeOptions: IScreenOptions = {
-    title: "Anasayfa"
+    title: "Anasayfa",
 }
 
 export const CartOptions: IScreenOptions = {

@@ -5,8 +5,8 @@ import { Dispatch } from 'redux';
 import { NavigationProps, UserModel } from 'types';
 import { dataManager } from 'api';
 import { screens } from 'navigation';
-import { IAction, actionTypes } from 'myRedux/types';
-import { messageBox } from 'utils';
+import { IAction } from 'myRedux/types';
+import { messageBox, userManager } from 'utils';
 
 interface State {
     username: string
@@ -17,8 +17,7 @@ interface State {
 }
 
 interface Props extends NavigationProps<any, any> {
-    setToken: (token: string) => void
-    dispatch: (param: IAction<UserModel>) => void
+
 }
 class Index extends React.PureComponent<Props, State> {
     state: State = {
@@ -39,19 +38,15 @@ class Index extends React.PureComponent<Props, State> {
         } else {
             this.setState({ loading: true, errors: {} });
             let { token, data, error } = await dataManager.login(username, password, storeId);
-            console.log(token)
             if (token && data && data.length > 0) {
                 let __data__ = data[0];
-                this.props.dispatch({
-                    type: actionTypes.SET_TOKEN,
-                    payload: {
-                        ID: __data__.ID,
-                        PASSWORD: password,
-                        USERNAME: username,
-                        STOREID: storeId,
-                        token: token
-                    }
-                })
+                await userManager.set({
+                    ID: __data__.ID,
+                    PASSWORD: password,
+                    USERNAME: username,
+                    STOREID: storeId,
+                    token: token
+                });
                 this.props.navigation.navigate(screens.home)
             } else {
                 messageBox(error);
