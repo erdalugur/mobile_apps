@@ -32,3 +32,6 @@ export function Minus(props: IconProps) {
     return <AntDesign name="minussquareo" onPress={props.onPress} size={props.size || 30} color={props.color} />
 }
 
+export function Search(props: IconProps) {
+    return <FontAwesome name="search" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}

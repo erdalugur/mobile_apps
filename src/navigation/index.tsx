@@ -77,17 +77,47 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
     )
 }
 const SearchStack = createStackNavigator();
-const SearchStackScreen = () => (
-    <SearchStack.Navigator headerMode="none">
-        <SearchStack.Screen
-            options={SearchOptions}
-            name={screens.search}
-            component={SearchScreen}
-        />
+const SearchStackScreen = ({ navigation, route }: any) => {
 
-    </SearchStack.Navigator>
-)
-
+    if (route.state) {
+        let options: any = {
+            tabBarVisible: route.state.index > 0 ? false : true
+        }
+        navigation.setOptions({
+            ...options
+        })
+    }
+    return (
+        <SearchStack.Navigator headerMode="screen"
+            screenOptions={{
+                headerRight: ({ tintColor }) => <CartButton />,
+                headerBackTitleVisible: false,
+                headerBackTitleStyle: { color: theme.colors.text },
+                headerBackImage: ({ tintColor }) => <HeaderBack />
+            }}
+        >
+            <SearchStack.Screen
+                options={{
+                    header: () => null
+                }}
+                name={screens.search}
+                component={SearchScreen}
+            />
+            <SearchStack.Screen
+                options={{
+                    title: 'Ürün'
+                }}
+                name={screens.product}
+                component={ProductScreen} />
+            <SearchStack.Screen
+                options={{
+                    title: 'Cart'
+                }}
+                name={screens.cart}
+                component={CartScreen} />
+        </SearchStack.Navigator>
+    )
+}
 const ProfileStack = createStackNavigator();
 const ProfileStackScreen = () => (
     <ProfileStack.Navigator>
@@ -117,6 +147,7 @@ const Tab = createBottomTabNavigator();
 export const HomeTabs = ({ navigation, route }: { navigation: any, route: any }) => {
     return (
         <Tab.Navigator
+            //initialRouteName="Search"
             screenOptions={({ route, navigation }) => ({
 
                 tabBarIcon: ({ color, size }) => {
@@ -143,7 +174,7 @@ export const HomeTabs = ({ navigation, route }: { navigation: any, route: any })
 
             <Tab.Screen
                 options={{
-                    title: "Garson",
+                    title: "Ara",
                 }}
                 component={SearchStackScreen}
                 name={screens.search} />
@@ -198,7 +229,11 @@ export const App = (props: Props) => {
                 name={screens.presentation}
                 component={PresentationScreen}
             />
-            <RootStack.Screen name={screens.home} component={HomeTabs} />
+            <RootStack.Screen
+                options={{
+                    gestureEnabled: false
+                }}
+                name={screens.home} component={HomeTabs} />
             <RootStack.Screen name={screens.profile} component={ProfileScreen} />
             <RootStack.Screen
                 name={screens.cart}
@@ -216,7 +251,6 @@ export const App = (props: Props) => {
                 }}
                 component={AuthStackScreen}
                 name={screens.signin} />
-
         </RootStack.Navigator>
     )
 }

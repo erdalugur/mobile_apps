@@ -10,6 +10,7 @@ import { Dispatch } from 'redux'
 import { IAction, actionTypes } from 'myRedux/types'
 import { screens } from 'navigation'
 import { messageBox, messages } from 'utils'
+import { AddToCart } from './AddToCart'
 
 interface State {
 
@@ -19,7 +20,7 @@ interface Props extends NavigationProps<any, any> {
     title: string
     categoryId: string
     items: Array<Product>
-    dispatch: Dispatch<IAction>
+    dispatch: Dispatch<IAction<any>>
 }
 
 
@@ -36,7 +37,7 @@ class Index extends React.PureComponent<Props, State>{
                         <Text style={{ textTransform: "capitalize", textAlign: 'center' }}>{x.NAME.slice(0, 100)}</Text>
                         <Text style={{ textAlign: 'center' }}>{`${x.PRICE.toFixed(2).toString()} ₺`}</Text>
                     </View>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                         onPress={() => {
                             this.props.dispatch({ type: actionTypes.ADD_TO_CART, payload: x });
                             messageBox(messages.ADD_TO_CART_SUCCESS.replace('{0}', x.NAME))
@@ -45,7 +46,8 @@ class Index extends React.PureComponent<Props, State>{
                         <Text>
                             {messages.ADD_TO_CART}
                         </Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
+                    <AddToCart item={x} />
                 </View>
             </View>
         ));

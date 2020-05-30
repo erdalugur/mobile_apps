@@ -52,8 +52,8 @@ function ADD_TO_CART(state: IState = InitialState, payload: CartItem) {
         payload.quantity++;
 
     payload.totalPrice = payload.quantity * payload.PRICE;
-    state.cart.items[ID] = payload;
-    return { ...state };
+    state.cart.items[ID] = { ...payload };
+    return { ...state, cart: { ...state.cart } };
 }
 
 export function getInitialState(__data__: any): IState {
