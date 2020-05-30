@@ -10,7 +10,7 @@ import { messageBox, messages } from 'utils'
 interface Props extends NavigationProps<{
     item: Product
 }, any> {
-    dispatch: (param: IAction) => void
+    dispatch: (param: IAction<any>) => void
 }
 
 interface State { }

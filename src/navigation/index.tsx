@@ -13,6 +13,7 @@ import ProductScreen from 'screens/ProductScreen';
 import KitchenScreen from 'screens/KitchenScreen';
 import CashierScreen from 'screens/CashierScreen';
 import ReportScreen from 'screens/ReportScreen';
+import TablesScreen from 'screens/TablesScreen';
 
 import ProfileScreen from 'screens/ProfileScreen';
 import { AntDesign } from '@expo/vector-icons';
@@ -21,6 +22,7 @@ import { CartButton } from 'components'
 import theme from 'theme';
 import { HeaderBack } from 'icons'
 import RootingScreen from 'screens/Rooting';
+import AdditionScreen from 'screens/AdditionScreen';
 
 export const screens = {
     product: 'Product',
@@ -37,7 +39,9 @@ export const screens = {
     settings: 'Settings',
     kitchen: 'Kitchen',
     cashier: 'Cashier',
-    reports: 'Reports'
+    reports: 'Reports',
+    addition: 'Addition',
+    tables: 'Tables'
 }
 
 export const HomeStack = createStackNavigator();
@@ -183,12 +187,6 @@ export const HomeTabs = ({ navigation, route }: { navigation: any, route: any })
                 }}
                 component={SearchStackScreen}
                 name={screens.search} />
-            {/* <Tab.Screen
-                options={{
-                    title: "Hesabım",
-                }}
-                component={ProfileStackScreen}
-                name={screens.profile} /> */}
         </Tab.Navigator>
     )
 }
@@ -240,13 +238,34 @@ const KitchenStackScreen = () => (
 
 const CachierStack = createStackNavigator();
 const CachierStackScreen = () => (
-    <CachierStack.Navigator>
+    <CachierStack.Navigator
+        headerMode="screen"
+        screenOptions={{
+            headerBackTitleVisible: false,
+            headerBackTitleStyle: { color: theme.colors.text },
+            headerBackImage: ({ tintColor }) => <HeaderBack />
+        }}
+    >
+        <CachierStack.Screen
+            options={{
+                title: 'Masalar'
+            }}
+            name={screens.tables}
+            component={TablesScreen}
+        />
         <CachierStack.Screen
             options={{
                 title: 'Kasiyer'
             }}
             name={screens.cashier}
             component={CashierScreen}
+        />
+        <CachierStack.Screen
+            options={{
+                title: 'Adisyon'
+            }}
+            name={screens.addition}
+            component={AdditionScreen}
         />
     </CachierStack.Navigator>
 )
@@ -264,6 +283,77 @@ const ReportStackScreen = () => (
     </ReportStack.Navigator>
 )
 
+const AdditionStack = createStackNavigator();
+const AdditionStackScreen = ({ route, navigation }: { route: any, navigation: any }) => {
+    if (route.state) {
+        navigation.setOptions({
+            tabBarVisible: route.state.index > 0 ? false : true
+        })
+    }
+    return (
+        <AdditionStack.Navigator
+            headerMode="screen"
+            screenOptions={{
+                headerBackTitleVisible: false,
+                headerBackTitleStyle: { color: theme.colors.text },
+                headerBackImage: ({ tintColor }) => <HeaderBack />
+            }}
+        >
+            <AdditionStack.Screen
+                options={{
+                    title: 'Masalar'
+                }}
+                component={TablesScreen}
+                name={screens.tables}
+            />
+            <AdditionStack.Screen
+                options={{
+                    title: 'Adisyon'
+                }}
+                component={AdditionScreen}
+                name={screens.addition}
+            />
+        </AdditionStack.Navigator>
+    )
+}
+
+const StaffTab = createBottomTabNavigator();
+
+export const StaffTabs = ({ navigation, route }: { navigation: any, route: any }) => {
+    return (
+        <StaffTab.Navigator
+            screenOptions={({ route, navigation }) => ({
+
+                tabBarIcon: ({ color, size }) => {
+                    let iconName: string = "";
+                    if (route.name === screens.search)
+                        iconName = 'appstore1'
+                    else if (route.name === screens.addition)
+                        iconName = 'search1';
+                    else if (route.name === screens.profile)
+                        iconName = 'user'
+
+                    return <AntDesign color={color} size={size} name={iconName} />
+                },
+                header: () => null
+            })}
+            tabBarOptions={{ activeTintColor: theme.colors.text }}>
+            <Tab.Screen
+                options={{
+                    title: 'Menü'
+                }}
+                component={SearchStackScreen}
+                name={screens.search} />
+
+            <Tab.Screen
+                options={{
+                    title: 'Adisyon'
+                }}
+                component={AdditionStackScreen}
+                name={screens.addition} />
+        </StaffTab.Navigator>
+    )
+}
 const RootStack = createStackNavigator();
 interface Props {
     isAuthenticated: boolean
@@ -318,7 +408,7 @@ export const App = (props: Props) => {
                 options={{
                     title: "",
                 }}
-                component={SearchStackScreen}
+                component={StaffTabs}
                 name={screens.search} />
             <RootStack.Screen
                 options={{

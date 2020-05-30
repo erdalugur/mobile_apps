@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text } from 'components'
 import { NavigationProps } from 'types'
 import { dataManager } from 'api'
-import { ScrollView, RefreshControl } from 'react-native'
+import { ScrollView, RefreshControl, StyleSheet } from 'react-native'
 import theme from 'theme'
 
 interface Props extends NavigationProps<any, any> {
@@ -44,18 +44,8 @@ export default class extends React.PureComponent<Props, State>{
 
     renderItems = () => {
         return this.state.items.map(x => (
-            <View key={x.ID} style={{
-                height: 60,
-                flexDirection: 'row',
-                alignItems: 'center',
-                justifyContent: 'space-between',
-                borderBottomWidth: 1,
-                borderColor: theme.colors.border,
-                paddingHorizontal: 10
-            }}>
-                <View style={{
-                    width: '50%'
-                }}>
+            <View key={x.ID} style={[styles.itemContainer]}>
+                <View style={{ width: '50%' }}>
                     <Text style={{ fontSize: 16 }}>{x.PRODUCT_NAME}</Text>
                 </View>
                 <View style={{
@@ -74,6 +64,18 @@ export default class extends React.PureComponent<Props, State>{
     render() {
         return (
             <View full>
+                <View style={[styles.header]}>
+                    <View style={{
+                        width: '50%',
+                        // backgroundColor: theme.colors.card
+                    }}>
+                        <Text style={{ fontSize: 16 }}>{'Sipariş'}</Text>
+                    </View>
+                    <View style={[styles.headerRight]}>
+                        <Text style={{ fontSize: 16 }}>{`Durum`}</Text>
+                        <Text style={{ fontSize: 16 }}>{'Masa'}</Text>
+                    </View>
+                </View>
                 <ScrollView refreshControl={
                     <RefreshControl
                         onRefresh={this.loadAsync}
@@ -86,3 +88,31 @@ export default class extends React.PureComponent<Props, State>{
         )
     };
 }
+
+const styles = StyleSheet.create({
+    header: {
+        height: 60,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: theme.colors.border
+        //backgroundColor: theme.colors.card
+    },
+    headerRight: {
+        flexDirection: 'row',
+        width: '50%',
+        justifyContent: 'space-between',
+        //backgroundColor: theme.colors.card
+    },
+    itemContainer: {
+        height: 60,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        borderBottomWidth: 1,
+        borderColor: theme.colors.border,
+        paddingHorizontal: 10
+    }
+})

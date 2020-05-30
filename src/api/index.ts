@@ -151,6 +151,18 @@ export const dataManager = {
         } else {
             return await errorPromise(messages.PLEASE_LOGIN_FIRST);
         }
+    },
+    loadAddion: async function (table: string) {
+        let user = await userManager.get();
+        if (user) {
+            return await QueryableIO<IProc>({
+                action: 'public',
+                model: 'MPOS_GET_TRANSACTIONS',
+                parameters: [{ key: 'TABLEID', value: table }, { key: 'STOREID', value: user.STOREID }]
+            })
+        } else {
+            return await errorPromise(messages.PLEASE_LOGIN_FIRST)
+        }
     }
 }
 
