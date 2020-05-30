@@ -10,10 +10,11 @@ import SearchScreen from 'screens/SearchScreen';
 import CartScreen from 'screens/CartScreen'
 import CategoryScreen from 'screens/CategoryScreen'
 import ProductScreen from 'screens/ProductScreen';
+import KitchenScreen from 'screens/KitchenScreen';
 
 import ProfileScreen from 'screens/ProfileScreen';
 import { AntDesign } from '@expo/vector-icons';
-import { HomeOptions, ProfileOptions, NotificationOptions, SearchOptions } from './options'
+import { HomeOptions, ProfileOptions, NotificationOptions, SearchOptions, CartOptions } from './options'
 import { CartButton } from 'components'
 import theme from 'theme';
 import { HeaderBack } from 'icons'
@@ -55,9 +56,7 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
                 name={screens.home}
                 component={HomeScreen} />
             <HomeStack.Screen
-                options={{
-                    title: 'Sepetim'
-                }}
+                options={CartOptions}
                 name={screens.cart}
                 component={CartScreen}
             />
@@ -114,9 +113,7 @@ const SearchStackScreen = ({ navigation, route }: any) => {
                 name={screens.product}
                 component={ProductScreen} />
             <SearchStack.Screen
-                options={{
-                    title: 'Cart'
-                }}
+                options={CartOptions}
                 name={screens.cart}
                 component={CartScreen} />
         </SearchStack.Navigator>
@@ -195,6 +192,7 @@ const CartStack = createStackNavigator();
 const CartStackScreen = () => (
     <CartStack.Navigator>
         <CartStack.Screen
+            options={CartOptions}
             name={screens.cart}
             component={CartScreen}
         />
@@ -227,8 +225,11 @@ const KitchenStack = createStackNavigator();
 const KitchenStackScreen = () => (
     <KitchenStack.Navigator>
         <KitchenStack.Screen
-            name={screens.settings}
-            component={ProfileScreen}
+            options={{
+                title: 'Mutfak'
+            }}
+            name={screens.kitchen}
+            component={KitchenScreen}
         />
     </KitchenStack.Navigator>
 )

@@ -44,7 +44,7 @@ class Index extends React.PureComponent<Props, State> {
                 <View style={[styles.button]}>
                     {x.ICON}
                     <Text
-                        component="h5"
+                        component="h6"
                         color={theme.colors.text}>{x.NAME}</Text>
                 </View>
             </TouchableOpacity>
@@ -56,7 +56,6 @@ class Index extends React.PureComponent<Props, State> {
             <View full style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
                 <View style={{ flex: 1 }}></View>
                 <View style={{ flex: 1 }}>
-
                     <FlatList
                         style={{ width: '100%', height: '100%' }}
                         initialNumToRender={2}

@@ -127,6 +127,18 @@ export const dataManager = {
             fields: ['ID'],
             filters: [{ key: 'STOREID', value: store, operator: '=' }],
         })
+    },
+    loadWaiting: async function () {
+        let user = await userManager.get();
+        if (user != null) {
+            return await QueryableIO<IProc>({
+                model: 'MPOS_GET_WAITING',
+                action: 'public',
+                parameters: [{ key: 'STOREID', value: user.STOREID }]
+            })
+        } else {
+            return errorPromise(messages.PLEASE_LOGIN_FIRST)
+        }
     }
 }
 

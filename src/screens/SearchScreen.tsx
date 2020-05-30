@@ -77,7 +77,7 @@ class Index extends React.PureComponent<Props, State> {
                     <View style={[styles.searchboxWrapper]}>
                         {/* {this.props.navigation.canGoBack() && <Back onPress={() => this.props.navigation.goBack()} />} */}
                         <View style={[styles.headerInputWrapper]}>
-                            <Search color={'#ddd'} />
+                            <Search color={'#ddd'} size={23} />
                             <Input
                                 value={this.state.searchTerm}
                                 onChangeText={(searchTerm) => this.setState({ searchTerm })}
@@ -132,7 +132,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor: theme.colors.card
+        backgroundColor: theme.colors.card,
+        opacity: 0.9
     },
     cartInfo: {
         width: '55%',
