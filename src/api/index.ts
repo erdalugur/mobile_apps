@@ -137,7 +137,19 @@ export const dataManager = {
                 parameters: [{ key: 'STOREID', value: user.STOREID }]
             })
         } else {
-            return errorPromise(messages.PLEASE_LOGIN_FIRST)
+            return await errorPromise(messages.PLEASE_LOGIN_FIRST)
+        }
+    },
+    loadTables: async function () {
+        let user = await userManager.get();
+        if (user) {
+            return await QueryableIO<IProc>({
+                model: 'MPOS_GET_TABLES',
+                action: 'public',
+                parameters: [{ key: 'STOREID', value: user.STOREID }]
+            })
+        } else {
+            return await errorPromise(messages.PLEASE_LOGIN_FIRST);
         }
     }
 }

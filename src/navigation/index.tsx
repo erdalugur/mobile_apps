@@ -11,6 +11,8 @@ import CartScreen from 'screens/CartScreen'
 import CategoryScreen from 'screens/CategoryScreen'
 import ProductScreen from 'screens/ProductScreen';
 import KitchenScreen from 'screens/KitchenScreen';
+import CashierScreen from 'screens/CashierScreen';
+import ReportScreen from 'screens/ReportScreen';
 
 import ProfileScreen from 'screens/ProfileScreen';
 import { AntDesign } from '@expo/vector-icons';
@@ -33,7 +35,9 @@ export const screens = {
     presentation: 'Presentation',
     routing: 'Routing',
     settings: 'Settings',
-    kitchen: 'Kitchen'
+    kitchen: 'Kitchen',
+    cashier: 'Cashier',
+    reports: 'Reports'
 }
 
 export const HomeStack = createStackNavigator();
@@ -233,6 +237,33 @@ const KitchenStackScreen = () => (
         />
     </KitchenStack.Navigator>
 )
+
+const CachierStack = createStackNavigator();
+const CachierStackScreen = () => (
+    <CachierStack.Navigator>
+        <CachierStack.Screen
+            options={{
+                title: 'Kasiyer'
+            }}
+            name={screens.cashier}
+            component={CashierScreen}
+        />
+    </CachierStack.Navigator>
+)
+
+const ReportStack = createStackNavigator();
+const ReportStackScreen = () => (
+    <ReportStack.Navigator>
+        <ReportStack.Screen
+            options={{
+                title: 'Raporlar'
+            }}
+            name={screens.reports}
+            component={ReportScreen}
+        />
+    </ReportStack.Navigator>
+)
+
 const RootStack = createStackNavigator();
 interface Props {
     isAuthenticated: boolean
@@ -298,6 +329,14 @@ export const App = (props: Props) => {
             <RootStack.Screen
                 component={KitchenStackScreen}
                 name={screens.kitchen} />
+
+            <RootStack.Screen
+                component={ReportStackScreen}
+                name={screens.reports} />
+
+            <RootStack.Screen
+                component={CachierStackScreen}
+                name={screens.cashier} />
         </RootStack.Navigator>
     )
 }

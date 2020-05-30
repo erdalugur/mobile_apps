@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { TouchableOpacity, FlatList, StatusBar, StyleSheet } from 'react-native'
 import theme from 'theme'
 import { NavigationProps } from 'types'
-import { Cheff, Setting, Menu, Bowtie } from 'icons'
+import { Cheff, Setting, Menu, Bowtie, Money, ReportFile } from 'icons'
 
 interface Props extends NavigationProps<any, any> {
 
@@ -22,8 +22,10 @@ interface MenuItem {
 
 let items: MenuItem[] = [
     { NAME: 'MİSAFİR', PATH: 'Home', ICON: <Menu color={theme.colors.text} size={40} /> },
-    { NAME: 'GARSON', PATH: 'Search', ICON: <Bowtie color={theme.colors.text} size={40} /> },
+    { NAME: 'GARSON', PATH: 'Search', ICON: <Bowtie color={theme.colors.text} size={45} /> },
+    { NAME: 'KASİYER', PATH: 'Cashier', ICON: <Money color={theme.colors.text} size={40} /> },
     { NAME: 'MUTFAK', PATH: 'Kitchen', ICON: <Cheff color={theme.colors.text} size={40} /> },
+    { NAME: 'RAPORLAR', PATH: 'Reports', ICON: <ReportFile color={theme.colors.text} size={40} /> },
     { NAME: 'AYARLAR', PATH: 'Settings', ICON: <Setting color={theme.colors.text} size={40} /> },
 ]
 
@@ -55,7 +57,7 @@ class Index extends React.PureComponent<Props, State> {
         return (
             <View full style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
                 <View style={{ flex: 1 }}></View>
-                <View style={{ flex: 1 }}>
+                <View style={{ flex: 2 }}>
                     <FlatList
                         style={{ width: '100%', height: '100%' }}
                         initialNumToRender={2}
