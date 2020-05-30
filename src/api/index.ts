@@ -163,7 +163,40 @@ export const dataManager = {
         } else {
             return await errorPromise(messages.PLEASE_LOGIN_FIRST)
         }
-    }
+    },
+    closeAddition: async function (table: string, paymentType: string) {
+        let user = await userManager.get();
+        if (user) {
+            return QueryableIO<IProc>({
+                model: 'MPOS_CLOSE_SESSION',
+                action: 'public',
+                parameters: [
+                    { key: 'TABLEID', value: table },
+                    { key: 'STOREID', value: user.STOREID },
+                    { key: 'PAYMENT_TYPE', value: paymentType }
+                ]
+            })
+        } else {
+            return await errorPromise(messages.PLEASE_LOGIN_FIRST)
+        }
+    },
+    addPayment: async function (table: string, paymentType: string, items: any[]) {
+        let user = await userManager.get();
+        if (user) {
+            return QueryableIO<IProc>({
+                model: 'MPOS_ADD_PAYMENT',
+                action: 'public',
+                parameters: [
+                    { key: 'TABLEID', value: table },
+                    { key: 'STOREID', value: user.STOREID },
+                    { key: 'JSON', value: JSON.stringify(items) },
+                    { key: 'PAYMENT_TYPE', value: paymentType }
+                ]
+            })
+        } else {
+            return await errorPromise(messages.PLEASE_LOGIN_FIRST)
+        }
+    },
 }
 
 async function errorPromise(message: string) {

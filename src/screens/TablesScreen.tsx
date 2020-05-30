@@ -55,7 +55,7 @@ export default class extends React.PureComponent<Props, State>{
             // masa ıd ye göre adisyonu çek
             let { data, statusCode, error } = await dataManager.loadAddion(selected);
             if (statusCode === 200 && Array.isArray(data)) {
-                this.props.navigation.navigate(screens.addition, { items: data });
+                this.props.navigation.navigate(screens.addition, { items: data, table: selected });
             } else {
                 messageBox(error);
             }
