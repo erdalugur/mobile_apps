@@ -4,7 +4,7 @@ import { View, TopActions, Slider, ProductScrollView } from 'components'
 import { NavigationProps, FetchAllModel } from 'types'
 import { connect } from 'react-redux';
 import { AppState, IState } from 'myRedux';
-import { IAction } from 'myRedux/types';
+import { IAction, actionTypes } from 'myRedux/types';
 import { dataManager } from 'api';
 
 interface Props extends NavigationProps<any, any> {
@@ -32,7 +32,7 @@ class Home extends React.PureComponent<Props, State> {
         console.log("fetchAllStart")
         this.setState({ loading: true });
         let result = await dataManager.loadAll();
-        this.props.dispatch({ type: 'FETCH_ALL', payload: result });
+        this.props.dispatch({ type: actionTypes.FETCH_ALL, payload: result });
         console.log("fetchAllEnd", result.tree.length)
         this.setState({ loading: false });
     }

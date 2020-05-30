@@ -1,19 +1,18 @@
 import React from 'react';
 import { StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
-import { View, Text } from 'components'
+import { View, Text, AddToCart } from 'components'
 import { connect } from 'react-redux';
 import { NavigationProps, Product } from 'types';
 import theme from 'theme';
 import { screens } from 'navigation';
-import { IAction, actionTypes } from 'myRedux/types';
-import { messageBox, messages } from 'utils';
+import { IAction } from 'myRedux/types';
 
 
 interface Props extends NavigationProps<{
     title: string
     items: Product[]
 }, any> {
-    dispatch: (param: IAction) => void
+    dispatch: (param: IAction<any>) => void
 }
 interface State {
 
@@ -50,12 +49,7 @@ class Index extends React.PureComponent<Props, State> {
                         <Text style={{ fontSize: 14 }}>{x.NAME}</Text>
                         <Text style={{ fontSize: 14 }}>{`${x.PRICE.toFixed(2)} ₺`}</Text>
                     </View>
-                    <TouchableOpacity onPress={() => {
-                        this.props.dispatch({ type: actionTypes.ADD_TO_CART, payload: x })
-                        messageBox(messages.ADD_TO_CART_SUCCESS.replace('{0}', x.NAME))
-                    }} style={[styles.basket]}>
-                        <Text>{messages.ADD_TO_CART}</Text>
-                    </TouchableOpacity>
+                    <AddToCart item={x} />
                 </View>
             </TouchableOpacity>
         )

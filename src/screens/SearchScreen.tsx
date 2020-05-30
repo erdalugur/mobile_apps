@@ -1,18 +1,18 @@
 import React from 'react';
-import { StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
-import { View, Text, Input, CartButton } from 'components'
-import { NavigationProps, ProductTreeModel, Product, CartItem } from 'types';
+import { StyleSheet, ScrollView, TouchableOpacity, Image, RefreshControl } from 'react-native';
+import { View, Text, Input, CartButton, AddToCart } from 'components'
+import { NavigationProps, ProductTreeModel, Product, CartItem, FetchAllModel } from 'types';
 import theme from 'theme';
-import { Search } from 'icons';
+import { Search, Back } from 'icons';
 import { connect } from 'react-redux';
 import { AppState } from 'myRedux';
 import { screens } from 'navigation';
-import { IAction, SingleMultiType } from 'myRedux/types';
-import { AddToCart } from 'components/AddToCart';
+import { IAction, SingleMultiType, actionTypes } from 'myRedux/types';
+import { dataManager } from 'api';
 
 interface Props extends NavigationProps<any, any> {
     items: ProductTreeModel[]
-    dispatch: (param: IAction<number | Product>) => void
+    dispatch: (param: IAction<number | Product | FetchAllModel>) => void
     cart: SingleMultiType<any, {
         [key: string]: CartItem;
     }>
@@ -20,11 +20,29 @@ interface Props extends NavigationProps<any, any> {
 
 interface State {
     items: Product[]
+    searchTerm: string
+    loading: boolean
 }
 
 class Index extends React.PureComponent<Props, State> {
     state: State = {
-        items: []
+        items: [],
+        searchTerm: '',
+        loading: false
+    }
+
+    componentDidMount = async () => {
+        if (this.props.items.length == 0)
+            this.loadAsync();
+    }
+
+    loadAsync = async () => {
+        console.log("fetchAllStart")
+        this.setState({ loading: true });
+        let result = await dataManager.loadAll();
+        this.props.dispatch({ type: actionTypes.FETCH_ALL, payload: result });
+        console.log("fetchAllEnd", result.tree.length)
+        this.setState({ loading: false });
     }
 
     renderItems = () => {
@@ -32,7 +50,7 @@ class Index extends React.PureComponent<Props, State> {
         this.props.items.forEach(x => {
             items = items.concat(x.PRODUCTS);
         })
-        return items.map(x => (
+        return items.filter(x => x.NAME.indexOf(this.state.searchTerm) > -1).map(x => (
             <View
                 style={[styles.itemContainer]}
                 key={x.ID}>
@@ -53,20 +71,17 @@ class Index extends React.PureComponent<Props, State> {
         ))
     }
     render() {
-        //console.log(this.props.items)
         return (
             <View full>
                 <View style={[styles.headerContainer]}>
-                    <View style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        backgroundColor: theme.colors.card
-                    }}>
+                    <View style={[styles.searchboxWrapper]}>
+                        {/* {this.props.navigation.canGoBack() && <Back onPress={() => this.props.navigation.goBack()} />} */}
                         <View style={[styles.headerInputWrapper]}>
                             <Search color={'#ddd'} />
                             <Input
-                                placeholder="Ürün veya kategori ara..."
+                                value={this.state.searchTerm}
+                                onChangeText={(searchTerm) => this.setState({ searchTerm })}
+                                placeholder="Ürün ara..."
                                 style={{
                                     width: '100%',
                                 }} />
@@ -74,7 +89,12 @@ class Index extends React.PureComponent<Props, State> {
                         <CartButton />
                     </View>
                 </View>
-                <ScrollView>
+                <ScrollView refreshControl={
+                    <RefreshControl
+                        refreshing={this.state.loading}
+                        onRefresh={this.loadAsync}
+                    />
+                }>
                     {this.renderItems()}
                 </ScrollView>
             </View>
@@ -107,6 +127,12 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         opacity: 0.8,
         width: '85%'
+    },
+    searchboxWrapper: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: theme.colors.card
     },
     cartInfo: {
         width: '55%',

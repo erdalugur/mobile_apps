@@ -1,5 +1,5 @@
 import React from 'react'
-import { Feather, FontAwesome, Ionicons, AntDesign } from '@expo/vector-icons'
+import { Feather, FontAwesome, Ionicons, AntDesign, MaterialCommunityIcons } from '@expo/vector-icons'
 import theme from 'theme'
 import { TouchableOpacity } from 'react-native';
 
@@ -34,4 +34,17 @@ export function Minus(props: IconProps) {
 
 export function Search(props: IconProps) {
     return <FontAwesome name="search" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}
+export function Cheff(props: IconProps) {
+    return <MaterialCommunityIcons name="chef-hat" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}
+export function Setting(props: IconProps) {
+    return <Feather name="settings" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}
+export function Menu(props: IconProps) {
+    return <MaterialCommunityIcons name="food-fork-drink" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}
+
+export function Bowtie(props: IconProps) {
+    return <Ionicons name="ios-bowtie" onPress={props.onPress} size={props.size || 30} color={props.color} />
 }

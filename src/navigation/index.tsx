@@ -17,6 +17,7 @@ import { HomeOptions, ProfileOptions, NotificationOptions, SearchOptions } from 
 import { CartButton } from 'components'
 import theme from 'theme';
 import { HeaderBack } from 'icons'
+import RootingScreen from 'screens/Rooting';
 
 export const screens = {
     product: 'Product',
@@ -28,7 +29,10 @@ export const screens = {
     profile: 'Profile',
     signin: 'Signin',
     signup: 'Signup',
-    presentation: 'Presentation'
+    presentation: 'Presentation',
+    routing: 'Routing',
+    settings: 'Settings',
+    kitchen: 'Kitchen'
 }
 
 export const HomeStack = createStackNavigator();
@@ -178,12 +182,12 @@ export const HomeTabs = ({ navigation, route }: { navigation: any, route: any })
                 }}
                 component={SearchStackScreen}
                 name={screens.search} />
-            <Tab.Screen
+            {/* <Tab.Screen
                 options={{
                     title: "Hesabım",
                 }}
                 component={ProfileStackScreen}
-                name={screens.profile} />
+                name={screens.profile} /> */}
         </Tab.Navigator>
     )
 }
@@ -209,6 +213,25 @@ const AuthStackScreen = () => (
     </AuthStack.Navigator>
 )
 
+const SettingStack = createStackNavigator();
+const SettingStackScreen = () => (
+    <SettingStack.Navigator>
+        <SettingStack.Screen
+            name={screens.settings}
+            component={ProfileScreen}
+        />
+    </SettingStack.Navigator>
+)
+
+const KitchenStack = createStackNavigator();
+const KitchenStackScreen = () => (
+    <KitchenStack.Navigator>
+        <KitchenStack.Screen
+            name={screens.settings}
+            component={ProfileScreen}
+        />
+    </KitchenStack.Navigator>
+)
 const RootStack = createStackNavigator();
 interface Props {
     isAuthenticated: boolean
@@ -221,7 +244,15 @@ export const App = (props: Props) => {
                 gestureDirection: 'horizontal',
                 ...TransitionPresets.SlideFromRightIOS
             }}
-            headerMode="none" initialRouteName={props.isAuthenticated ? screens.home : screens.signin}>
+            headerMode="none" initialRouteName={props.isAuthenticated ? screens.routing : screens.signin}>
+            <RootStack.Screen
+                options={{
+                    header: () => null
+                }}
+                name={screens.routing}
+                component={RootingScreen}
+            />
+
             <RootStack.Screen
                 options={{
                     header: () => null
@@ -231,7 +262,7 @@ export const App = (props: Props) => {
             />
             <RootStack.Screen
                 options={{
-                    gestureEnabled: false
+                    //gestureEnabled: false
                 }}
                 name={screens.home} component={HomeTabs} />
             <RootStack.Screen name={screens.profile} component={ProfileScreen} />
@@ -251,6 +282,21 @@ export const App = (props: Props) => {
                 }}
                 component={AuthStackScreen}
                 name={screens.signin} />
+            <RootStack.Screen
+                options={{
+                    title: "",
+                }}
+                component={SearchStackScreen}
+                name={screens.search} />
+            <RootStack.Screen
+                options={{
+                    title: "",
+                }}
+                component={SettingStackScreen}
+                name={screens.settings} />
+            <RootStack.Screen
+                component={KitchenStackScreen}
+                name={screens.kitchen} />
         </RootStack.Navigator>
     )
 }
