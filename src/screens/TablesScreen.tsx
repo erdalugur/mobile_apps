@@ -99,18 +99,18 @@ export default class extends React.PureComponent<Props, State>{
                     <TouchableOpacity
                         style={[styles.action]}
                     >
-                        <Text component="h6">Dolu</Text>
+                        <Text>Dolu</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={[styles.action]}
                     >
-                        <Text component="h6">Boş</Text>
+                        <Text>Boş</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={this.showAddition}
                         style={[styles.action]}
                     >
-                        <Text component="h6">Hesabı Göster</Text>
+                        <Text>Hesabı Göster</Text>
                     </TouchableOpacity>
                 </View>
                 <FlatList
@@ -150,6 +150,6 @@ const styles = StyleSheet.create({
         backgroundColor: theme.colors.border,
         paddingHorizontal: 10,
         width: '33%',
-        borderRadius: 5,
+        borderRadius: 2,
     }
 });
