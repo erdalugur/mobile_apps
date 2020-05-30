@@ -5,6 +5,7 @@ import { NavigationProps } from 'types';
 import theme from 'theme';
 import { dataManager } from 'api';
 import { messageBox, messages } from 'utils';
+import { screens } from 'navigation';
 
 interface AdditionItem {
     DISCOUNT_PERCENT: string,
@@ -22,10 +23,9 @@ interface Props extends NavigationProps<{
 }, any> {
 
 }
-interface SelectedItem {
+export interface SelectedItem {
     PRODUCTID: number
     PRICE: number
-
 }
 interface State {
     selectedPayment: string
@@ -65,43 +65,41 @@ export default class extends React.PureComponent<Props, State> {
     }
 
     close = async () => {
-        let { selectedPayment, table, items } = this.state
+        let { table, items, selectedItems } = this.state
         if (items.length === 0) return;
-
-        let { data, error, statusCode } = await dataManager.closeAddition(
-            table,
-            selectedPayment,
-            this.sessionId()
-        );
-        if (statusCode === 200) {
-            messageBox(messages.PROCESS_SUCCESS);
-            this.setState({ items: [] });
-            return;
-        }
+        let price: number = 0;
+        items.filter(x => selectedItems.indexOf(x.ID) > -1).map(x => {
+            price = price + x.LAST_PRICE;
+        })
+        this.props.navigation.navigate(screens.payment, {
+            table: table,
+            price: price.toString(),
+            items: [],
+            sessionId: this.sessionId(),
+            operation: 'closeSession'
+        })
     }
 
     addPayment = async () => {
-        let { selectedItems, table, selectedPayment } = this.state
-        let items = this.props.route.params.items;
+        let { selectedItems, table, items } = this.state
         if (selectedItems.length === 0) {
-            messageBox('Lütfen bir kayıt seçin')
+            messageBox('Lütfen ödemesini alacağınız en az bir kayıt seçin');
             return;
         }
-
+        let price: number = 0;
+        items.filter(x => selectedItems.indexOf(x.ID) > -1).map(x => {
+            price = price + x.LAST_PRICE;
+        })
         let sendingItems: SelectedItem[] = items.filter(x => selectedItems.indexOf(x.ID) > -1).map(x => {
             return { PRICE: x.UNIT_PRICE, PRODUCTID: parseInt(x.ID) } as SelectedItem
         })
-        let { data, error, statusCode, rowsEffected } = await dataManager.addPayment(
-            table,
-            selectedPayment,
-            sendingItems,
-            this.sessionId()
-        );
-        if (statusCode === 200) {
-            messageBox(messages.PROCESS_SUCCESS)
-        } else {
-            messageBox(error);
-        }
+        this.props.navigation.navigate(screens.payment, {
+            table: table,
+            price: price.toString(),
+            items: sendingItems,
+            sessionId: this.sessionId(),
+            operation: 'addPayment'
+        })
     }
 
     render() {

@@ -81,7 +81,7 @@ export default class extends React.PureComponent<Props, State>{
                         })
                     }}
                     style={[styles.button, {
-                        backgroundColor: isSelected ? 'green' : (item.GUEST > 0 ? theme.colors.text : theme.colors.border)
+                        backgroundColor: isSelected ? theme.colors.primary : (item.GUEST > 0 ? theme.colors.text : theme.colors.border)
                     }]}>
                     <Text color={
                         isSelected ? theme.colors.text : (item.GUEST > 0 ? theme.colors.card : theme.colors.text)

@@ -14,6 +14,7 @@ import KitchenScreen from 'screens/KitchenScreen';
 import CashierScreen from 'screens/CashierScreen';
 import ReportScreen from 'screens/ReportScreen';
 import TablesScreen from 'screens/TablesScreen';
+import PaymentScreen from 'screens/PaymentScreen';
 
 import ProfileScreen from 'screens/ProfileScreen';
 import { AntDesign } from '@expo/vector-icons';
@@ -41,7 +42,8 @@ export const screens = {
     cashier: 'Cashier',
     reports: 'Reports',
     addition: 'Addition',
-    tables: 'Tables'
+    tables: 'Tables',
+    payment: 'Payment'
 }
 
 export const HomeStack = createStackNavigator();
@@ -236,9 +238,11 @@ const KitchenStackScreen = () => (
     </KitchenStack.Navigator>
 )
 
+
 const CachierStack = createStackNavigator();
 const CachierStackScreen = () => (
     <CachierStack.Navigator
+        mode="modal"
         headerMode="screen"
         screenOptions={{
             headerBackTitleVisible: false,
@@ -267,6 +271,13 @@ const CachierStackScreen = () => (
             name={screens.addition}
             component={AdditionScreen}
         />
+        <CachierStack.Screen
+            options={{
+                title: 'Ödeme Al'
+            }}
+            name={screens.payment}
+            component={PaymentScreen}
+        />
     </CachierStack.Navigator>
 )
 
@@ -292,6 +303,7 @@ const AdditionStackScreen = ({ route, navigation }: { route: any, navigation: an
     }
     return (
         <AdditionStack.Navigator
+            mode="modal"
             headerMode="screen"
             screenOptions={{
                 headerBackTitleVisible: false,
@@ -312,6 +324,13 @@ const AdditionStackScreen = ({ route, navigation }: { route: any, navigation: an
                 }}
                 component={AdditionScreen}
                 name={screens.addition}
+            />
+            <AdditionStack.Screen
+                options={{
+                    title: 'Ödeme Al'
+                }}
+                component={PaymentScreen}
+                name={screens.payment}
             />
         </AdditionStack.Navigator>
     )

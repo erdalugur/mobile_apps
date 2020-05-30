@@ -200,6 +200,20 @@ export const dataManager = {
             return await errorPromise(messages.PLEASE_LOGIN_FIRST)
         }
     },
+    loadPaymentTypes: async function () {
+        let user = await userManager.get();
+        if (user) {
+            return await QueryableIO<IProc>({
+                model: 'MPOS_PAYMENT_TYPES',
+                action: 'public',
+                parameters: [
+                    { key: 'STOREID', value: user.STOREID }
+                ]
+            })
+        } else {
+            return await errorPromise(messages.PLEASE_LOGIN_FIRST);
+        }
+    }
 }
 
 async function errorPromise(message: string) {
