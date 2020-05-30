@@ -65,7 +65,7 @@ class Index extends React.PureComponent<Props, any> {
             messageBox(messages.EMPTY_CART_MESSAGE)
         } else {
             let { statusCode, data, error } = await dataManager.setCart({
-                TABLEID: '1',
+                TABLEID: '2',
                 JSON: Object.keys(items).map(x => {
                     return {
                         PRODUCTID: items[x].ID.toString(),

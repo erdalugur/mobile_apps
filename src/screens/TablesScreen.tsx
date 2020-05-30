@@ -54,9 +54,13 @@ export default class extends React.PureComponent<Props, State>{
         } else {
             // masa ıd ye göre adisyonu çek
             let { data, statusCode, error } = await dataManager.loadAddion(selected);
-            if (statusCode === 200 && Array.isArray(data)) {
+            if (statusCode === 200 && Array.isArray(data) && data.length > 0) {
                 this.props.navigation.navigate(screens.addition, { items: data, table: selected });
-            } else {
+            } else if (statusCode === 200 && Array.isArray(data) && data.length === 0) {
+                messageBox('Adisyon kaydı bulunamadı');
+                return
+            }
+            else {
                 messageBox(error);
             }
         }

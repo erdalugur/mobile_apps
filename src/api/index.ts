@@ -16,11 +16,11 @@ async function toJSON(e: any) {
             return {
                 statusCode: e.status,
                 data: null,
-                statusText: handleError(e.status, typeof (error) === "object" ? error.originalError && error.originalError.info && error.originalError.info.message : (error || ""))
-            };
+                error: handleError(e.status, typeof (error) === "object" ? error.originalError && error.originalError : (error || ""))
+            }
         }
         else {
-            return { statusCode: e.status, data: null, statusText: handleError(e.statusCode, e.statusText) };
+            return { statusCode: e.status, data: null, error: handleError(e.statusCode, e.statusText) };
         }
     } catch (error) {
         throw error;
@@ -64,8 +64,7 @@ export const statusMessages: { [key: string]: string } = {
 
 export function handleError(statusCode: string, orginalError: any) {
     let message = statusMessages[statusCode];
-
-    return message ? { message, orginalError } : null;
+    return orginalError && orginalError.info.message || message
 }
 
 export async function QueryableIO<T>(param: T): Promise<IResponse> {
@@ -157,14 +156,14 @@ export const dataManager = {
         if (user) {
             return await QueryableIO<IProc>({
                 action: 'public',
-                model: 'MPOS_GET_TRANSACTIONS',
+                model: 'MPOS_GET_CART',
                 parameters: [{ key: 'TABLEID', value: table }, { key: 'STOREID', value: user.STOREID }]
             })
         } else {
             return await errorPromise(messages.PLEASE_LOGIN_FIRST)
         }
     },
-    closeAddition: async function (table: string, paymentType: string) {
+    closeAddition: async function (table: string, paymentType: string, sessionId: number) {
         let user = await userManager.get();
         if (user) {
             return QueryableIO<IProc>({
@@ -173,14 +172,16 @@ export const dataManager = {
                 parameters: [
                     { key: 'TABLEID', value: table },
                     { key: 'STOREID', value: user.STOREID },
-                    { key: 'PAYMENT_TYPE', value: paymentType }
+                    { key: 'PAYMENT_TYPE', value: paymentType },
+                    { key: 'SESSIONID', value: sessionId },
+                    { key: 'USERID', value: user.ID }
                 ]
             })
         } else {
             return await errorPromise(messages.PLEASE_LOGIN_FIRST)
         }
     },
-    addPayment: async function (table: string, paymentType: string, items: any[]) {
+    addPayment: async function (table: string, paymentType: string, items: { PRODUCTID: number, PRICE: number }[], sessionId: number) {
         let user = await userManager.get();
         if (user) {
             return QueryableIO<IProc>({
@@ -190,7 +191,9 @@ export const dataManager = {
                     { key: 'TABLEID', value: table },
                     { key: 'STOREID', value: user.STOREID },
                     { key: 'JSON', value: JSON.stringify(items) },
-                    { key: 'PAYMENT_TYPE', value: paymentType }
+                    { key: 'PAYMENT_TYPE', value: paymentType },
+                    { key: 'USERID', value: user.ID },
+                    { key: 'SESSIONID', value: sessionId }
                 ]
             })
         } else {
