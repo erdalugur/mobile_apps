@@ -1,11 +1,12 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { Text, View, Input, Button } from 'components'
 import { NavigationProps } from 'types';
 import theme from 'theme';
 import { messageBox, messages } from 'utils';
 import { SelectedItem } from './AdditionScreen'
 import { dataManager } from 'api';
+
 interface Props extends NavigationProps<{
     table: string
     price: string
@@ -99,47 +100,77 @@ class Index extends React.PureComponent<Props, State>{
         }
     }
 
+    renderItems = () => {
+        return (
+            <FlatList
+                style={{ width: '100%', height: '100%' }}
+                initialNumToRender={2}
+                numColumns={2}
+                keyExtractor={item => item.ID.toString()}
+                data={this.state.paymentTypes}
+                renderItem={({ item, index }) => {
+                    let isSelected = this.state.selectedPayment === item.ID
+                    return (
+                        <View style={{
+                            paddingLeft: index % 2 === 0 ? 5 : 2.5,
+                            paddingRight: index % 2 === 0 ? 2.5 : 5,
+                            width: '50%'
+                        }}>
+                            <Button
+                                key={index}
+                                onPress={() => {
+                                    this.setState((state: State) => {
+                                        return { selectedPayment: item.ID === state.selectedPayment ? '' : item.ID }
+                                    })
+                                }}
+                                textColor={isSelected ? theme.colors.card : theme.colors.text}
+                                style={{
+                                    width: '100%',
+                                    marginBottom: 5,
+                                    opacity: 0.8,
+                                    backgroundColor: isSelected ? theme.colors.text : theme.colors.border,
+                                    padding: 10,
+
+                                }}>{item.NAME}</Button>
+                        </View>
+                    )
+                }}
+            />
+        )
+
+    }
+
     render() {
         const operation = this.props.route.params.operation
         return (
             <View style={styles.container}>
                 <View style={{
-                    padding: 5,
+
                     flex: 1
                 }}>
-                    {operation === 'addPayment' &&
-                        <Input
-                            placeholder="Tutar"
-                            style={{ borderWidth: 1, borderColor: theme.colors.border }}
-                            keyboardType="number-pad"
-                            value={this.state.price.toString()}
-                            onChangeText={price => this.setState({ price })}
-                        />}
-                    {this.state.paymentTypes.map(x => {
-                        let isSelected = this.state.selectedPayment === x.ID
-                        return (
-                            <Button
-                                onPress={() => {
-                                    this.setState({ selectedPayment: x.ID })
-                                }}
-                                style={{
-                                    marginTop: 10,
-                                    opacity: 0.8,
-                                    backgroundColor: isSelected ? theme.colors.primary : theme.colors.background,
-                                    padding: 10,
-                                    borderColor: theme.colors.text,
-                                    borderWidth: isSelected ? 0 : 1
-                                }} key={x.ID}>{x.NAME}</Button>
-                        )
-                    })}
-                    <Button
+                    {this.renderItems()}
+
+
+                </View>
+                <View style={{
+                    bottom: 0,
+                    width: '100%',
+
+                    position: 'absolute',
+                    height: 60
+                }}>
+                    <TouchableOpacity
                         onPress={() => {
                             operation === 'addPayment' ? this.addPayment() : this.closeSession();
                         }}
                         style={{
-                            marginTop: 10,
+                            height: 70,
+                            justifyContent: 'center',
+                            alignItems: 'center',
                             backgroundColor: theme.colors.border
-                        }}>Tamamla</Button>
+                        }}><Text style={{
+                            fontSize: 16
+                        }}>Tamamla</Text></TouchableOpacity>
                 </View>
             </View>
         );

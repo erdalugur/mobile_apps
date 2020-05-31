@@ -20,13 +20,15 @@ interface State {
     loading: boolean
     error: string
     selected: string
+    filter: string
 }
 export default class extends React.PureComponent<Props, State>{
     state: State = {
         items: [],
         loading: false,
         error: '',
-        selected: ''
+        selected: '',
+        filter: 'All'
     }
 
     componentDidMount = async () => {
@@ -91,6 +93,8 @@ export default class extends React.PureComponent<Props, State>{
         )
     }
     render() {
+        const { items, filter } = this.state
+        let filteredItems = filter === 'All' ? items : items.filter(x => filter === 'Empty' ? x.GUEST === 0 : x.GUEST !== 0)
         return (
             <View style={styles.container}>
                 <View style={{
@@ -101,11 +105,21 @@ export default class extends React.PureComponent<Props, State>{
                     backgroundColor: theme.colors.card
                 }}>
                     <TouchableOpacity
+                        onPress={() => {
+                            this.setState((state: State) => {
+                                return { filter: state.filter === 'Full' ? 'All' : 'Full' }
+                            })
+                        }}
                         style={[styles.action]}
                     >
                         <Text>Dolu</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
+                        onPress={() => {
+                            this.setState((state: State) => {
+                                return { filter: state.filter === 'Empty' ? 'All' : 'Empty' }
+                            })
+                        }}
                         style={[styles.action]}
                     >
                         <Text>Boş</Text>
@@ -128,7 +142,7 @@ export default class extends React.PureComponent<Props, State>{
                     initialNumToRender={2}
                     numColumns={4}
                     keyExtractor={item => item.ID.toString()}
-                    data={this.state.items}
+                    data={filteredItems}
                     renderItem={({ item, index }) => this.renderItem(item, index)}
                 />
             </View>

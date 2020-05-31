@@ -34,17 +34,10 @@ interface State {
     items: AdditionItem[]
 }
 
-interface PaymentType {
-    NAME: string
-    ID: number
-}
 
-let PaymentItems: PaymentType[] = [
-    { NAME: 'Nakit', ID: 1 }
-]
 export default class extends React.PureComponent<Props, State> {
     state: State = {
-        selectedPayment: '1',
+        selectedPayment: '',
         table: '',
         selectedItems: [],
         items: []
@@ -142,7 +135,7 @@ export default class extends React.PureComponent<Props, State> {
                             }}
                             style={[styles.itemContainer, {
                                 borderLeftWidth: this.state.selectedItems.indexOf(x.ID) > -1 ? 4 : 0,
-                                borderLeftColor: this.state.selectedItems.indexOf(x.ID) > -1 ? theme.colors.primary : theme.colors.card
+                                borderLeftColor: this.state.selectedItems.indexOf(x.ID) > -1 ? theme.colors.text : theme.colors.card
                             }]}>
                             <View style={{ width: '55%', flexDirection: 'row' }}>
                                 <Text>{x.PRODUCT_NAME}</Text>
