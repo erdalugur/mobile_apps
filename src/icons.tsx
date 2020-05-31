@@ -1,5 +1,5 @@
 import React from 'react'
-import { Feather, FontAwesome, Ionicons, AntDesign, MaterialCommunityIcons, FontAwesome5 } from '@expo/vector-icons'
+import { Feather, FontAwesome, Ionicons, AntDesign, MaterialCommunityIcons, FontAwesome5, MaterialIcons } from '@expo/vector-icons'
 import theme from 'theme'
 import { TouchableOpacity } from 'react-native';
 
@@ -54,4 +54,7 @@ export function Money(props: IconProps) {
 
 export function ReportFile(props: IconProps) {
     return <FontAwesome name="file-word-o" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}
+export function Person(props: IconProps) {
+    return <MaterialIcons name="person" onPress={props.onPress} size={props.size || 30} color={props.color} />
 }

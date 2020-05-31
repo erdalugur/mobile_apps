@@ -213,6 +213,34 @@ export const dataManager = {
         } else {
             return await errorPromise(messages.PLEASE_LOGIN_FIRST);
         }
+    },
+    loadReportByPerson: async function () {
+        let user = await userManager.get();
+        if (user) {
+            return await QueryableIO<IProc>({
+                model: 'MPOS_REPORT_BY_PERSON',
+                action: 'public',
+                parameters: [
+                    { key: 'STOREID', value: user.STOREID }
+                ]
+            })
+        } else {
+            return await errorPromise(messages.PLEASE_LOGIN_FIRST);
+        }
+    },
+    loadReportByProduct: async function () {
+        let user = await userManager.get();
+        if (user) {
+            return await QueryableIO<IProc>({
+                model: 'MPOS_REPORT_BY_PRODUCT',
+                action: 'public',
+                parameters: [
+                    { key: 'STOREID', value: user.STOREID }
+                ]
+            })
+        } else {
+            return await errorPromise(messages.PLEASE_LOGIN_FIRST);
+        }
     }
 }
 

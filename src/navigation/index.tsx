@@ -15,6 +15,7 @@ import CashierScreen from 'screens/CashierScreen';
 import ReportScreen from 'screens/ReportScreen';
 import TablesScreen from 'screens/TablesScreen';
 import PaymentScreen from 'screens/PaymentScreen';
+import ReportDetail from 'screens/ReportDetail';
 
 import ProfileScreen from 'screens/ProfileScreen';
 import { AntDesign } from '@expo/vector-icons';
@@ -43,7 +44,8 @@ export const screens = {
     reports: 'Reports',
     addition: 'Addition',
     tables: 'Tables',
-    payment: 'Payment'
+    payment: 'Payment',
+    reportDetail: 'ReportDetail'
 }
 
 export const HomeStack = createStackNavigator();
@@ -283,7 +285,15 @@ const CachierStackScreen = () => (
 
 const ReportStack = createStackNavigator();
 const ReportStackScreen = () => (
-    <ReportStack.Navigator>
+    <ReportStack.Navigator
+        mode="modal"
+        headerMode="screen"
+        screenOptions={{
+            headerBackTitleVisible: false,
+            headerBackTitleStyle: { color: theme.colors.text },
+            headerBackImage: ({ tintColor }) => <HeaderBack />
+        }}
+    >
         <ReportStack.Screen
             options={{
                 title: 'Raporlar'
@@ -291,6 +301,14 @@ const ReportStackScreen = () => (
             name={screens.reports}
             component={ReportScreen}
         />
+        <ReportStack.Screen
+            options={{
+                title: 'Rapor Detay'
+            }}
+            name={screens.reportDetail}
+            component={ReportDetail}
+        />
+
     </ReportStack.Navigator>
 )
 
