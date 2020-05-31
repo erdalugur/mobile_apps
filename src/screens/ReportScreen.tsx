@@ -46,7 +46,7 @@ let items: MenuItem[] = [
     { TYPE: 'PERSON', NAME: 'Kişi Bazlı', PATH: 'ReportDetail', ICON: <Person color={theme.colors.text} size={40} /> },
     { TYPE: 'PRODUCT', NAME: 'Ürün Bazlı', PATH: 'ReportDetail', ICON: <Menu color={theme.colors.text} size={40} /> },
     { TYPE: 'PERIOD', NAME: 'Periyod Bazlı', PATH: 'ReportDetail', ICON: <Calendar color={theme.colors.text} size={40} /> },
-    { TYPE: 'PRICE', NAME: 'Adisyon Bazlı', PATH: 'ReportDetail', ICON: <Money color={theme.colors.text} size={40} /> },
+    { TYPE: 'PRICE', NAME: 'Masa Bazlı', PATH: 'ReportDetail', ICON: <Money color={theme.colors.text} size={40} /> },
 ]
 
 

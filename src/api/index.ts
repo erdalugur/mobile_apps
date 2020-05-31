@@ -74,11 +74,14 @@ export async function QueryableIO<T>(param: T): Promise<IResponse> {
 
 export const dataManager = {
     loadAll: async function () {
+        const user = await userManager.get();
         console.log("dataManager")
         let { data, statusCode, error } = await QueryableIO<IProc>({
             model: 'MPOS_GET_ALL',
             action: 'public',
-            parameters: []
+            parameters: [{
+                key: 'STOREID', value: user?.STOREID
+            }]
         });
         return new Promise<FetchAllModel>((resolve, reject) => {
             if (statusCode === 200 && data && data.length > 0) {
@@ -153,6 +156,7 @@ export const dataManager = {
     },
     loadAddion: async function (table: string) {
         let user = await userManager.get();
+        console.log(table)
         if (user) {
             return await QueryableIO<IProc>({
                 action: 'public',
@@ -214,25 +218,11 @@ export const dataManager = {
             return await errorPromise(messages.PLEASE_LOGIN_FIRST);
         }
     },
-    loadReportByPerson: async function () {
+    loadReports: async function () {
         let user = await userManager.get();
         if (user) {
             return await QueryableIO<IProc>({
-                model: 'MPOS_REPORT_BY_PERSON',
-                action: 'public',
-                parameters: [
-                    { key: 'STOREID', value: user.STOREID }
-                ]
-            })
-        } else {
-            return await errorPromise(messages.PLEASE_LOGIN_FIRST);
-        }
-    },
-    loadReportByProduct: async function () {
-        let user = await userManager.get();
-        if (user) {
-            return await QueryableIO<IProc>({
-                model: 'MPOS_REPORT_BY_PRODUCT',
+                model: 'MPOS_GET_REPORTS',
                 action: 'public',
                 parameters: [
                     { key: 'STOREID', value: user.STOREID }

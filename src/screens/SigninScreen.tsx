@@ -47,7 +47,7 @@ class Index extends React.PureComponent<Props, State> {
                     STOREID: storeId,
                     token: token
                 });
-                this.props.navigation.navigate(screens.home)
+                this.props.navigation.navigate(screens.routing)
             } else {
                 messageBox(error);
                 this.setState({ loading: false })
@@ -58,12 +58,19 @@ class Index extends React.PureComponent<Props, State> {
         return (
             <View full style={{ justifyContent: 'center' }}>
                 <Card style={{ padding: 40, borderRadius: 10 }}>
+                    <FormRow errorMessage={this.state.errors["store"]} style={{ marginBottom: 10, marginTop: 10 }}>
+                        <Input
+                            value={this.state.storeId.toString()}
+                            onChangeText={(storeId) => this.setState({ storeId })}
+                            placeholder="Restoran" />
+                    </FormRow>
                     <FormRow errorMessage={this.state.errors["username"]} style={{ marginBottom: 10, marginTop: 10 }}>
                         <Input
                             value={this.state.username.toString()}
                             onChangeText={(username) => this.setState({ username: username })}
                             placeholder="Username" />
                     </FormRow>
+
                     <FormRow errorMessage={this.state.errors["password"]} style={{ marginBottom: 10, marginTop: 10 }}>
                         <Input
                             textContentType="password"
