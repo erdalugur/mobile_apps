@@ -7,6 +7,7 @@ import { dataManager } from 'api';
 import { screens } from 'navigation';
 import { IAction } from 'myRedux/types';
 import { messageBox, userManager } from 'utils';
+import theme from 'theme';
 
 interface State {
     username: string
@@ -21,8 +22,8 @@ interface Props extends NavigationProps<any, any> {
 }
 class Index extends React.PureComponent<Props, State> {
     state: State = {
-        username: "",
-        password: "",
+        username: "uerdal92@gmail.com",
+        password: "uU01012000",
         storeId: "1",
         loading: false,
         errors: {}
@@ -56,8 +57,16 @@ class Index extends React.PureComponent<Props, State> {
     }
     render() {
         return (
-            <View full style={{ justifyContent: 'center' }}>
-                <Card style={{ padding: 40, borderRadius: 10 }}>
+            <View full style={{
+                justifyContent: 'center',
+                backgroundColor: theme.colors.card,
+                padding: 30
+            }}>
+                <Card style={{
+                    padding: 40,
+                    backgroundColor: theme.colors.background,
+                    borderRadius: 5
+                }}>
                     <FormRow errorMessage={this.state.errors["store"]} style={{ marginBottom: 10, marginTop: 10 }}>
                         <Input
                             value={this.state.storeId.toString()}
@@ -81,9 +90,9 @@ class Index extends React.PureComponent<Props, State> {
                     <FormRow style={{ marginBottom: 10, marginTop: 10 }}>
                         <Button loading={this.state.loading} onPress={this.submit}>Sign In</Button>
                     </FormRow>
-                    <FormRow style={{ borderWidth: 0 }}>
-                        <Button size="small" onPress={() => this.props.navigation.navigate("Signup")}>
-                            Buradan kayıt olabilirsiniz
+                    <FormRow style={{ borderWidth: 0, marginTop: 20 }}>
+                        <Button size="small" onPress={() => this.props.navigation.navigate(screens.loginQR)}>
+                            QR Code ile Login
                         </Button>
                     </FormRow>
                 </Card>

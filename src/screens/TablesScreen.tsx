@@ -6,6 +6,7 @@ import theme from 'theme';
 import { messageBox } from 'utils';
 import { NavigationProps } from 'types';
 import { screens } from 'navigation';
+import { QRCode } from 'icons';
 const { height } = Dimensions.get('screen')
 interface Props extends NavigationProps<any, any> { }
 
@@ -33,6 +34,13 @@ export default class extends React.PureComponent<Props, State>{
 
     componentDidMount = async () => {
         this.loadAsync();
+        this.props.navigation.setOptions({
+            headerRight: () => <View style={{
+                marginRight: 20
+            }}>
+                <QRCode onPress={() => this.props.navigation.navigate(screens.cartQR, { fromScreen: '' })} color={theme.colors.text} />
+            </View>
+        })
     }
 
     loadAsync = async () => {

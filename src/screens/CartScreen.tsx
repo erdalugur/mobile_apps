@@ -19,7 +19,15 @@ interface Props extends NavigationProps<any, any> {
     }>
     dispatch: (param: IAction<number | any>) => void
 }
-class Index extends React.PureComponent<Props, any> {
+
+interface State {
+    table: string
+}
+class Index extends React.PureComponent<Props, State> {
+
+    state: State = {
+        table: ''
+    }
 
     totalPrice = (): string => {
         let { items } = this.props.cart, price = 0;
@@ -60,12 +68,16 @@ class Index extends React.PureComponent<Props, any> {
     }
 
     complete = async () => {
+        if (this.state.table === '') {
+            messageBox('Lütfen bir masa seçin')
+            return;
+        }
         let { items } = this.props.cart
         if (Object.keys(items).length === 0) {
             messageBox(messages.EMPTY_CART_MESSAGE)
         } else {
             let { statusCode, data, error } = await dataManager.setCart({
-                TABLEID: '13',
+                TABLEID: this.state.table,
                 JSON: Object.keys(items).map(x => {
                     return {
                         PRODUCTID: items[x].ID.toString(),
@@ -97,7 +109,7 @@ class Index extends React.PureComponent<Props, any> {
                     </View>
                     <View style={{ width: 1, backgroundColor: theme.colors.border, height: 70 }}></View>
                     <TouchableOpacity
-                        onPress={this.complete}
+                        onPress={() => this.props.navigation.navigate(screens.cartQR, { fromScreen: 'cart' })}
                         style={[styles.bottomButton]}>
                         <Text style={{ textAlign: 'center', fontSize: 10 }}>Sipariş</Text>
                         <Text style={{ fontSize: 20 }}>

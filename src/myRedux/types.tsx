@@ -11,6 +11,7 @@ export interface SingleMultiType<Single, Multi> {
     items: Multi
 }
 export interface IState {
+    screen: string
     token: string
     category: SingleMultiType<any, Array<any>>
     product: SingleMultiType<any, Array<any>>
@@ -25,5 +26,6 @@ export const actionTypes = {
     ADD_TO_CART: 'ADD_TO_CART',
     REMOVE_CART: 'REMOVE_CART',
     INCREMENT: 'INCREMENT',
-    DECREMENT: 'DECREMENT'
+    DECREMENT: 'DECREMENT',
+    SET_SCREEN: 'SET_SCREEN'
 }

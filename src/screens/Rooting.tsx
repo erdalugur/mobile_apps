@@ -5,9 +5,10 @@ import { TouchableOpacity, FlatList, StatusBar, StyleSheet } from 'react-native'
 import theme from 'theme'
 import { NavigationProps } from 'types'
 import { Cheff, Setting, Menu, Bowtie, Money, ReportFile } from 'icons'
+import { IAction, actionTypes } from 'myRedux/types'
 
 interface Props extends NavigationProps<any, any> {
-
+    dispatch: (param: IAction<string>) => void
 }
 
 interface State {
@@ -40,6 +41,7 @@ class Index extends React.PureComponent<Props, State> {
         return (
             <TouchableOpacity
                 onPress={() => {
+                    this.props.dispatch({ type: actionTypes.SET_SCREEN, payload: x.PATH })
                     this.props.navigation.navigate(x.PATH)
                 }}
                 style={[styles.menuItem]}>

@@ -2,7 +2,7 @@ import React from 'react';
 import PresentationScreen from 'screens/PresentationScreen'
 import HomeScreen from 'screens/HomeScreen'
 import SigninScreen from 'screens/SigninScreen'
-import { SignUpScreen } from 'screens/SignupScreen'
+import { QRScreen } from 'screens/QRScreen'
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import NotificationScreen from 'screens/NotificationScreen';
@@ -16,6 +16,7 @@ import ReportScreen from 'screens/ReportScreen';
 import TablesScreen from 'screens/TablesScreen';
 import PaymentScreen from 'screens/PaymentScreen';
 import ReportDetail from 'screens/ReportDetail';
+import AuthScreen from 'screens/AuthScreen';
 
 import ProfileScreen from 'screens/ProfileScreen';
 import { AntDesign } from '@expo/vector-icons';
@@ -25,6 +26,9 @@ import theme from 'theme';
 import { HeaderBack } from 'icons'
 import RootingScreen from 'screens/Rooting';
 import AdditionScreen from 'screens/AdditionScreen';
+import CartQRScreen from 'screens/CartQRScreen';
+import CartResultScreen from 'screens/CartResultScreen';
+
 
 export const screens = {
     product: 'Product',
@@ -35,7 +39,7 @@ export const screens = {
     notification: 'Notification',
     profile: 'Profile',
     signin: 'Signin',
-    signup: 'Signup',
+    loginQR: 'LoginQR',
     presentation: 'Presentation',
     routing: 'Routing',
     settings: 'Settings',
@@ -45,7 +49,10 @@ export const screens = {
     addition: 'Addition',
     tables: 'Tables',
     payment: 'Payment',
-    reportDetail: 'ReportDetail'
+    reportDetail: 'ReportDetail',
+    auth: 'Auth',
+    cartQR: 'CartQR',
+    cartResult: 'CartResult'
 }
 
 export const HomeStack = createStackNavigator();
@@ -74,6 +81,15 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
             />
             <HomeStack.Screen
                 options={{
+                    gestureEnabled: false,
+                    headerBackImage: () => null,
+                    title: 'Sonuç'
+                }}
+                name={screens.cartResult}
+                component={CartResultScreen}
+            />
+            <HomeStack.Screen
+                options={{
                     title: 'Kategoriler'
                 }}
                 name={screens.category}
@@ -87,7 +103,14 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
                 name={screens.product}
                 component={ProductScreen}
             />
+            <HomeStack.Screen
+                options={{
+                    title: 'Qr',
 
+                }}
+                name={screens.cartQR}
+                component={CartQRScreen}
+            />
         </HomeStack.Navigator>
     )
 }
@@ -128,6 +151,20 @@ const SearchStackScreen = ({ navigation, route }: any) => {
                 options={CartOptions}
                 name={screens.cart}
                 component={CartScreen} />
+            <SearchStack.Screen
+                options={{
+                    title: 'QR'
+                }}
+                name={screens.cartQR}
+                component={CartQRScreen} />
+            <SearchStack.Screen
+                options={{
+                    title: 'Sonuç',
+                    gestureEnabled: false,
+                    headerBackImage: () => null
+                }}
+                name={screens.cartResult}
+                component={CartResultScreen} />
         </SearchStack.Navigator>
     )
 }
@@ -209,11 +246,16 @@ const AuthStack = createStackNavigator();
 const AuthStackScreen = () => (
     <AuthStack.Navigator headerMode="none">
         <AuthStack.Screen
+            name={screens.auth} component={AuthScreen}
+        />
+        <AuthStack.Screen
             name={screens.signin} component={SigninScreen}
         />
         <AuthStack.Screen
-            name={screens.signup} component={SignUpScreen}
+            name={screens.loginQR} component={QRScreen}
         />
+
+
     </AuthStack.Navigator>
 )
 
@@ -279,6 +321,21 @@ const CachierStackScreen = () => (
             }}
             name={screens.payment}
             component={PaymentScreen}
+        />
+        <CachierStack.Screen
+            options={{
+                title: 'QR'
+            }}
+            name={screens.cartQR}
+            component={CartQRScreen}
+        />
+        <CachierStack.Screen
+            options={{
+                title: 'Sonuç',
+                gestureEnabled: false
+            }}
+            name={screens.cartResult}
+            component={CartResultScreen}
         />
     </CachierStack.Navigator>
 )
@@ -350,6 +407,14 @@ const AdditionStackScreen = ({ route, navigation }: { route: any, navigation: an
                 component={PaymentScreen}
                 name={screens.payment}
             />
+            <AdditionStack.Screen
+                options={{
+                    title: 'Ödeme Al'
+                }}
+                component={CartQRScreen}
+                name={screens.cartQR}
+            />
+
         </AdditionStack.Navigator>
     )
 }

@@ -58,3 +58,6 @@ export function ReportFile(props: IconProps) {
 export function Person(props: IconProps) {
     return <MaterialIcons name="person" onPress={props.onPress} size={props.size || 30} color={props.color} />
 }
+export function QRCode(props: IconProps) {
+    return <AntDesign name="qrcode" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}
