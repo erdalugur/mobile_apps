@@ -49,7 +49,7 @@ export const userManager = {
         cacheService.set(cacheKeys.user, data, 7);
     },
     remove: async function () {
-        cacheService.remove(cacheKeys.user);
+        return AsyncStorage.removeItem(cacheKeys.user);
     }
 }
 

@@ -1,11 +1,11 @@
 import React from 'react'
+import { ScrollView } from 'react-native'
 import { Card, View, Button, FormRow, Input, Text } from 'components'
 import { connect } from 'react-redux';
 import { Dispatch } from 'redux';
 import { NavigationProps, UserModel } from 'types';
 import { dataManager } from 'api';
 import { screens } from 'navigation';
-import { IAction } from 'myRedux/types';
 import { messageBox, userManager } from 'utils';
 import theme from 'theme';
 
@@ -97,7 +97,7 @@ class Index extends React.PureComponent<Props, State> {
                             style={{ backgroundColor: theme.colors.border }}
                         >Sign In</Button>
                     </FormRow>
-                    <FormRow style={{ borderWidth: 0, marginTop: 20 }}>
+                    <FormRow style={{ borderWidth: 0, marginTop: 20, alignItems: 'flex-end' }}>
                         <Button size="small"
                             onPress={() => this.props.navigation.navigate(screens.loginQR)}>
                             QR Code ile Login

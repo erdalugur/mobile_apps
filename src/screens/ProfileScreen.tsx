@@ -16,6 +16,12 @@ interface Props extends NavigationProps<{}, any> {
 }
 
 class Index extends React.PureComponent<Props, State> {
+
+    logout = async () => {
+        await userManager.remove();
+        this.props.dispatch({ type: actionTypes.SET_TOKEN, payload: '' });
+        this.props.navigation.navigate(screens.auth);
+    }
     render() {
         return (
             <View style={styles.container}>
@@ -29,11 +35,7 @@ class Index extends React.PureComponent<Props, State> {
                     <Text>Hesap Ayarları</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={async () => {
-                        await userManager.remove();
-                        this.props.dispatch({ type: actionTypes.SET_TOKEN, payload: '' });
-                        this.props.navigation.navigate(screens.auth);
-                    }}
+                    onPress={this.logout}
                     style={{
                         backgroundColor: theme.colors.border,
                         height: 40,

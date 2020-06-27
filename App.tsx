@@ -26,20 +26,20 @@ const Main = () => {
 
   async function handleIsAuthenticated() {
     let result: string = "";
+    setLoading(false);
     try {
       let user = await userManager.get();
-      console.log(user)
+      console.log("user", user)
       if (user != null && user.token != "") {
         result = user.token;
         dispatch({ type: actionTypes.SET_TOKEN, payload: user.token })
         setIsAuthenticated(result != "");
       }
       else
-        result = "";
+        setIsAuthenticated(false);
     } catch (error) {
-      result = ""
+      setIsAuthenticated(false);
     }
-    setLoading(false);
   }
 
   return (

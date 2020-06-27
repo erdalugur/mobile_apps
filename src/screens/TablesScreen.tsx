@@ -48,7 +48,7 @@ class Index extends React.PureComponent<Props, State>{
             headerRight: () => <View style={{
                 marginRight: 20
             }}>
-                <QRCode onPress={() => this.props.navigation.navigate(screens.cartQR, { fromScreen: '' })} color={theme.colors.text} />
+                <QRCode onPress={() => this.props.navigation.navigate(screens.tableQR, { fromScreen: '' })} color={theme.colors.text} />
             </View>
         })
     }
@@ -140,7 +140,7 @@ class Index extends React.PureComponent<Props, State>{
 
     renderSendButton = () => {
         const { routeScreen, cart, navigation } = this.props
-        let fromCart = routeScreen !== 'Home'
+        let fromCart = routeScreen === 'Search'
         return fromCart && Object.keys(cart.items).length > 0 && <TouchableOpacity
             onPress={this.sendOrder}
             activeOpacity={0.8} style={[styles.sendOrder]}>

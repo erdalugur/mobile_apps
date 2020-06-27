@@ -1,45 +1,91 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Button } from 'react-native';
-import { BarCodeScanner } from 'expo-barcode-scanner';
+import React from 'react';
+import { messageBox, userManager } from 'utils';
+import { SingleMultiType, IAction } from 'myRedux/types';
+import { dataManager } from 'api';
+import { connect } from 'react-redux';
+import { AppState } from 'myRedux';
+import { CartItem, NavigationProps } from 'types';
+import { screens } from 'navigation';
+import { BarcodeScanner } from 'components';
 
-export function QRScreen() {
-    const [hasPermission, setHasPermission] = useState(null);
-    const [scanned, setScanned] = useState(false);
+//<tennantId|username|password>
+interface Props extends NavigationProps<any, any> {
+    cart: SingleMultiType<any, {
+        [key: string]: CartItem;
+    }>
+    dispatch: (param: IAction<number | any>) => void
+}
 
-    useEffect(() => {
-        (async () => {
-            const { status } = await BarCodeScanner.requestPermissionsAsync();
-            setHasPermission(status === 'granted');
-        })();
-    }, []);
+interface State {
+    hasPermission: boolean
+    scanned: boolean
+    username: string
+    password: string
+    tennantId: string
+    loading: boolean
+}
+class Index extends React.Component<Props, State> {
+    state: State = {
+        hasPermission: false,
+        scanned: false,
+        username: "",
+        password: "",
+        tennantId: "",
+        loading: false
+    }
 
-    const handleBarCodeScanned = ({ type, data }) => {
-        setScanned(true);
-        alert(`Bar code with type ${type} and data ${data} has been scanned!`);
+    handleBarCodeScanned = ({ type, data }: { type: any, data: string }) => {
+        let [tennantId, username, password] = data.split("|");
+        this.setState({
+            scanned: true,
+            username,
+            password,
+            tennantId
+        }, this.loginAsync);
     };
 
-    if (hasPermission === null) {
-        return <Text>Requesting for camera permission</Text>;
-    }
-    if (hasPermission === false) {
-        return <Text>No access to camera</Text>;
+    checkCartItems = () => Object.keys(this.props.cart.items).length > 0
+
+
+    loginAsync = async () => {
+        let { username,
+            password,
+            tennantId } = this.state
+        let { token, data, error } = await dataManager.login(
+            username,
+            password,
+            tennantId
+        );
+        if (token && data && data.length > 0) {
+            let __data__ = data[0];
+            await userManager.set({
+                ID: __data__.ID,
+                PASSWORD: password,
+                USERNAME: username,
+                STOREID: tennantId,
+                token: token
+            });
+            this.setState({ loading: false })
+            this.props.navigation.navigate(screens.routing)
+        } else {
+            messageBox(error);
+            this.setState({ loading: false })
+        }
     }
 
-    return (
-        <View
-            style={{
-                flex: 1,
-                flexDirection: 'column',
-                justifyContent: 'flex-end',
-            }}>
-            <BarCodeScanner
-                onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-                style={StyleSheet.absoluteFillObject}
+
+    render() {
+        return (
+            <BarcodeScanner
+                full={true}
+                handleBarCodeScanned={this.handleBarCodeScanned}
             />
-
-            {scanned && (
-                <Button title={'Tap to Scan Again'} onPress={() => setScanned(false)} />
-            )}
-        </View>
-    );
+        );
+    }
 }
+
+const mapState = (state: AppState) => ({
+    cart: state.app.cart,
+})
+
+export default connect(mapState)(Index)

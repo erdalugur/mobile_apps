@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from 'react';
-import { Text, View, StyleSheet, Button } from 'react-native';
-import { BarCodeScanner } from 'expo-barcode-scanner';
-import theme from 'theme';
+import React from 'react';
 import { messages, messageBox } from 'utils';
 import { SingleMultiType, IAction, actionTypes } from 'myRedux/types';
 import { dataManager } from 'api';
 import { connect } from 'react-redux';
 import { AppState } from 'myRedux';
 import { CartItem } from 'types';
+import { BarcodeScanner } from 'components';
 
 interface Props {
     cart: SingleMultiType<any, {
@@ -27,20 +25,10 @@ class Index extends React.Component<Props, State> {
         scanned: false,
         table: ""
     }
-    componentDidMount = async () => {
-        this.requestPermissionsAsync();
-    }
-
-    requestPermissionsAsync = async () => {
-        const { status } = await BarCodeScanner.requestPermissionsAsync();
-        this.setState({ hasPermission: status === 'granted' });
-    }
 
 
     handleBarCodeScanned = ({ type, data }: { type: any, data: any }) => {
-        if (!this.state.scanned) {
-            this.setState({ scanned: true, table: data }, this.sendOrder);
-        }
+        this.setState({ table: data }, this.sendOrder);
     };
 
     checkCartItems = () => Object.keys(this.props.cart.items).length > 0
@@ -73,49 +61,18 @@ class Index extends React.Component<Props, State> {
         }
     }
 
-
     render() {
-        const { hasPermission, scanned } = this.state
-        if (hasPermission === null) {
-            return (
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', opacity: 0.8, }}>
-                    <Text style={{ color: theme.colors.white }}>Requesting for camera permission</Text>
-                </View>
-            )
-        }
-        if (hasPermission === false) {
-            return (
-                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', opacity: 0.8, }}>
-                    <Text style={{ color: theme.colors.white }}>No access to camera</Text>
-                </View>
-            )
-        }
         return (
-            <View
-                style={{
-                    flex: 1,
-                    flexDirection: 'column',
-                    justifyContent: 'flex-end',
-                    marginBottom: 50
-                }}>
-                <BarCodeScanner
-                    onBarCodeScanned={this.handleBarCodeScanned}
-                    style={StyleSheet.absoluteFillObject}
-                />
-
-                {scanned && (
-                    <Button title={'Yeniden Tara'}
-                        onPress={() => this.setState({ scanned: false })} />
-                )}
-            </View>
-        );
+            <BarcodeScanner
+                handleBarCodeScanned={this.handleBarCodeScanned}
+            />
+        )
 
     }
 }
 
 const mapState = (state: AppState) => ({
     cart: state.app.cart,
-    routeScreen: state.app.screen as screenOptions
 })
 
 export default connect(mapState)(Index)

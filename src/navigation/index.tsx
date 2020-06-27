@@ -2,7 +2,7 @@ import React from 'react';
 import PresentationScreen from 'screens/PresentationScreen'
 import HomeScreen from 'screens/HomeScreen'
 import SigninScreen from 'screens/SigninScreen'
-import { QRScreen } from 'screens/QRScreen'
+import QRScreen from 'screens/QRScreen'
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import NotificationScreen from 'screens/NotificationScreen';
@@ -28,6 +28,7 @@ import RootingScreen from 'screens/Rooting';
 import AdditionScreen from 'screens/AdditionScreen';
 import CartQRScreen from 'screens/CartQRScreen';
 import CartResultScreen from 'screens/CartResultScreen';
+import ReadQRTableScreen from 'screens/ReadQRTableScreen';
 
 
 export const screens = {
@@ -52,7 +53,8 @@ export const screens = {
     reportDetail: 'ReportDetail',
     auth: 'Auth',
     cartQR: 'CartQR',
-    cartResult: 'CartResult'
+    cartResult: 'CartResult',
+    tableQR: 'TableQR'
 }
 
 export const HomeStack = createStackNavigator();
@@ -455,8 +457,8 @@ const AdditionStackScreen = ({ route, navigation }: { route: any, navigation: an
                 options={{
                     title: 'Ödeme Al'
                 }}
-                component={CartQRScreen}
-                name={screens.cartQR}
+                component={ReadQRTableScreen}
+                name={screens.tableQR}
             />
 
         </AdditionStack.Navigator>
@@ -549,7 +551,7 @@ export const App = (props: Props) => {
                     title: "",
                 }}
                 component={AuthStackScreen}
-                name={screens.signin} />
+                name={screens.auth} />
             <RootStack.Screen
                 options={{
                     title: "",
