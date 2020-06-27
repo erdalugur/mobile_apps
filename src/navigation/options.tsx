@@ -12,7 +12,7 @@ export const HomeOptions: IScreenOptions = {
 }
 
 export const CartOptions: IScreenOptions = {
-    title: "Sepetim"
+    title: "Adisyon"
 }
 
 export const ProfileOptions: IScreenOptions = {

@@ -7,7 +7,7 @@ import { AppState } from 'myRedux';
 import { ScrollView } from 'react-native-gesture-handler';
 import theme from 'theme';
 import { SingleMultiType, IAction, actionTypes } from 'myRedux/types';
-import { Plus, Minus, QRCode, Table } from 'icons';
+import { Plus, Minus, QRCode, Table, EmojiNeutral } from 'icons';
 import { screens } from 'navigation';
 import { messageBox, messages } from 'utils';
 import { dataManager } from 'api';
@@ -69,13 +69,15 @@ class Index extends React.PureComponent<Props, State> {
         ));
     }
 
+    checkCartItems = () => Object.keys(this.props.cart.items).length > 0
+
     complete = async () => {
         if (this.state.table === '') {
             messageBox('Lütfen bir masa seçin')
             return;
         }
         let { items } = this.props.cart
-        if (Object.keys(items).length === 0) {
+        if (!this.checkCartItems()) {
             messageBox(messages.EMPTY_CART_MESSAGE)
         } else {
             let { statusCode, data, error } = await dataManager.setCart({
@@ -96,9 +98,9 @@ class Index extends React.PureComponent<Props, State> {
         }
     }
 
-    render() {
+    renderCart = () => {
         return (
-            <View full>
+            <React.Fragment>
                 <ScrollView style={{ marginBottom: 70 }}>
                     {this.RenderItems()}
                 </ScrollView>
@@ -123,8 +125,29 @@ class Index extends React.PureComponent<Props, State> {
                             </TouchableOpacity>
                         }
                     </View>
-
                 </View>
+            </React.Fragment>
+        )
+    }
+
+    renderEmpty = () => {
+        return (
+            <View style={{
+                flex: 1,
+                justifyContent: 'center',
+                alignItems: 'center',
+                opacity: 0.8,
+            }}>
+                <EmojiNeutral color={theme.colors.white} size={60} />
+                <Text style={{ marginTop: 20 }}>{messages.EMPTY_CART_MESSAGE}</Text>
+            </View>
+        )
+    }
+
+    render() {
+        return (
+            <View full>
+                {this.checkCartItems() ? this.renderCart() : this.renderEmpty()}
             </View>
         );
     }

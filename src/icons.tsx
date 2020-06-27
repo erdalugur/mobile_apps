@@ -1,5 +1,5 @@
 import React from 'react'
-import { Feather, FontAwesome, Ionicons, AntDesign, MaterialCommunityIcons, FontAwesome5, MaterialIcons } from '@expo/vector-icons'
+import { Feather, FontAwesome, Ionicons, AntDesign, MaterialCommunityIcons, FontAwesome5, MaterialIcons, Entypo } from '@expo/vector-icons'
 import theme from 'theme'
 import { TouchableOpacity } from 'react-native';
 
@@ -63,4 +63,8 @@ export function QRCode(props: IconProps) {
 }
 export function Table(props: IconProps) {
     return <AntDesign name="table" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}
+
+export function EmojiNeutral(props: IconProps) {
+    return <Entypo name="emoji-neutral" onPress={props.onPress} size={props.size || 30} color={props.color} />
 }
