@@ -6,7 +6,7 @@ import theme from 'theme';
 import { messageBox, messages } from 'utils';
 import { NavigationProps, CartItem } from 'types';
 import { screens } from 'navigation';
-import { QRCode } from 'icons';
+import { QRCode, MoreOption } from 'icons';
 import { connect } from 'react-redux';
 import { AppState } from 'myRedux';
 import { SingleMultiType, actionTypes, IAction } from 'myRedux/types';
@@ -46,7 +46,13 @@ class Index extends React.PureComponent<Props, State>{
         this.loadAsync();
         this.props.navigation.setOptions({
             headerRight: () => <View style={{
-                marginRight: 20
+                marginRight: 20,
+                backgroundColor: theme.colors.card
+            }}>
+                <MoreOption onPress={() => messageBox('Modal açılacak')} color={theme.colors.text} />
+            </View>,
+            headerLeft: () => <View style={{
+                marginLeft: 20
             }}>
                 <QRCode onPress={() => this.props.navigation.navigate(screens.tableQR, { fromScreen: '' })} color={theme.colors.text} />
             </View>

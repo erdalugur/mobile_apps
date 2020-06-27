@@ -47,18 +47,22 @@ class Home extends React.PureComponent<Props, State> {
                             onRefresh={this.loadAsync} />
                     }
                     showsHorizontalScrollIndicator>
-                    <TopActions />
+                    {/* <TopActions /> */}
                     <Slider />
-                    {this.props.app.menu.tree.map(x => (
-                        <ProductScrollView
-                            categoryId={x.PRODUCTS[0].CATEGORYID}
-                            key={x.ID}
-                            title={x.NAME}
-                            items={x.PRODUCTS}
-                            navigation={this.props.navigation}
-                            route={this.props.route}
-                        />
-                    ))}
+                    <View style={{
+                        marginTop: 20
+                    }}>
+                        {this.props.app.menu.tree.map(x => (
+                            <ProductScrollView
+                                categoryId={x.PRODUCTS[0].CATEGORYID}
+                                key={x.ID}
+                                title={x.NAME}
+                                items={x.PRODUCTS}
+                                navigation={this.props.navigation}
+                                route={this.props.route}
+                            />
+                        ))}
+                    </View>
                 </ScrollView>
             </View>
         );

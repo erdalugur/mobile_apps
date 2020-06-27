@@ -68,3 +68,9 @@ export function Table(props: IconProps) {
 export function EmojiNeutral(props: IconProps) {
     return <Entypo name="emoji-neutral" onPress={props.onPress} size={props.size || 30} color={props.color} />
 }
+
+export function MoreOption(props: IconProps) {
+    return <Feather name="more-vertical" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}
+
+
