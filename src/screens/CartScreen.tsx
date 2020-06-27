@@ -7,17 +7,19 @@ import { AppState } from 'myRedux';
 import { ScrollView } from 'react-native-gesture-handler';
 import theme from 'theme';
 import { SingleMultiType, IAction, actionTypes } from 'myRedux/types';
-import { Plus, Minus } from 'icons';
+import { Plus, Minus, QRCode, Table } from 'icons';
 import { screens } from 'navigation';
 import { messageBox, messages } from 'utils';
 import { dataManager } from 'api';
 
+type screenOptions = 'Home' | 'Search' | 'Cashier' | 'Kitchen'
 
 interface Props extends NavigationProps<any, any> {
     cart: SingleMultiType<any, {
         [key: string]: CartItem;
     }>
     dispatch: (param: IAction<number | any>) => void
+    routeScreen: screenOptions
 }
 
 interface State {
@@ -101,21 +103,27 @@ class Index extends React.PureComponent<Props, State> {
                     {this.RenderItems()}
                 </ScrollView>
                 <View style={[styles.bottomButtonContainer]}>
-                    <View style={[styles.bottomButton]}>
+                    <View style={[styles.bottomTotalPrice]}>
                         <Text style={{ marginLeft: 5, fontSize: 10 }}>Toplam Fiyat</Text>
                         <Text style={{ fontSize: 20 }}>
                             {this.totalPrice()}
                         </Text>
                     </View>
-                    <View style={{ width: 1, backgroundColor: theme.colors.border, height: 70 }}></View>
-                    <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate(screens.cartQR, { fromScreen: 'cart' })}
-                        style={[styles.bottomButton]}>
-                        <Text style={{ textAlign: 'center', fontSize: 10 }}>Sipariş</Text>
-                        <Text style={{ fontSize: 20 }}>
-                            Gönder
-                        </Text>
-                    </TouchableOpacity>
+                    <View style={[styles.bottomButton]}>
+                        <TouchableOpacity
+                            onPress={() => this.props.navigation.navigate(screens.cartQR, { fromScreen: 'cart' })}
+                        >
+                            <QRCode color={theme.colors.white} />
+                        </TouchableOpacity>
+                        {this.props.routeScreen !== 'Home' &&
+                            <TouchableOpacity
+                                onPress={() => this.props.navigation.navigate(screens.tables, { fromScreen: 'cart' })}
+                            >
+                                <Table color={theme.colors.white} />
+                            </TouchableOpacity>
+                        }
+                    </View>
+
                 </View>
             </View>
         );
@@ -123,7 +131,8 @@ class Index extends React.PureComponent<Props, State> {
 }
 
 const mapState = (state: AppState) => ({
-    cart: state.app.cart
+    cart: state.app.cart,
+    routeScreen: state.app.screen as screenOptions
 })
 
 export default connect(mapState)(Index)
@@ -168,12 +177,24 @@ const styles = StyleSheet.create({
         height: 70,
         width: '100%',
         flexDirection: 'row',
-        justifyContent: 'space-around'
+        justifyContent: 'space-between'
     },
     bottomButton: {
-        backgroundColor: theme.colors.card,
         height: 70,
-        alignContent: 'center',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        paddingHorizontal: 10,
+        backgroundColor: theme.colors.card,
+        flexDirection: 'row',
+        width: '50%'
+    },
+    bottomTotalPrice: {
+        backgroundColor: theme.colors.border,
+        height: 70,
+        alignItems: 'center',
         justifyContent: 'center',
+        width: '50%',
+        paddingHorizontal: 10,
+        textAlign: 'center'
     },
 });

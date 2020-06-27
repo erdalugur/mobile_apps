@@ -111,6 +111,30 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
                 name={screens.cartQR}
                 component={CartQRScreen}
             />
+            <HomeStack.Screen
+                options={{
+                    title: 'Masalar'
+                }}
+                name={screens.tables}
+                component={TablesScreen}
+            />
+
+            <HomeStack.Screen
+                options={{
+                    title: 'Adisyon'
+                }}
+                name={screens.addition}
+                component={AdditionScreen}
+            />
+
+            <HomeStack.Screen
+                options={{
+                    title: 'Ödeme Al'
+                }}
+                name={screens.payment}
+                component={PaymentScreen}
+            />
+
         </HomeStack.Navigator>
     )
 }
@@ -157,6 +181,26 @@ const SearchStackScreen = ({ navigation, route }: any) => {
                 }}
                 name={screens.cartQR}
                 component={CartQRScreen} />
+            <SearchStack.Screen
+                options={{
+                    title: 'Masalar'
+                }}
+                name={screens.tables}
+                component={TablesScreen} />
+            <SearchStack.Screen
+                options={{
+                    title: 'Adisyon'
+                }}
+                component={AdditionScreen}
+                name={screens.addition}
+            />
+            <SearchStack.Screen
+                options={{
+                    title: 'Ödeme Al'
+                }}
+                component={PaymentScreen}
+                name={screens.payment}
+            />
             <SearchStack.Screen
                 options={{
                     title: 'Sonuç',
@@ -378,7 +422,7 @@ const AdditionStackScreen = ({ route, navigation }: { route: any, navigation: an
     }
     return (
         <AdditionStack.Navigator
-            mode="modal"
+            // mode="modal"
             headerMode="screen"
             screenOptions={{
                 headerBackTitleVisible: false,
@@ -465,8 +509,8 @@ export const App = (props: Props) => {
         <RootStack.Navigator
             screenOptions={{
                 gestureEnabled: true,
-                gestureDirection: 'horizontal',
-                ...TransitionPresets.SlideFromRightIOS
+                ...TransitionPresets.SlideFromRightIOS,
+                gestureDirection: "horizontal",
             }}
             headerMode="none" initialRouteName={props.isAuthenticated ? screens.routing : screens.signin}>
             <RootStack.Screen

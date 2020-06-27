@@ -5,7 +5,6 @@ import { Provider, useSelector, useDispatch } from 'react-redux'
 import { store, AppState } from 'myRedux'
 import { Apploading } from 'components';
 import { App } from 'navigation'
-import { StatusBar } from 'react-native';
 import { userManager } from 'utils';
 import { IAction, actionTypes } from 'myRedux/types';
 

@@ -31,6 +31,7 @@ class Index extends React.PureComponent<Props, State> {
     submit = async () => {
         let errors: { [key: string]: string } = {};
         const { username, password, storeId } = this.state
+        storeId ? null : errors["storeId"] = "Required";
         username ? null : errors["username"] = "Required";
         password ? null : errors["password"] = "Required";
         if (Object.keys(errors).length) {
@@ -48,6 +49,7 @@ class Index extends React.PureComponent<Props, State> {
                     STOREID: storeId,
                     token: token
                 });
+                this.setState({ loading: false })
                 this.props.navigation.navigate(screens.routing)
             } else {
                 messageBox(error);
@@ -67,7 +69,7 @@ class Index extends React.PureComponent<Props, State> {
                     backgroundColor: theme.colors.background,
                     borderRadius: 5
                 }}>
-                    <FormRow errorMessage={this.state.errors["store"]} style={{ marginBottom: 10, marginTop: 10 }}>
+                    <FormRow errorMessage={this.state.errors["storeId"]} style={{ marginBottom: 10, marginTop: 10 }}>
                         <Input
                             value={this.state.storeId.toString()}
                             onChangeText={(storeId) => this.setState({ storeId })}
@@ -84,14 +86,20 @@ class Index extends React.PureComponent<Props, State> {
                         <Input
                             textContentType="password"
                             value={this.state.password.toString()}
+                            secureTextEntry
                             onChangeText={(password) => this.setState({ password: password })}
                             placeholder="Password" />
                     </FormRow>
                     <FormRow style={{ marginBottom: 10, marginTop: 10 }}>
-                        <Button loading={this.state.loading} onPress={this.submit}>Sign In</Button>
+                        <Button
+                            loading={this.state.loading}
+                            onPress={this.submit}
+                            style={{ backgroundColor: theme.colors.border }}
+                        >Sign In</Button>
                     </FormRow>
                     <FormRow style={{ borderWidth: 0, marginTop: 20 }}>
-                        <Button size="small" onPress={() => this.props.navigation.navigate(screens.loginQR)}>
+                        <Button size="small"
+                            onPress={() => this.props.navigation.navigate(screens.loginQR)}>
                             QR Code ile Login
                         </Button>
                     </FormRow>

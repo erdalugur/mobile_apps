@@ -61,3 +61,6 @@ export function Person(props: IconProps) {
 export function QRCode(props: IconProps) {
     return <AntDesign name="qrcode" onPress={props.onPress} size={props.size || 30} color={props.color} />
 }
+export function Table(props: IconProps) {
+    return <AntDesign name="table" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}

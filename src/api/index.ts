@@ -75,7 +75,6 @@ export async function QueryableIO<T>(param: T): Promise<IResponse> {
 export const dataManager = {
     loadAll: async function () {
         const user = await userManager.get();
-        console.log("dataManager")
         let { data, statusCode, error } = await QueryableIO<IProc>({
             model: 'MPOS_GET_ALL',
             action: 'public',

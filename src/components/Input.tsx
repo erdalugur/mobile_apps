@@ -6,6 +6,9 @@ interface Props extends TextInputProps {
 
 }
 export class Input extends React.PureComponent<Props, any> {
+    static defaultProps = {
+        underlineColorAndroid: false
+    }
     render() {
         return (
             <TextInput
