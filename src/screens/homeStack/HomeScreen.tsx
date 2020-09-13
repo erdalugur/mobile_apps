@@ -1,7 +1,7 @@
 import React from 'react';
 import { RefreshControl, ScrollView } from 'react-native'
 import { View, TopActions, Slider, ProductScrollView } from 'components'
-import { NavigationProps, FetchAllModel } from 'types'
+import { NavigationProps, FetchAllModel, ProductTreeModel } from 'types'
 import { connect } from 'react-redux';
 import { AppState, IState } from 'myRedux';
 import { IAction, actionTypes } from 'myRedux/types';
@@ -37,6 +37,10 @@ class Home extends React.PureComponent<Props, State> {
         this.setState({ loading: false });
     }
 
+    getCurrentCategory = (x: ProductTreeModel) => {
+        return Array.isArray(x.PRODUCTS) && x.PRODUCTS.length > 0 && x.PRODUCTS[0].CATEGORYID || "0"
+    }
+
     render() {
         return (
             <View full>
@@ -48,13 +52,13 @@ class Home extends React.PureComponent<Props, State> {
                     }
                     showsHorizontalScrollIndicator>
                     {/* <TopActions /> */}
-                    <Slider />
+                    <Slider items={this.props.app.sliderItems} />
                     <View style={{
                         marginTop: 20
                     }}>
                         {this.props.app.menu.tree.map(x => (
                             <ProductScrollView
-                                categoryId={x.PRODUCTS[0].CATEGORYID}
+                                categoryId={this.getCurrentCategory(x)}
                                 key={x.ID}
                                 title={x.NAME}
                                 items={x.PRODUCTS}

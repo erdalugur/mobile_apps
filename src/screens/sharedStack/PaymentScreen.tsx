@@ -4,7 +4,7 @@ import { Text, View, Input, Button } from 'components'
 import { NavigationProps } from 'types';
 import theme from 'theme';
 import { messageBox, messages } from 'utils';
-import { SelectedItem } from './AdditionScreen'
+import { SelectedItem } from '../additionStack/AdditionScreen'
 import { dataManager } from 'api';
 
 interface Props extends NavigationProps<{
@@ -71,7 +71,8 @@ class Index extends React.PureComponent<Props, State>{
         let { data, error, statusCode } = await dataManager.closeAddition(
             table,
             selectedPayment,
-            sessionId
+            sessionId,
+            items
         );
         if (statusCode === 200) {
             messageBox(messages.PROCESS_SUCCESS);

@@ -18,6 +18,7 @@ export interface IState {
     campaign: SingleMultiType<any, Array<any>>
     cart: SingleMultiType<any, { [key: string]: CartItem }>
     menu: FetchAllModel
+    sliderItems: Array<any>
 }
 
 export const actionTypes = {

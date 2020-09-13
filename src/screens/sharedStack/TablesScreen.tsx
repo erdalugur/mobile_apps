@@ -61,7 +61,6 @@ class Index extends React.PureComponent<Props, State>{
 
     loadAsync = async () => {
         let { data, statusCode, error } = await dataManager.loadTables();
-        console.log("data", data)
         if (statusCode === 200 && Array.isArray(data)) {
             this.setState({
                 items: data,
@@ -130,7 +129,7 @@ class Index extends React.PureComponent<Props, State>{
                 TABLEID: this.state.selected,
                 JSON: Object.keys(items).map(x => {
                     return {
-                        PRODUCTID: items[x].ID.toString(),
+                        PRODUCTID: x,
                         QUANTITY: items[x].quantity.toString()
                     }
                 })

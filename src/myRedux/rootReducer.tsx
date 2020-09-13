@@ -61,6 +61,7 @@ function ADD_TO_CART(state: IState = InitialState, payload: CartItem) {
 
 export function getInitialState(__data__: any): IState {
     return {
+        sliderItems: __data__.SLIDER_ITEMS || [],
         screen: '',
         token: __data__.token || "",
         campaign: {

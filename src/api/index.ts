@@ -75,6 +75,7 @@ export async function QueryableIO<T>(param: T): Promise<IResponse> {
 export const dataManager = {
     loadAll: async function () {
         const user = await userManager.get();
+        console.log(user?.STOREID)
         let { data, statusCode, error } = await QueryableIO<IProc>({
             model: 'MPOS_GET_ALL',
             action: 'public',
@@ -166,7 +167,7 @@ export const dataManager = {
             return await errorPromise(messages.PLEASE_LOGIN_FIRST)
         }
     },
-    closeAddition: async function (table: string, paymentType: string, sessionId: number) {
+    closeAddition: async function (table: string, paymentType: string, sessionId: number, items: { PRODUCTID: number, PRICE: number }[]) {
         let user = await userManager.get();
         if (user) {
             return QueryableIO<IProc>({
@@ -177,7 +178,8 @@ export const dataManager = {
                     { key: 'STOREID', value: user.STOREID },
                     { key: 'PAYMENT_TYPE', value: paymentType },
                     { key: 'SESSIONID', value: sessionId },
-                    { key: 'USERID', value: user.ID }
+                    { key: 'USERID', value: user.ID },
+                    { key: 'JSON', value: JSON.stringify(items) }
                 ]
             })
         } else {

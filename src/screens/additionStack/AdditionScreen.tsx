@@ -15,6 +15,7 @@ interface AdditionItem {
     QUANTITY: number,
     SESSIONID: number,
     UNIT_PRICE: number,
+    PRODUCTID: string
 }
 
 interface Props extends NavigationProps<{
@@ -60,17 +61,27 @@ export default class extends React.PureComponent<Props, State> {
     close = async () => {
         let { table, items, selectedItems } = this.state
         if (items.length === 0) return;
+        const { price, sendingItems } = this.sendingData();
+
+        this.props.navigation.navigate(screens.payment, {
+            table: table,
+            price: price.toString(),
+            items: sendingItems,
+            sessionId: this.sessionId(),
+            operation: 'closeSession'
+        })
+    }
+
+    sendingData = () => {
+        let { selectedItems, table, items } = this.state
         let price: number = 0;
         items.filter(x => selectedItems.indexOf(x.ID) > -1).map(x => {
             price = price + x.LAST_PRICE;
         })
-        this.props.navigation.navigate(screens.payment, {
-            table: table,
-            price: price.toString(),
-            items: [],
-            sessionId: this.sessionId(),
-            operation: 'closeSession'
+        let sendingItems: SelectedItem[] = items.filter(x => selectedItems.indexOf(x.ID) > -1).map(x => {
+            return { PRICE: x.UNIT_PRICE, PRODUCTID: parseInt(x.PRODUCTID) } as SelectedItem
         })
+        return { sendingItems, price };
     }
 
     addPayment = async () => {
@@ -79,13 +90,8 @@ export default class extends React.PureComponent<Props, State> {
             messageBox('Lütfen ödemesini alacağınız en az bir kayıt seçin');
             return;
         }
-        let price: number = 0;
-        items.filter(x => selectedItems.indexOf(x.ID) > -1).map(x => {
-            price = price + x.LAST_PRICE;
-        })
-        let sendingItems: SelectedItem[] = items.filter(x => selectedItems.indexOf(x.ID) > -1).map(x => {
-            return { PRICE: x.UNIT_PRICE, PRODUCTID: parseInt(x.ID) } as SelectedItem
-        })
+        const { price, sendingItems } = this.sendingData();
+
         this.props.navigation.navigate(screens.payment, {
             table: table,
             price: price.toString(),
