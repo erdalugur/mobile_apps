@@ -47,11 +47,9 @@ export interface FetchAllModel {
     status: "success" | "error" | "fetching"
 }
 
-export interface DomainSettingModel {
+export interface PlaceModel {
     ID: string,
     NAME: string,
-    IS_DISABLED: boolean,
-    CREATED_DATE: string,
     USE_POS: boolean,
     USE_KITCHEN: boolean,
     USE_CACHIER: boolean,
@@ -61,6 +59,8 @@ export interface DomainSettingModel {
     USE_MENU: boolean
     DEFAULT_CLIENT_ID: string
 }
+
+export interface DomainSettingModel extends PlaceModel { }
 
 export interface ProductTreeModel {
     ID: number,

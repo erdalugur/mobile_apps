@@ -6,7 +6,7 @@ import theme from 'theme'
 import { AuthStackScreen } from 'screens/authStack'
 import { Provider } from 'react-redux'
 import { store } from 'myRedux'
-import { userManager } from 'utils';
+import { userManager, cacheService, cacheKeys, configurationManager } from 'utils';
 import { UserModel } from 'types';
 import { KitchenStackScreen } from 'screens/kitchenStack'
 import { ReportStackScreen } from 'screens/reportStack'
@@ -19,6 +19,7 @@ import {
     RootingScreen,
     CartScreen,
 } from 'screens'
+import { dataManager } from 'api';
 
 export const AuthContext = React.createContext<any>(null);
 
@@ -81,21 +82,41 @@ export default function ({ navigation }: any) {
         }
     );
 
+    async function getPlaceAsync(storeId: string) {
+        const { data, statusCode, error } = await dataManager.loadPlace(storeId)
+        return new Promise<'ok' | 'nok'>((resolve, reject) => {
+            if (statusCode === 200 && data) {
+                configurationManager.setPlace(data[0]).then(x => {
+                    return resolve('ok')
+                })
+            } else {
+                configurationManager.removePlace().then(x => {
+                    return resolve('nok')
+                })
+            }
+        })
+
+    }
+
     React.useEffect(() => {
         // Fetch the token from storage then navigate to our appropriate place
         const bootstrapAsync = async () => {
-            let userToken;
-
             try {
                 let user = await userManager.get();
-                if (user)
-                    userToken = user.token;
-
+                if (user) {
+                    let result = await getPlaceAsync(user.STOREID)
+                    if (result === 'ok') {
+                        dispatch({ type: 'RESTORE_TOKEN', token: user.token });
+                    } else {
+                        configurationManager.removePlace();
+                        dispatch({ type: 'RESTORE_TOKEN', token: null });
+                    }
+                } else {
+                    dispatch({ type: 'RESTORE_TOKEN', token: null });
+                }
             } catch (e) {
-                // Restoring token failed
+                dispatch({ type: 'RESTORE_TOKEN', token: null });
             }
-
-            dispatch({ type: 'RESTORE_TOKEN', token: userToken });
         };
 
         bootstrapAsync();
@@ -105,7 +126,9 @@ export default function ({ navigation }: any) {
         () => ({
             signIn: async (user: UserModel) => {
                 await userManager.set(user)
-                dispatch({ type: 'SIGN_IN', token: user.token });
+                let result = await getPlaceAsync(user.STOREID)
+                if (result === 'ok')
+                    dispatch({ type: 'SIGN_IN', token: user.token });
             },
             signOut: async () => {
                 await userManager.remove();
@@ -113,7 +136,9 @@ export default function ({ navigation }: any) {
             },
             signUp: async (user: UserModel) => {
                 await userManager.set(user)
-                dispatch({ type: 'SIGN_IN', token: user.token });
+                let result = await getPlaceAsync(user.STOREID)
+                if (result === 'ok')
+                    dispatch({ type: 'SIGN_IN', token: user.token });
             },
         }),
         []

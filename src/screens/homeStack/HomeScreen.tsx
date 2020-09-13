@@ -23,17 +23,14 @@ class Home extends React.PureComponent<Props, State> {
         if (this.props.app.menu.tree.length === 0)
             this.loadAsync();
         else {
-            console.log("menuItems", this.props.app.menu.tree.length)
             return;
         }
     }
 
     loadAsync = async () => {
-        console.log("fetchAllStart")
         this.setState({ loading: true });
         let result = await dataManager.loadAll();
         this.props.dispatch({ type: actionTypes.FETCH_ALL, payload: result });
-        console.log("fetchAllEnd", result.tree.length)
         this.setState({ loading: false });
     }
 

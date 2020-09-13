@@ -1,24 +1,3 @@
-// import React from 'react';
-// import { StyleSheet } from 'react-native';
-// import { Text, View } from 'components'
-
-// export default function () {
-//     return (
-//         <View style={styles.container}>
-//             <Text>KİŞİ BAZLI!</Text>
-//             <Text>ÜRÜN BAZLI!</Text>
-//             <Text>PERIOD BAZLI!</Text>
-//             <Text>ADISYON BAZLI!</Text>
-//         </View>
-//     );
-// }
-
-// const styles = StyleSheet.create({
-//     container: {
-//         flex: 1,
-//     },
-// });
-
 import React from 'react'
 import { View, Text } from 'components'
 import { connect } from 'react-redux'
@@ -62,12 +41,11 @@ class Index extends React.PureComponent<Props, State> {
                 onPress={() => {
                     this.props.navigation.navigate(x.PATH, { type: x.TYPE })
                 }}
+                key={x.NAME}
                 style={[styles.menuItem]}>
                 <View style={[styles.button]}>
                     {x.ICON}
-                    <Text
-
-                        color={theme.colors.text}>{x.NAME}</Text>
+                    <Text color={theme.colors.text}>{x.NAME}</Text>
                 </View>
             </TouchableOpacity>
         )
@@ -80,8 +58,9 @@ class Index extends React.PureComponent<Props, State> {
                     style={{ width: '100%', height: '100%' }}
                     initialNumToRender={2}
                     numColumns={2}
-                    keyExtractor={item => item.PATH}
+                    keyExtractor={item => item.NAME}
                     data={items}
+                    listKey="NAME"
                     renderItem={({ item, index }) => this.renderItem(item, index)}
                 />
             </View>

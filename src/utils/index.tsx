@@ -1,9 +1,10 @@
 import { AsyncStorage, Alert } from 'react-native'
-import { UserModel, CacheResponse, DomainSettingModel } from 'types'
+import { UserModel, CacheResponse, DomainSettingModel, PlaceModel } from 'types'
 export { messages } from './messages'
 export const cacheKeys = {
     user: "user",
-    config: 'config'
+    config: 'config',
+    store: 'store'
 }
 
 export const cacheService = {
@@ -34,7 +35,7 @@ export const cacheService = {
         }
         await AsyncStorage.setItem(name, JSON.stringify({ name: name, value: JSON.stringify(data), expiryDate: getTime() }))
     },
-    remove: function (name: string) {
+    remove: async function (name: string) {
         AsyncStorage.removeItem(name);
     }
 }
@@ -62,6 +63,15 @@ export const configurationManager = {
     },
     remove: function () {
         cacheService.remove(cacheKeys.config);
+    },
+    getPlace: async function () {
+        return cacheService.get<PlaceModel>(cacheKeys.store)
+    },
+    setPlace: async function (param: PlaceModel) {
+        return cacheService.set(cacheKeys.store, param);
+    },
+    removePlace: async function () {
+        return cacheService.remove(cacheKeys.store);
     }
 }
 

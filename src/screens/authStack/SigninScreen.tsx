@@ -74,6 +74,7 @@ function Index(props: Props) {
                     opacity: 0.5
                 }}>
                     <Input
+                        keyboardType="number-pad"
                         style={{
                             backgroundColor: 'transparent',
                             color: '#000'
