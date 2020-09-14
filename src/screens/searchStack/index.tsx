@@ -17,29 +17,39 @@ import {
 } from 'navigation/options'
 import { CartButton } from 'components'
 import theme from 'theme';
-import { HeaderBack } from 'icons'
+import { HeaderBack, HeaderBack2 } from 'icons'
 import { screens } from 'navigation'
+import { Platform } from 'react-native';
 
 export const SearchStack = createStackNavigator();
 
 export const SearchStackScreen = ({ navigation, route }: any) => {
-
+    let options: any = {}
     if (route.state) {
-        let options: any = {
-            tabBarVisible: route.state.index > 0 ? false : true
-        }
-        navigation.setOptions({
-            ...options
-        })
+        options.tabBarVisible = route.state.index > 0 ? false : true
     }
+
+    let searchStackOptions: any = {
+        headerRight: ({ tintColor }: any) => <CartButton />,
+        headerBackTitleVisible: false,
+        headerBackTitleStyle: { color: theme.colors.text },
+        headerBackImage: ({ tintColor }: any) => <HeaderBack2 />
+    }
+    if (Platform.OS === "web") {
+        options.headerBackImage = (props: any) => (
+            <HeaderBack onPress={() => {
+                navigation.goBack(null)
+            }} />
+        )
+        delete searchStackOptions.headerBackImage
+    }
+
+    navigation.setOptions({
+        ...options
+    })
     return (
         <SearchStack.Navigator headerMode="screen"
-            screenOptions={{
-                headerRight: ({ tintColor }) => <CartButton />,
-                headerBackTitleVisible: false,
-                headerBackTitleStyle: { color: theme.colors.text },
-                headerBackImage: ({ tintColor }) => <HeaderBack />
-            }}
+            screenOptions={searchStackOptions}
         >
             <SearchStack.Screen
                 options={{
@@ -88,7 +98,7 @@ export const SearchStackScreen = ({ navigation, route }: any) => {
                 options={{
                     title: 'Sonuç',
                     gestureEnabled: false,
-                    headerBackImage: () => null
+
                 }}
                 name={screens.cartResult}
                 component={CartResultScreen} />

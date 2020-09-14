@@ -37,16 +37,6 @@ class Index extends React.PureComponent<Props, State>{
                         <Text style={{ textTransform: "capitalize", textAlign: 'center' }}>{x.NAME.slice(0, 100)}</Text>
                         <Text style={{ textAlign: 'center' }}>{`${x.PRICE.toFixed(2).toString()} ₺`}</Text>
                     </View>
-                    {/* <TouchableOpacity
-                        onPress={() => {
-                            this.props.dispatch({ type: actionTypes.ADD_TO_CART, payload: x });
-                            messageBox(messages.ADD_TO_CART_SUCCESS.replace('{0}', x.NAME))
-                        }}
-                        style={[styles.basket]}>
-                        <Text>
-                            {messages.ADD_TO_CART}
-                        </Text>
-                    </TouchableOpacity> */}
                     <AddToCart item={x} />
                 </View>
             </View>

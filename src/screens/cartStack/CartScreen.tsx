@@ -1,10 +1,9 @@
 import React from 'react';
-import { StyleSheet, Image, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, Image, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
 import { CartItem, NavigationProps } from 'types';
 import { View, Text } from 'components'
 import { connect } from 'react-redux';
 import { AppState } from 'myRedux';
-import { ScrollView } from 'react-native-gesture-handler';
 import theme from 'theme';
 import { SingleMultiType, IAction, actionTypes } from 'myRedux/types';
 import { Plus, Minus, QRCode, Table, EmojiNeutral } from 'icons';
@@ -21,6 +20,8 @@ interface Props extends NavigationProps<any, any> {
     dispatch: (param: IAction<number | any>) => void
     routeScreen: screenOptions
 }
+
+const { height } = Dimensions.get('window')
 
 interface State {
     table: string
@@ -100,7 +101,7 @@ class Index extends React.PureComponent<Props, State> {
 
     renderCart = () => {
         return (
-            <React.Fragment>
+            <>
                 <ScrollView style={{ marginBottom: 70 }}>
                     {this.RenderItems()}
                 </ScrollView>
@@ -126,7 +127,7 @@ class Index extends React.PureComponent<Props, State> {
                         }
                     </View>
                 </View>
-            </React.Fragment>
+            </>
         )
     }
 
@@ -191,7 +192,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         height: 120,
-        marginBottom: 5
+        marginBottom: 5,
     },
     bottomButtonContainer: {
         backgroundColor: theme.colors.card,
@@ -218,6 +219,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         width: '50%',
         paddingHorizontal: 10,
-        textAlign: 'center'
+        //textAlign: 'center'
     },
 });

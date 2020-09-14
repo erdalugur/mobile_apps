@@ -153,8 +153,10 @@ export default function ({ navigation }: any) {
                             gestureEnabled: true,
                             ...TransitionPresets.SlideFromRightIOS,
                             gestureDirection: "horizontal",
+                            headerShown: false
                         }}
                         headerMode="none"
+
                     >
                         {state.isLoading ? (
                             // We haven't finished checking for the token yet

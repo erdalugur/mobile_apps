@@ -19,7 +19,12 @@ export function Back({ color = theme.colors.text, size = 30, onPress }: IconProp
     return <Ionicons onPress={onPress} color={color} size={size} name="ios-arrow-round-back" />
 }
 
-export function HeaderBack() {
+export function HeaderBack(props: IconProps) {
+    return <TouchableOpacity
+        style={{ marginLeft: 15 }} {...props}>
+        <Back size={40} /></TouchableOpacity>
+}
+export function HeaderBack2() {
     return <TouchableOpacity
         style={{ marginLeft: 15 }}>
         <Back size={40} /></TouchableOpacity>

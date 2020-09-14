@@ -153,9 +153,8 @@ export const dataManager = {
             return await errorPromise(messages.PLEASE_LOGIN_FIRST);
         }
     },
-    loadAddion: async function (table: string) {
+    loadCart: async function (table: string) {
         let user = await userManager.get();
-        console.log(table)
         if (user) {
             return await QueryableIO<IProc>({
                 action: 'public',

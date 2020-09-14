@@ -1,5 +1,6 @@
 import React from 'react';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
+import { Platform } from 'react-native'
 import {
     HomeScreen,
     CartScreen,
@@ -25,19 +26,32 @@ import { screens } from 'navigation'
 export const HomeStack = createStackNavigator();
 
 export const HomeStackScreen = ({ navigation, route }: any) => {
+    let options: any = {}
     if (route.state) {
-        navigation.setOptions({
-            tabBarVisible: route.state.index > 0 ? false : true
-        })
+        options.tabBarVisible = route.state.index > 0 ? false : true
     }
+
+    let stackOptions: any = {
+        headerRight: ({ tintColor }: any) => <CartButton />,
+        headerBackTitleVisible: false,
+        headerBackTitleStyle: { color: theme.colors.text },
+        headerBackImage: ({ tintColor }: any) => <HeaderBack />
+    }
+    if (Platform.OS === "web") {
+        options.headerBackImage = (props: any) => (
+            <HeaderBack onPress={() => {
+                navigation.goBack(null)
+            }} />
+        )
+        delete stackOptions.headerBackImage
+    }
+
+    navigation.setOptions({
+        ...options
+    })
+
     return (
-        <HomeStack.Navigator screenOptions={{
-            // header: () => null
-            headerRight: ({ tintColor }) => <CartButton />,
-            headerBackTitleVisible: false,
-            headerBackTitleStyle: { color: theme.colors.text },
-            headerBackImage: ({ tintColor }) => <HeaderBack />
-        }}>
+        <HomeStack.Navigator screenOptions={{ ...stackOptions }}>
             <HomeStack.Screen
                 options={HomeOptions}
                 name={screens.home}

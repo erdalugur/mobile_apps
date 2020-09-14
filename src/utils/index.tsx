@@ -1,4 +1,4 @@
-import { AsyncStorage, Alert } from 'react-native'
+import { AsyncStorage, Alert, Platform } from 'react-native'
 import { UserModel, CacheResponse, DomainSettingModel, PlaceModel } from 'types'
 export { messages } from './messages'
 export const cacheKeys = {
@@ -76,5 +76,8 @@ export const configurationManager = {
 }
 
 export function messageBox(message: string) {
+    if (Platform.OS === 'web') {
+        alert(message)
+    }
     return Alert.alert(message);
 }

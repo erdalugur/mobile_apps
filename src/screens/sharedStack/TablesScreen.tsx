@@ -78,7 +78,7 @@ class Index extends React.PureComponent<Props, State>{
             return;
         } else {
             // masa ıd ye göre adisyonu çek
-            let { data, statusCode, error } = await dataManager.loadAddion(selected);
+            let { data, statusCode, error } = await dataManager.loadCart(selected);
             if (statusCode === 200 && Array.isArray(data) && data.length > 0) {
                 this.props.navigation.navigate(screens.addition, { items: data, table: selected });
             } else if (statusCode === 200 && Array.isArray(data) && data.length === 0) {
