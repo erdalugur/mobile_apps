@@ -8,46 +8,45 @@ import { IAction, actionTypes } from 'myRedux/types';
 import { NavigationProps } from 'types';
 import { connect } from 'react-redux';
 import { screens } from 'navigation';
-
+import { AuthContext } from 'navigation'
 interface State { }
 
 interface Props extends NavigationProps<{}, any> {
     dispatch: (param: IAction<string>) => void
 }
 
-class Index extends React.PureComponent<Props, State> {
+function Index(props: Props) {
 
-    logout = async () => {
-        await userManager.remove();
-        this.props.dispatch({ type: actionTypes.SET_TOKEN, payload: '' });
-        this.props.navigation.navigate(screens.auth);
+    const { signOut } = React.useContext(AuthContext);
+
+    const logout = async () => {
+        signOut();
+        props.navigation.navigate(screens.auth);
     }
-    render() {
-        return (
-            <View style={styles.container}>
-                <TouchableOpacity style={{
+    return (
+        <View style={styles.container}>
+            <TouchableOpacity style={{
+                backgroundColor: theme.colors.border,
+                height: 40,
+                justifyContent: 'center',
+                marginTop: 5,
+                alignItems: 'center'
+            }}>
+                <Text>Hesap Ayarları</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                onPress={logout}
+                style={{
                     backgroundColor: theme.colors.border,
                     height: 40,
                     justifyContent: 'center',
                     marginTop: 5,
                     alignItems: 'center'
                 }}>
-                    <Text>Hesap Ayarları</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={this.logout}
-                    style={{
-                        backgroundColor: theme.colors.border,
-                        height: 40,
-                        justifyContent: 'center',
-                        marginTop: 5,
-                        alignItems: 'center'
-                    }}>
-                    <Text>Çıkış Yap</Text>
-                </TouchableOpacity>
-            </View>
-        );
-    }
+                <Text>Çıkış Yap</Text>
+            </TouchableOpacity>
+        </View>
+    );
 }
 
 

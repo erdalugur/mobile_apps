@@ -112,9 +112,9 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     headerContainer: {
-        height: 100,
+        height: 65,
         backgroundColor: theme.colors.card,
-        paddingTop: 40,
+        paddingTop: 10,
         paddingHorizontal: 10,
     },
     headerInputWrapper: {

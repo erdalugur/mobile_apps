@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, FlatList, RefreshControl, TouchableOpacity, Dimensions } from 'react-native';
+import { StyleSheet, FlatList, RefreshControl, TouchableOpacity, Dimensions, SafeAreaView } from 'react-native';
 import { Text, View } from 'components'
 import { dataManager } from 'api';
 import theme from 'theme';
@@ -157,7 +157,7 @@ class Index extends React.PureComponent<Props, State>{
         const { items, filter } = this.state;
         let filteredItems = filter === 'All' ? items : items.filter(x => filter === 'Empty' ? x.GUEST === 0 : x.GUEST !== 0)
         return (
-            <View style={styles.container}>
+            <SafeAreaView style={styles.container}>
                 <View style={{
                     height: 45,
                     flexDirection: 'row',
@@ -199,7 +199,7 @@ class Index extends React.PureComponent<Props, State>{
                             refreshing={this.state.loading}
                         />
                     }
-                    style={{ width: '100%', height: height - 70 }}
+                    style={{ width: '100%', height: height - 140 }}
                     initialNumToRender={2}
                     numColumns={4}
                     keyExtractor={item => item.ID.toString()}
@@ -207,7 +207,7 @@ class Index extends React.PureComponent<Props, State>{
                     renderItem={({ item, index }) => this.renderItem(item, index)}
                 />
                 {this.renderSendButton()}
-            </View>
+            </SafeAreaView>
         );
     }
 }

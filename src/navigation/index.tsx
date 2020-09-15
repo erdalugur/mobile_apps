@@ -132,6 +132,7 @@ export default function ({ navigation }: any) {
             },
             signOut: async () => {
                 await userManager.remove();
+                await configurationManager.removePlace();
                 dispatch({ type: 'SIGN_OUT' })
             },
             signUp: async (user: UserModel) => {

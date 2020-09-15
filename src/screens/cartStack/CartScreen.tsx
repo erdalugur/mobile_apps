@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Image, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
+import { StyleSheet, Image, TouchableOpacity, Dimensions, ScrollView, SafeAreaView } from 'react-native';
 import { CartItem, NavigationProps } from 'types';
 import { View, Text } from 'components'
 import { connect } from 'react-redux';
@@ -21,7 +21,7 @@ interface Props extends NavigationProps<any, any> {
     routeScreen: screenOptions
 }
 
-const { height } = Dimensions.get('window')
+const { height } = Dimensions.get('screen')
 
 interface State {
     table: string
@@ -101,8 +101,8 @@ class Index extends React.PureComponent<Props, State> {
 
     renderCart = () => {
         return (
-            <>
-                <ScrollView style={{ marginBottom: 70 }}>
+            <View style={{ flex: 1 }}>
+                <ScrollView style={{ marginBottom: 70, height: height - 140 }}>
                     {this.RenderItems()}
                 </ScrollView>
                 <View style={[styles.bottomButtonContainer]}>
@@ -127,7 +127,7 @@ class Index extends React.PureComponent<Props, State> {
                         }
                     </View>
                 </View>
-            </>
+            </View>
         )
     }
 
@@ -147,9 +147,9 @@ class Index extends React.PureComponent<Props, State> {
 
     render() {
         return (
-            <View full>
+            <SafeAreaView style={{ flex: 1 }}>
                 {this.checkCartItems() ? this.renderCart() : this.renderEmpty()}
-            </View>
+            </SafeAreaView>
         );
     }
 }
@@ -198,6 +198,8 @@ const styles = StyleSheet.create({
         backgroundColor: theme.colors.card,
         position: 'absolute',
         bottom: 0,
+        left: 0,
+        right: 0,
         height: 70,
         width: '100%',
         flexDirection: 'row',

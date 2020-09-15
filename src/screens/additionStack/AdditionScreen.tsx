@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, ScrollView, Picker, TouchableOpacity } from 'react-native';
+import { StyleSheet, ScrollView, Picker, TouchableOpacity, SafeAreaView, Dimensions } from 'react-native';
 import { Text, View, Button } from 'components'
 import { NavigationProps } from 'types';
 import theme from 'theme';
@@ -7,6 +7,7 @@ import { dataManager } from 'api';
 import { messageBox, messages } from 'utils';
 import { screens } from 'navigation';
 
+const { height } = Dimensions.get('screen')
 interface AdditionItem {
     DISCOUNT_PERCENT: string,
     ID: string,
@@ -104,7 +105,7 @@ export default class extends React.PureComponent<Props, State> {
     render() {
         let { items } = this.state
         return (
-            <View style={styles.container}>
+            <SafeAreaView style={styles.container}>
                 <View style={{ height: 50, flexDirection: 'row' }}>
                     <View style={{ width: '50%', paddingRight: 1 }}>
                         <Button
@@ -125,7 +126,7 @@ export default class extends React.PureComponent<Props, State> {
                         </Button>
                     </View>
                 </View>
-                <ScrollView style={{ width: '100%' }}>
+                <ScrollView style={{ height: height - 140 }}>
                     {items.map(x => (
                         <TouchableOpacity key={x.ID}
                             onPress={() => {
@@ -166,7 +167,7 @@ export default class extends React.PureComponent<Props, State> {
                         </TouchableOpacity>
                     ))}
                 </ScrollView>
-            </View>
+            </SafeAreaView>
         );
     }
 }

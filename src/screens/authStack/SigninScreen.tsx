@@ -31,7 +31,7 @@ function Index(props: Props) {
             return
         } else {
             setLoading(true)
-            let { token, data, error } = await dataManager.login(username, password, storeId);
+            let { token, data, error, statusCode } = await dataManager.login(username, password, storeId);
             if (token && data && data.length > 0) {
                 let __data__ = data[0];
                 let __user__ = {
@@ -45,9 +45,12 @@ function Index(props: Props) {
                 setTimeout(() => {
                     props.navigation.navigate(screens.routing)
                 }, 1000);
-            } else {
+            } else if (statusCode === 200 && error) {
                 setLoading(false)
                 messageBox(error);
+            } else {
+                setLoading(false)
+                messageBox('Kullanıcı adı veya parola yanlış')
             }
         }
     }

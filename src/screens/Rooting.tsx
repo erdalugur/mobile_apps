@@ -6,6 +6,7 @@ import theme from 'theme'
 import { NavigationProps } from 'types'
 import { Cheff, Setting, Menu, Bowtie, Money, ReportFile } from 'icons'
 import { IAction, actionTypes } from 'myRedux/types'
+import { configurationManager } from 'utils'
 
 interface Props extends NavigationProps<any, any> {
     dispatch: (param: IAction<string>) => void
@@ -30,8 +31,13 @@ let items: MenuItem[] = [
     { NAME: 'AYARLAR', PATH: 'Settings', ICON: <Setting color={theme.colors.text} size={40} /> },
 ]
 
-
+interface IState {
+    name: string
+}
 class Index extends React.PureComponent<Props, State> {
+    state: IState = {
+        name: ""
+    }
 
     componentWillMount = async () => {
         StatusBar.setBarStyle('light-content')
@@ -54,11 +60,26 @@ class Index extends React.PureComponent<Props, State> {
             </TouchableOpacity>
         )
     }
+    componentDidMount = async () => {
+        const place = await configurationManager.getPlace();
+        this.setState({ name: place?.NAME || "" })
+    }
+
+    renderTitle = () => {
+
+        return (
+            <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+                <Text component="h2">{this.state.name}</Text>
+            </View>
+        )
+    }
 
     render() {
         return (
             <View full style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
-                <View style={{ flex: 1 }}></View>
+                <View style={{ flex: 1 }}>
+                    {this.renderTitle()}
+                </View>
                 <View style={{ flex: 2 }}>
                     <FlatList
                         style={{ width: '100%', height: '100%' }}

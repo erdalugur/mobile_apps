@@ -64,7 +64,7 @@ export const statusMessages: { [key: string]: string } = {
 
 export function handleError(statusCode: string, orginalError: any) {
     let message = statusMessages[statusCode];
-    return orginalError && orginalError.info.message || message
+    return message || orginalError && orginalError.info.message
 }
 
 export async function QueryableIO<T>(param: T): Promise<IResponse> {
