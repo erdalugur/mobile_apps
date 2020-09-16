@@ -1,14 +1,15 @@
 import React from 'react';
-import { RefreshControl, ScrollView, StyleSheet, TouchableOpacity } from 'react-native'
-import { View, TopActions, Slider, ProductScrollView, SliderProducts, Text } from 'components'
+import { RefreshControl, ScrollView, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { View, Slider, Text } from 'components'
 import { NavigationProps, FetchAllModel, ProductTreeModel } from 'types'
 import { connect } from 'react-redux';
 import { AppState, IState } from 'myRedux';
 import { IAction, actionTypes } from 'myRedux/types';
 import { dataManager } from 'api';
 import theme from 'theme';
-import { messageBox, messages } from 'utils';
+import { messages, applicationManager } from 'utils';
 import { screens } from 'navigation';
+import { RenderComponent } from './RenderComponent'
 
 interface Props extends NavigationProps<any, any> {
     app: IState
@@ -19,15 +20,17 @@ interface State {
     loading: boolean
 }
 
-let themes: { [key: string]: any } = {
-    '1': ProductScrollView,
-    '2': SliderProducts
-}
 
 class Home extends React.PureComponent<Props, State> {
     state: State = { loading: false };
 
     componentDidMount = async () => {
+        const place = await applicationManager.config.getPlace();
+        if (place) {
+            this.props.navigation.setOptions({
+                title: place.NAME
+            })
+        }
         if (this.props.app.menu.tree.length === 0)
             this.loadAsync();
         else {
@@ -42,66 +45,62 @@ class Home extends React.PureComponent<Props, State> {
         this.setState({ loading: false });
     }
 
-    getCurrentCategory = (x: ProductTreeModel) => {
-        return Array.isArray(x.PRODUCTS) && x.PRODUCTS.length > 0 && x.PRODUCTS[0].CATEGORYID || "0"
+    renderSpinner = () => {
+        return (
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <ActivityIndicator color={theme.colors.white} size={40} />
+                <Text>Yükleniyor...</Text>
+            </View>
+        )
     }
 
-    renderComponent = (themeNo: string, props: any) => {
-        console.log('themeNo', themeNo)
-        let Component = themes[themeNo]
-        return <Component {...props} />
+    renderScreen = () => {
+        return (
+            <ScrollView
+                refreshControl={
+                    <RefreshControl
+                        refreshing={this.state.loading}
+                        onRefresh={this.loadAsync} />
+                }
+                showsHorizontalScrollIndicator>
+                {/* <TopActions /> */}
+                <Slider items={this.props.app.sliderItems} />
+                <View style={{
+                    marginTop: 20
+                }}>
+                    {this.props.app.menu.tree.map(x => (
+                        <View style={[styles.container]} key={x.ID}>
+                            <View style={[styles.title]}>
+                                <Text style={{ fontSize: 20 }}>{x.NAME}</Text>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        this.props.navigation.navigate(screens.category, {
+                                            title: x.NAME,
+                                            items: x.PRODUCTS,
+                                            all: this.props.app.menu.tree
+                                        })
+                                    }}>
+                                    <Text style={{ fontSize: 16 }}>
+                                        {messages.SEE_ALL}
+                                    </Text>
+                                </TouchableOpacity>
+                            </View>
+                            <RenderComponent
+                                themeNo={x.THEME_NO}
+                                navigation={this.props.navigation}
+                                route={this.props.route}
+                                items={x.PRODUCTS}
+                            />
+                        </View>
+                    ))}
+                </View>
+            </ScrollView>
+        )
     }
 
     render() {
-
         return (
-            <View full>
-                <ScrollView
-                    refreshControl={
-                        <RefreshControl
-                            refreshing={this.state.loading}
-                            onRefresh={this.loadAsync} />
-                    }
-                    showsHorizontalScrollIndicator>
-                    {/* <TopActions /> */}
-                    <Slider items={this.props.app.sliderItems} />
-                    <View style={{
-                        marginTop: 20
-                    }}>
-                        {this.props.app.menu.tree.map(x => (
-                            <View style={[styles.container]} key={x.ID}>
-                                <View style={[styles.title]}>
-                                    <Text style={{ fontSize: 20 }}>{x.NAME}</Text>
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            this.props.navigation.navigate(screens.category, {
-                                                title: x.NAME,
-                                                items: x.PRODUCTS
-                                            })
-                                        }}>
-                                        <Text style={{ fontSize: 16 }}>
-                                            {messages.SEE_ALL}
-                                        </Text>
-                                    </TouchableOpacity>
-                                </View>
-                                {/* <ProductScrollView
-                                    categoryId={this.getCurrentCategory(x)}
-                                    key={x.ID}
-                                    title={x.NAME}
-                                    items={x.PRODUCTS}
-                                    navigation={this.props.navigation}
-                                    route={this.props.route}
-                                /> */}
-                                {this.renderComponent(x.THEME_NO.toString(), {
-                                    items: x.PRODUCTS,
-                                    navigation: this.props.navigation,
-                                    route: this.props.route
-                                })}
-                            </View>
-                        ))}
-                    </View>
-                </ScrollView>
-            </View>
+            <View full>{this.state.loading ? this.renderSpinner() : this.renderScreen()}</View>
         );
     }
 }
@@ -109,7 +108,6 @@ class Home extends React.PureComponent<Props, State> {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: theme.colors.card,
-        height: 300,
         paddingBottom: 5,
         marginBottom: 10
     },

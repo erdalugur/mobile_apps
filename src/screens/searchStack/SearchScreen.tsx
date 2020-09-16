@@ -50,7 +50,7 @@ class Index extends React.PureComponent<Props, State> {
         this.props.items.forEach(x => {
             items = items.concat(x.PRODUCTS);
         })
-        return items.filter(x => x.NAME.indexOf(this.state.searchTerm) > -1).map(x => (
+        return items.filter(x => x.NAME.toLocaleLowerCase().indexOf(this.state.searchTerm.toLocaleLowerCase()) > -1).map(x => (
             <View
                 style={[styles.itemContainer]}
                 key={x.ID}>

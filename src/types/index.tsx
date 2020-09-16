@@ -61,6 +61,7 @@ export interface PlaceModel {
     LOCAL_IP: string
     PHONE: string
     PACKAGE_ORDER: boolean
+    CATEGORY_THEME_N0: string
 }
 
 export interface DomainSettingModel extends PlaceModel { }
@@ -70,6 +71,7 @@ export interface ProductTreeModel {
     NAME: string,
     PRODUCTS: Product[]
     THEME_NO: string
+    PREVIEW: string
 }
 
 export interface SetCartRequest {

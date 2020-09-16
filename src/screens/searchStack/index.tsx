@@ -17,9 +17,8 @@ import {
 } from 'navigation/options'
 import { CartButton } from 'components'
 import theme from 'theme';
-import { HeaderBack, HeaderBack2 } from 'icons'
+import { HeaderBack } from 'icons'
 import { screens } from 'navigation'
-import { Platform } from 'react-native';
 
 export const SearchStack = createStackNavigator();
 
@@ -28,28 +27,17 @@ export const SearchStackScreen = ({ navigation, route }: any) => {
     if (route.state) {
         options.tabBarVisible = route.state.index > 0 ? false : true
     }
-
-    let searchStackOptions: any = {
-        headerRight: ({ tintColor }: any) => <CartButton />,
-        headerBackTitleVisible: false,
-        headerBackTitleStyle: { color: theme.colors.text },
-        headerBackImage: ({ tintColor }: any) => <HeaderBack2 />
-    }
-    if (Platform.OS === "web") {
-        options.headerBackImage = (props: any) => (
-            <HeaderBack onPress={() => {
-                navigation.goBack(null)
-            }} />
-        )
-        delete searchStackOptions.headerBackImage
-    }
-
     navigation.setOptions({
         ...options
     })
     return (
         <SearchStack.Navigator headerMode="screen"
-            screenOptions={searchStackOptions}
+            screenOptions={{
+                headerRight: ({ tintColor }: any) => <CartButton />,
+                headerBackTitleVisible: false,
+                headerBackTitleStyle: { color: theme.colors.text },
+                headerBackImage: ({ tintColor }: any) => <HeaderBack />
+            }}
         >
             <SearchStack.Screen
                 options={{

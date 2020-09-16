@@ -30,28 +30,17 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
     if (route.state) {
         options.tabBarVisible = route.state.index > 0 ? false : true
     }
-
-    let stackOptions: any = {
-        headerRight: ({ tintColor }: any) => <CartButton />,
-        headerBackTitleVisible: false,
-        headerBackTitleStyle: { color: theme.colors.text },
-        headerBackImage: ({ tintColor }: any) => <HeaderBack />
-    }
-    if (Platform.OS === "web") {
-        options.headerBackImage = (props: any) => (
-            <HeaderBack onPress={() => {
-                navigation.goBack(null)
-            }} />
-        )
-        delete stackOptions.headerBackImage
-    }
-
     navigation.setOptions({
         ...options
     })
 
     return (
-        <HomeStack.Navigator screenOptions={{ ...stackOptions }}>
+        <HomeStack.Navigator screenOptions={{
+            headerRight: ({ tintColor }: any) => <CartButton />,
+            headerBackTitleVisible: false,
+            headerBackTitleStyle: { color: theme.colors.text },
+            headerBackImage: ({ tintColor }: any) => <HeaderBack />
+        }}>
             <HomeStack.Screen
                 options={HomeOptions}
                 name={screens.home}

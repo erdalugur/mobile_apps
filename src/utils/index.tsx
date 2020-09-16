@@ -88,7 +88,7 @@ export function messageBox(message: string) {
 export const applicationManager = {
     user: userManager,
     data: dataManager,
-    domain: () => __DEV__ ? 'http://localhost:19006' : window.location.origin,
+    domain: () => __DEV__ ? 'http://hungryghost.queryableio.com' : window.location.origin,
     cache: cacheService,
     clientIP: async () => Network.getIpAddressAsync(),
     config: configurationManager

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Feather, FontAwesome, Ionicons, AntDesign, MaterialCommunityIcons, FontAwesome5, MaterialIcons, Entypo } from '@expo/vector-icons'
 import theme from 'theme'
-import { TouchableOpacity } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 
 interface IconProps {
     size?: number
@@ -20,14 +20,9 @@ export function Back({ color = theme.colors.text, size = 30, onPress }: IconProp
 }
 
 export function HeaderBack(props: IconProps) {
-    return <TouchableOpacity
-        style={{ marginLeft: 15 }} {...props}>
-        <Back size={40} /></TouchableOpacity>
-}
-export function HeaderBack2() {
-    return <TouchableOpacity
+    return <View
         style={{ marginLeft: 15 }}>
-        <Back size={40} /></TouchableOpacity>
+        <Back size={40} /></View>
 }
 
 export function Plus(props: IconProps) {

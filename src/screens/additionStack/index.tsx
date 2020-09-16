@@ -17,20 +17,6 @@ import { screens } from 'navigation'
 export const AdditionStack = createStackNavigator();
 export const AdditionStackScreen = ({ route, navigation }: { route: any, navigation: any }) => {
     let parentOptions: any = {}
-
-    let options: any = {
-        headerBackTitleVisible: false,
-        headerBackTitleStyle: { color: theme.colors.text },
-        headerBackImage: ({ tintColor }: any) => <HeaderBack />
-    }
-    if (Platform.OS === "web") {
-        parentOptions.headerBackImage = (props: any) => (
-            <HeaderBack onPress={() => {
-                navigation.goBack(null)
-            }} />
-        )
-        delete options.headerBackImage
-    }
     if (route.state) {
         parentOptions.tabBarVisible = route.state.index > 0 ? false : true
     }
@@ -41,7 +27,11 @@ export const AdditionStackScreen = ({ route, navigation }: { route: any, navigat
         <AdditionStack.Navigator
             // mode="modal"
             headerMode="screen"
-            screenOptions={{ ...options }}
+            screenOptions={{
+                headerBackTitleVisible: false,
+                headerBackTitleStyle: { color: theme.colors.text },
+                headerBackImage: ({ tintColor }: any) => <HeaderBack />
+            }}
         >
             <AdditionStack.Screen
                 options={{
