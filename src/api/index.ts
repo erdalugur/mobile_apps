@@ -74,12 +74,12 @@ export async function QueryableIO<T>(param: T): Promise<IResponse> {
 
 export const dataManager = {
     loadAll: async function () {
-        const user = await userManager.get();
+        const place = await configurationManager.getPlace();
         let { data, statusCode, error } = await QueryableIO<IProc>({
             model: 'MPOS_GET_ALL',
             action: 'public',
             parameters: [{
-                key: 'STOREID', value: user?.STOREID
+                key: 'STOREID', value: place?.ID
             }]
         });
         return new Promise<FetchAllModel>((resolve, reject) => {
@@ -142,41 +142,45 @@ export const dataManager = {
         }
     },
     loadTables: async function () {
-        let user = await userManager.get();
-        if (user) {
+        let place = await configurationManager.getPlace();
+        if (place) {
             return await QueryableIO<IProc>({
                 model: 'MPOS_GET_TABLES',
                 action: 'public',
-                parameters: [{ key: 'STOREID', value: user.STOREID }]
+                parameters: [{ key: 'STOREID', value: place.ID }]
             })
         } else {
             return await errorPromise(messages.PLEASE_LOGIN_FIRST);
         }
     },
     loadCart: async function (table: string) {
-        let user = await userManager.get();
-        if (user) {
+        let place = await configurationManager.getPlace();
+        if (place) {
             return await QueryableIO<IProc>({
                 action: 'public',
                 model: 'MPOS_GET_CART',
-                parameters: [{ key: 'TABLEID', value: table }, { key: 'STOREID', value: user.STOREID }]
+                parameters: [
+                    { key: 'TABLEID', value: table },
+                    { key: 'STOREID', value: place.ID }
+                ]
             })
         } else {
             return await errorPromise(messages.PLEASE_LOGIN_FIRST)
         }
     },
     closeAddition: async function (table: string, paymentType: string, sessionId: number, items: { PRODUCTID: number, PRICE: number }[]) {
+        let place = await configurationManager.getPlace();
         let user = await userManager.get();
-        if (user) {
+        if (place) {
             return QueryableIO<IProc>({
                 model: 'MPOS_CLOSE_SESSION',
                 action: 'public',
                 parameters: [
                     { key: 'TABLEID', value: table },
-                    { key: 'STOREID', value: user.STOREID },
+                    { key: 'STOREID', value: place.ID },
                     { key: 'PAYMENT_TYPE', value: paymentType },
                     { key: 'SESSIONID', value: sessionId },
-                    { key: 'USERID', value: user.ID },
+                    { key: 'USERID', value: user?.ID },
                     { key: 'JSON', value: JSON.stringify(items) }
                 ]
             })
@@ -185,17 +189,18 @@ export const dataManager = {
         }
     },
     addPayment: async function (table: string, paymentType: string, items: { PRODUCTID: number, PRICE: number }[], sessionId: number) {
+        let place = await configurationManager.getPlace();
         let user = await userManager.get();
-        if (user) {
+        if (place) {
             return QueryableIO<IProc>({
                 model: 'MPOS_ADD_PAYMENT',
                 action: 'public',
                 parameters: [
                     { key: 'TABLEID', value: table },
-                    { key: 'STOREID', value: user.STOREID },
+                    { key: 'STOREID', value: place.ID },
                     { key: 'JSON', value: JSON.stringify(items) },
                     { key: 'PAYMENT_TYPE', value: paymentType },
-                    { key: 'USERID', value: user.ID },
+                    { key: 'USERID', value: user?.ID },
                     { key: 'SESSIONID', value: sessionId }
                 ]
             })
@@ -204,13 +209,13 @@ export const dataManager = {
         }
     },
     loadPaymentTypes: async function () {
-        let user = await userManager.get();
-        if (user) {
+        let place = await configurationManager.getPlace();
+        if (place) {
             return await QueryableIO<IProc>({
                 model: 'MPOS_PAYMENT_TYPES',
                 action: 'public',
                 parameters: [
-                    { key: 'STOREID', value: user.STOREID }
+                    { key: 'STOREID', value: place.ID }
                 ]
             })
         } else {
@@ -236,6 +241,15 @@ export const dataManager = {
             model: 'MPOS_GET_PLACE',
             parameters: [
                 { key: 'STOREID', value: storeId }
+            ],
+            action: 'public'
+        })
+    },
+    loadPlaceByDomain: async function (domain: string) {
+        return await QueryableIO<IProc>({
+            model: 'MPOS_GET_PLACE_BY_DOMAIN',
+            parameters: [
+                { key: 'DOMAIN', value: domain }
             ],
             action: 'public'
         })

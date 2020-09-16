@@ -6,7 +6,7 @@ import theme from 'theme'
 import { AuthStackScreen } from 'screens/authStack'
 import { Provider } from 'react-redux'
 import { store } from 'myRedux'
-import { userManager, cacheService, cacheKeys, configurationManager } from 'utils';
+import { userManager, cacheService, cacheKeys, configurationManager, applicationManager } from 'utils';
 import { UserModel } from 'types';
 import { KitchenStackScreen } from 'screens/kitchenStack'
 import { ReportStackScreen } from 'screens/reportStack'
@@ -20,6 +20,7 @@ import {
     CartScreen,
 } from 'screens'
 import { dataManager } from 'api';
+import { Platform } from 'react-native';
 
 export const AuthContext = React.createContext<any>(null);
 
@@ -60,18 +61,29 @@ export default function ({ navigation }: any) {
                         ...prevState,
                         userToken: action.token,
                         isLoading: false,
+                        isWebApp: false
                     };
                 case 'SIGN_IN':
                     return {
                         ...prevState,
                         isSignout: false,
                         userToken: action.token,
+                        isWebApp: false
                     };
                 case 'SIGN_OUT':
                     return {
                         ...prevState,
                         isSignout: true,
                         userToken: null,
+                        isWebApp: false
+                    };
+                case 'MAKE_WEB':
+                    return {
+                        ...prevState,
+                        isSignout: false,
+                        userToken: null,
+                        isWebApp: true,
+                        isLoading: false,
                     };
             }
         },
@@ -98,24 +110,45 @@ export default function ({ navigation }: any) {
 
     }
 
+    const handleWebApp = async () => {
+        try {
+            const domain = applicationManager.domain();
+            const { data, statusCode, error } = await dataManager.loadPlaceByDomain(domain);
+            if (statusCode === 200 && data) {
+                configurationManager.setPlace(data[0])
+                dispatch({ type: 'MAKE_WEB' });
+            } else {
+                configurationManager.removePlace();
+            }
+        } catch (error) { }
+    }
+
+    const handleMobileApp = async () => {
+        try {
+            let user = await userManager.get();
+            if (user) {
+                let result = await getPlaceAsync(user.STOREID)
+                if (result === 'ok') {
+                    dispatch({ type: 'RESTORE_TOKEN', token: user.token });
+                } else {
+                    configurationManager.removePlace();
+                    dispatch({ type: 'RESTORE_TOKEN', token: null });
+                }
+            } else {
+                dispatch({ type: 'RESTORE_TOKEN', token: null });
+            }
+        } catch (e) {
+            dispatch({ type: 'RESTORE_TOKEN', token: null });
+        }
+    }
+
     React.useEffect(() => {
         // Fetch the token from storage then navigate to our appropriate place
         const bootstrapAsync = async () => {
-            try {
-                let user = await userManager.get();
-                if (user) {
-                    let result = await getPlaceAsync(user.STOREID)
-                    if (result === 'ok') {
-                        dispatch({ type: 'RESTORE_TOKEN', token: user.token });
-                    } else {
-                        configurationManager.removePlace();
-                        dispatch({ type: 'RESTORE_TOKEN', token: null });
-                    }
-                } else {
-                    dispatch({ type: 'RESTORE_TOKEN', token: null });
-                }
-            } catch (e) {
-                dispatch({ type: 'RESTORE_TOKEN', token: null });
+            if (Platform.OS === 'web') {
+                await handleWebApp();
+            } else {
+                await handleMobileApp();
             }
         };
 
@@ -162,63 +195,67 @@ export default function ({ navigation }: any) {
                         {state.isLoading ? (
                             // We haven't finished checking for the token yet
                             <AppStack.Screen name="Splash" component={Apploading} />
-                        ) : state.userToken == null ? (
-                            // No token found, user isn't signed in
+                        ) : state.isWebApp ? (
                             <AppStack.Screen
-                                name="SignIn"
-                                component={AuthStackScreen}
-                            />
-                        ) : (
-                                    <>
-                                        <AppStack.Screen
-                                            name={screens.routing}
-                                            component={RootingScreen}
-                                        />
+                                name={screens.home}
+                                component={HomeTabs} />)
+                                : state.userToken == null ? (
+                                    // No token found, user isn't signed in
+                                    <AppStack.Screen
+                                        name="SignIn"
+                                        component={AuthStackScreen}
+                                    />
+                                ) : (
+                                        <>
+                                            <AppStack.Screen
+                                                name={screens.routing}
+                                                component={RootingScreen}
+                                            />
 
-                                        <AppStack.Screen
-                                            name={screens.presentation}
-                                            component={PresentationScreen}
-                                        />
+                                            <AppStack.Screen
+                                                name={screens.presentation}
+                                                component={PresentationScreen}
+                                            />
 
-                                        <AppStack.Screen
-                                            name={screens.home}
-                                            component={HomeTabs} />
+                                            <AppStack.Screen
+                                                name={screens.home}
+                                                component={HomeTabs} />
 
-                                        <AppStack.Screen
-                                            name={screens.cart}
-                                            component={CartScreen}
-                                        />
+                                            <AppStack.Screen
+                                                name={screens.cart}
+                                                component={CartScreen}
+                                            />
 
-                                        <AppStack.Screen
-                                            component={NotificationStackScreen}
-                                            name={screens.notification} />
+                                            <AppStack.Screen
+                                                component={NotificationStackScreen}
+                                                name={screens.notification} />
 
-                                        <AppStack.Screen
-                                            component={AuthStackScreen}
-                                            name={screens.auth} />
+                                            <AppStack.Screen
+                                                component={AuthStackScreen}
+                                                name={screens.auth} />
 
-                                        <AppStack.Screen
-                                            component={StaffTabs}
-                                            name={screens.search} />
+                                            <AppStack.Screen
+                                                component={StaffTabs}
+                                                name={screens.search} />
 
-                                        <AppStack.Screen
-                                            component={SettingStackScreen}
-                                            name={screens.settings} />
+                                            <AppStack.Screen
+                                                component={SettingStackScreen}
+                                                name={screens.settings} />
 
-                                        <AppStack.Screen
-                                            component={KitchenStackScreen}
-                                            name={screens.kitchen} />
+                                            <AppStack.Screen
+                                                component={KitchenStackScreen}
+                                                name={screens.kitchen} />
 
-                                        <AppStack.Screen
-                                            component={ReportStackScreen}
-                                            name={screens.reports} />
+                                            <AppStack.Screen
+                                                component={ReportStackScreen}
+                                                name={screens.reports} />
 
-                                        <AppStack.Screen
-                                            component={CachierStackScreen}
-                                            name={screens.cashier} />
+                                            <AppStack.Screen
+                                                component={CachierStackScreen}
+                                                name={screens.cashier} />
 
-                                    </>
-                                )}
+                                        </>
+                                    )}
                     </AppStack.Navigator>
                 </NavigationContainer>
             </Provider>

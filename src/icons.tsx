@@ -77,5 +77,6 @@ export function EmojiNeutral(props: IconProps) {
 export function MoreOption(props: IconProps) {
     return <Feather name="more-vertical" onPress={props.onPress} size={props.size || 30} color={props.color} />
 }
-
-
+export function Phone(props: IconProps) {
+    return <AntDesign name="phone" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}

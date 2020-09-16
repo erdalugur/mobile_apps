@@ -17,8 +17,6 @@ interface State {
 }
 
 interface Props extends NavigationProps<any, any> {
-    title: string
-    categoryId: string
     items: Array<Product>
     dispatch: Dispatch<IAction<any>>
 }
@@ -45,27 +43,11 @@ class Index extends React.PureComponent<Props, State>{
     render() {
 
         return (
-            <View style={[styles.container]}>
-                <View style={[styles.title]}>
-                    <Text style={{ fontSize: 20 }}>{this.props.title}</Text>
-                    <TouchableOpacity
-                        onPress={() => {
-                            this.props.navigation.navigate(screens.category, {
-                                title: this.props.title,
-                                items: this.props.items
-                            })
-                        }}>
-                        <Text style={{ fontSize: 16 }}>
-                            {messages.SEE_ALL}
-                        </Text>
-                    </TouchableOpacity>
-                </View>
-                <ScrollView
-                    horizontal
-                    showsHorizontalScrollIndicator={false}>
-                    {this.renderItems()}
-                </ScrollView>
-            </View>
+            <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}>
+                {this.renderItems()}
+            </ScrollView>
         )
     }
 }
@@ -77,14 +59,6 @@ const styles = StyleSheet.create({
         height: 300,
         paddingBottom: 5,
         marginBottom: 10
-    },
-    title: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        width: '100%',
-        paddingHorizontal: 10,
-        paddingBottom: 10
     },
     image: {
         width: '100%',

@@ -1,14 +1,14 @@
 import React from 'react';
-import { StyleSheet, Image, TouchableOpacity, Dimensions, ScrollView, SafeAreaView } from 'react-native';
+import { StyleSheet, Image, TouchableOpacity, Dimensions, ScrollView, SafeAreaView, Platform, Linking } from 'react-native';
 import { CartItem, NavigationProps } from 'types';
 import { View, Text } from 'components'
 import { connect } from 'react-redux';
 import { AppState } from 'myRedux';
 import theme from 'theme';
 import { SingleMultiType, IAction, actionTypes } from 'myRedux/types';
-import { Plus, Minus, QRCode, Table, EmojiNeutral } from 'icons';
+import { Plus, Minus, QRCode, Table, EmojiNeutral, Phone } from 'icons';
 import { screens } from 'navigation';
-import { messageBox, messages } from 'utils';
+import { messageBox, messages, applicationManager } from 'utils';
 import { dataManager } from 'api';
 
 type screenOptions = 'Home' | 'Search' | 'Cashier' | 'Kitchen'
@@ -25,11 +25,35 @@ const { height } = Dimensions.get('screen')
 
 interface State {
     table: string
+    enableActions: boolean
+    packageOrder: boolean
+    enableQR: boolean
 }
 class Index extends React.PureComponent<Props, State> {
 
     state: State = {
-        table: ''
+        table: '',
+        enableActions: false,
+        packageOrder: false,
+        enableQR: true
+    }
+
+    componentDidMount = async () => {
+        this.bootStrapAsync();
+    }
+
+    bootStrapAsync = async () => {
+        if (Platform.OS === 'web') {
+            let place = await applicationManager.config.getPlace();
+            let clientIP = await applicationManager.clientIP();
+            this.setState({
+                enableActions: place !== null && place.LOCAL_IP === clientIP,
+                packageOrder: place !== null && place.PACKAGE_ORDER,
+                enableQR: place !== null && place.USE_GUEST_COMPLETE
+            })
+        } else {
+            this.setState({ enableActions: true })
+        }
     }
 
     totalPrice = (): string => {
@@ -112,20 +136,7 @@ class Index extends React.PureComponent<Props, State> {
                             {this.totalPrice()}
                         </Text>
                     </View>
-                    <View style={[styles.bottomButton]}>
-                        <TouchableOpacity
-                            onPress={() => this.props.navigation.navigate(screens.cartQR, { fromScreen: 'cart' })}
-                        >
-                            <QRCode color={theme.colors.white} />
-                        </TouchableOpacity>
-                        {this.props.routeScreen !== 'Home' &&
-                            <TouchableOpacity
-                                onPress={() => this.props.navigation.navigate(screens.tables, { fromScreen: 'cart' })}
-                            >
-                                <Table color={theme.colors.white} />
-                            </TouchableOpacity>
-                        }
-                    </View>
+                    {this.renderActions()}
                 </View>
             </View>
         )
@@ -141,6 +152,42 @@ class Index extends React.PureComponent<Props, State> {
             }}>
                 <EmojiNeutral color={theme.colors.white} size={60} />
                 <Text style={{ marginTop: 20 }}>{messages.EMPTY_CART_MESSAGE}</Text>
+            </View>
+        )
+    }
+
+    callPhone = async () => {
+        let place = await applicationManager.config.getPlace();
+        if (place) {
+            const url = `tel://${place.PHONE}`
+            Linking.openURL(url)
+        }
+    }
+
+    renderActions = () => {
+        return (
+            <View style={[styles.bottomButton]}>
+                {this.state.enableActions ? (<>
+                    {this.state.enableQR &&
+                        <TouchableOpacity onPress={() => {
+                            this.props.navigation.navigate(screens.cartQR, { fromScreen: 'cart' })
+                        }}>
+                            <QRCode color={theme.colors.white} />
+                        </TouchableOpacity>
+                    }
+                    {this.props.routeScreen !== 'Home' && Platform.OS !== 'web' &&
+                        <TouchableOpacity onPress={() => {
+                            this.props.navigation.navigate(screens.tables, { fromScreen: 'cart' })
+                        }}>
+                            <Table color={theme.colors.white} />
+                        </TouchableOpacity>
+                    }
+                </>) : this.state.packageOrder ? (
+                    <TouchableOpacity onPress={() => this.callPhone()}>
+                        <Phone color={theme.colors.white} />
+                    </TouchableOpacity>
+                ) : null
+                }
             </View>
         )
     }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Text, View, StyleSheet, Button } from 'react-native';
+import { Text, View, StyleSheet, Button, Platform } from 'react-native';
 import { BarCodeScanner as ExpoScanner } from 'expo-barcode-scanner';
 import theme from 'theme';
 
@@ -26,8 +26,10 @@ export class BarcodeScanner extends React.Component<Props, State> {
     }
 
     requestPermissionsAsync = async () => {
-        const { status } = await ExpoScanner.requestPermissionsAsync();
-        this.setState({ hasPermission: status === 'granted' });
+        if (Platform.OS !== 'web') {
+            const { status } = await ExpoScanner.requestPermissionsAsync();
+            this.setState({ hasPermission: status === 'granted' });
+        }
     }
 
 

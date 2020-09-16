@@ -4,32 +4,52 @@ import { View } from './View'
 import { Text } from './Text'
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Product, NavigationProps } from 'types';
+import { Dispatch } from 'redux'
+import { IAction } from 'myRedux/types';
+import { screens } from 'navigation';
 
 const { width, height } = Dimensions.get("screen")
 interface ItemProps {
     ID: number
     IMAGE_URL: string
 }
-interface Props {
-    items: Array<ItemProps>
+interface Props extends NavigationProps<any, any> {
+    items: Array<Product>
+    dispatch: Dispatch<IAction<any>>
 }
 interface State {
     active: number
 }
-export class Slider extends React.PureComponent<Props, State> {
+export class SliderProducts extends React.PureComponent<Props, State> {
     state: State = {
         active: 0
     }
 
     ref = React.createRef<any>();
-    renderItem = ({ item, index }: { item: ItemProps, index: number }) => {
+    renderItem = ({ item, index }: { item: Product, index: number }) => {
         return (
-            <TouchableOpacity activeOpacity={0.8} style={styles.slide}>
-                <ImageBackground source={{ uri: item.IMAGE_URL }}
+            <TouchableOpacity
+                activeOpacity={0.8}
+                style={styles.slide}
+                onPress={() => this.props.navigation.navigate(screens.product, { item })}
+            >
+                <ImageBackground source={{ uri: item.PREVIEW }}
                     resizeMethod="auto"
                     style={{
                         height: height / 5, width: width
-                    }}></ImageBackground>
+                    }}>
+                    <View style={{
+                        position: 'absolute',
+                        height: '100%', width: '100%',
+                        backgroundColor: '#000',
+                        opacity: 0.5,
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                        <Text component="h4">{item.NAME}</Text>
+                    </View>
+                </ImageBackground>
 
             </TouchableOpacity>
         );
@@ -40,13 +60,14 @@ export class Slider extends React.PureComponent<Props, State> {
             <Pagination
                 dotsLength={items.length}
                 activeDotIndex={this.state.active}
-                containerStyle={{}}
+                containerStyle={{
+                    padding: 10
+                }}
                 dotStyle={{
                     width: 10,
                     height: 10,
                     borderRadius: 5,
-                    marginHorizontal: 8,
-                    backgroundColor: 'rgba(255, 255, 255, 0.92)'
+                    backgroundColor: 'rgba(255, 255, 255, 0.92)',
                 }}
                 inactiveDotStyle={{
                     // Define styles for inactive dots here
@@ -58,7 +79,7 @@ export class Slider extends React.PureComponent<Props, State> {
     }
     render() {
         return (
-            <View>
+            <>
                 <Carousel
                     autoplay
                     autoplayDelay={1000}
@@ -72,7 +93,7 @@ export class Slider extends React.PureComponent<Props, State> {
                     loop
                 />
                 {this.pagination()}
-            </View>
+            </>
         )
     }
 }

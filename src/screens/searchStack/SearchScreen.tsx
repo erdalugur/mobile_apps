@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, ScrollView, TouchableOpacity, Image, RefreshControl } from 'react-native';
+import { StyleSheet, ScrollView, TouchableOpacity, Image, RefreshControl, SafeAreaView } from 'react-native';
 import { View, Text, Input, CartButton, AddToCart } from 'components'
 import { NavigationProps, ProductTreeModel, Product, CartItem, FetchAllModel } from 'types';
 import theme from 'theme';
@@ -72,7 +72,7 @@ class Index extends React.PureComponent<Props, State> {
     }
     render() {
         return (
-            <View full>
+            <SafeAreaView style={{ flex: 1, backgroundColor: theme.colors.card }}>
                 <View style={[styles.headerContainer]}>
                     <View style={[styles.searchboxWrapper]}>
                         {/* {this.props.navigation.canGoBack() && <Back onPress={() => this.props.navigation.goBack()} />} */}
@@ -97,7 +97,7 @@ class Index extends React.PureComponent<Props, State> {
                 }>
                     {this.renderItems()}
                 </ScrollView>
-            </View>
+            </SafeAreaView>
         );
     }
 }

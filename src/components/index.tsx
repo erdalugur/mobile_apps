@@ -14,3 +14,5 @@ export { ProductScrollView } from './ProductScrollView'
 export { Html } from './Html'
 export { AddToCart } from './AddToCart'
 export { BarcodeScanner } from './BarcodeScanner'
+export { SliderProducts } from './SliderProducts'
+

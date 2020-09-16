@@ -58,6 +58,9 @@ export interface PlaceModel {
     USE_REPORT: boolean,
     USE_MENU: boolean
     DEFAULT_CLIENT_ID: string
+    LOCAL_IP: string
+    PHONE: string
+    PACKAGE_ORDER: boolean
 }
 
 export interface DomainSettingModel extends PlaceModel { }
@@ -66,6 +69,7 @@ export interface ProductTreeModel {
     ID: number,
     NAME: string,
     PRODUCTS: Product[]
+    THEME_NO: string
 }
 
 export interface SetCartRequest {

@@ -1,6 +1,9 @@
-import { AsyncStorage, Alert, Platform } from 'react-native'
+import { AsyncStorage, Alert, Platform, processColor } from 'react-native'
 import { UserModel, CacheResponse, DomainSettingModel, PlaceModel } from 'types'
+import { dataManager } from 'api'
 export { messages } from './messages'
+import * as Network from 'expo-network';
+
 export const cacheKeys = {
     user: "user",
     config: 'config',
@@ -80,4 +83,13 @@ export function messageBox(message: string) {
         alert(message)
     }
     return Alert.alert(message);
+}
+
+export const applicationManager = {
+    user: userManager,
+    data: dataManager,
+    domain: () => __DEV__ ? 'http://localhost:19006' : window.location.origin,
+    cache: cacheService,
+    clientIP: async () => Network.getIpAddressAsync(),
+    config: configurationManager
 }
