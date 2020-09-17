@@ -12,7 +12,8 @@ export const HomeOptions: IScreenOptions = {
 }
 
 export const CartOptions: IScreenOptions = {
-    title: "Adisyon"
+    title: "Adisyon",
+    headerRight: () => null
 }
 
 export const ProfileOptions: IScreenOptions = {

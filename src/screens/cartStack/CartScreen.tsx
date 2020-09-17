@@ -21,7 +21,7 @@ interface Props extends NavigationProps<any, any> {
     routeScreen: screenOptions
 }
 
-const { height } = Dimensions.get('screen')
+const { height } = Dimensions.get('window')
 
 interface State {
     table: string
@@ -126,9 +126,13 @@ class Index extends React.PureComponent<Props, State> {
     renderCart = () => {
         return (
             <View style={{ flex: 1 }}>
-                <ScrollView style={{ marginBottom: 70, height: height - 140 }}>
-                    {this.RenderItems()}
-                </ScrollView>
+                <View style={{
+                    maxHeight: height - 110
+                }}>
+                    <ScrollView>
+                        {this.RenderItems()}
+                    </ScrollView>
+                </View>
                 <View style={[styles.bottomButtonContainer]}>
                     <View style={[styles.bottomTotalPrice]}>
                         <Text style={{ marginLeft: 5, fontSize: 10 }}>Toplam Fiyat</Text>
@@ -247,13 +251,13 @@ const styles = StyleSheet.create({
         bottom: 0,
         left: 0,
         right: 0,
-        height: 70,
+        height: 50,
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
     bottomButton: {
-        height: 70,
+        height: '100%',
         alignItems: 'center',
         justifyContent: 'space-around',
         paddingHorizontal: 10,
@@ -263,7 +267,7 @@ const styles = StyleSheet.create({
     },
     bottomTotalPrice: {
         backgroundColor: theme.colors.border,
-        height: 70,
+        height: '100%',
         alignItems: 'center',
         justifyContent: 'center',
         width: '50%',

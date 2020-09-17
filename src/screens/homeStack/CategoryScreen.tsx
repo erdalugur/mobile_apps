@@ -1,16 +1,15 @@
 import React from 'react';
-import { StyleSheet, FlatList, Image, TouchableOpacity, ImageBackground, Dimensions, ViewBase } from 'react-native';
+import { StyleSheet, Image, TouchableOpacity, ImageBackground, Dimensions, TouchableWithoutFeedback, ScrollView } from 'react-native';
 import { View, Text, AddToCart, CartButton } from 'components'
 import { connect } from 'react-redux';
 import { NavigationProps, Product, ProductTreeModel } from 'types';
 import theme from 'theme';
 import { screens } from 'navigation';
 import { IAction } from 'myRedux/types';
-import { ScrollView, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { MoreOption } from 'icons';
-import { messageBox, applicationManager } from 'utils';
+import { applicationManager, messageBox } from 'utils';
 
-const { height } = Dimensions.get('screen')
+const { height } = Dimensions.get('window')
 interface Props extends NavigationProps<{
     title: string
     items: Product[]
@@ -108,34 +107,20 @@ class Index extends React.PureComponent<Props, State> {
 
     renderDrawer = () => {
         return (
-            <View style={{
-                position: 'absolute',
-                flex: 1,
-                width: '80%',
-                height: '100%',
-                top: 0,
-                right: 0,
-                zIndex: 99,
-                backgroundColor: theme.colors.background
-            }}>
-                <ScrollView style={{ height: height - 100 }}>
-                    {this.props.route.params.all.map(x => (
-                        <TouchableOpacity
-                            style={{
-                                height: 50,
-                                paddingHorizontal: 10,
-                                alignItems: 'flex-start',
-                                justifyContent: 'center',
-                                borderColor: theme.colors.border,
-                                borderBottomWidth: 1
-                            }}
-                            key={x.ID} onPress={() => {
-                                this.setProductsAndTitle(x.PRODUCTS, x.NAME)
-                            }}>
-                            <Text>{x.NAME}</Text>
-                        </TouchableOpacity>
-                    ))}
-                </ScrollView>
+            <View style={[styles.drawerContainer]}>
+                <View style={[styles.drawerContent]}>
+                    <ScrollView style={{ height: height - 100 }}>
+                        {this.props.route.params.all.map(x => (
+                            <TouchableOpacity
+                                style={[styles.drawerItem]}
+                                key={x.ID} onPress={() => {
+                                    this.setProductsAndTitle(x.PRODUCTS, x.NAME)
+                                }}>
+                                <Text>{x.NAME}</Text>
+                            </TouchableOpacity>
+                        ))}
+                    </ScrollView>
+                </View>
             </View>
         )
     }
@@ -154,7 +139,7 @@ class Index extends React.PureComponent<Props, State> {
 
     render() {
         let { items } = this.state
-        let style = this.state.themeNo === '1' ? { height: height - 130 } : { flex: 1, }
+        let style = this.state.themeNo === '1' ? { height: height - 140, maxHeight: height - 140 } : { height: height - 70 }
         return (
             <View style={{ flex: 1 }}>
                 {this.state.drawerOpen && this.renderDrawer()}
@@ -174,6 +159,30 @@ class Index extends React.PureComponent<Props, State> {
 export default connect()(Index);
 const styles = StyleSheet.create({
     container: {
+    },
+    drawerContainer: {
+        position: 'absolute',
+        flex: 1,
+        width: '50%',
+        height: '100%',
+        top: 0,
+        right: 0,
+        zIndex: 99,
+        backgroundColor: theme.colors.card,
+        alignItems: 'flex-end'
+    },
+    drawerContent: {
+        backgroundColor: theme.colors.card,
+        width: '100%',
+        height: '100%',
+    },
+    drawerItem: {
+        height: 50,
+        paddingHorizontal: 10,
+        alignItems: 'flex-start',
+        justifyContent: 'center',
+        borderColor: theme.colors.border,
+        borderBottomWidth: 1
     },
     categoryItemImageContainer: {
         height: 70,

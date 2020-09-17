@@ -18,11 +18,12 @@ interface Props extends NavigationProps<any, any> {
 
 interface State {
     loading: boolean
+    recordNotFound: boolean
 }
 
 
 class Home extends React.PureComponent<Props, State> {
-    state: State = { loading: false };
+    state: State = { loading: false, recordNotFound: false };
 
     componentDidMount = async () => {
         const place = await applicationManager.config.getPlace();
@@ -30,6 +31,10 @@ class Home extends React.PureComponent<Props, State> {
             this.props.navigation.setOptions({
                 title: place.NAME
             })
+        }
+        if (place === null) {
+            this.setState({ recordNotFound: true, loading: false })
+            return
         }
         if (this.props.app.menu.tree.length === 0)
             this.loadAsync();
@@ -98,9 +103,18 @@ class Home extends React.PureComponent<Props, State> {
         )
     }
 
+    renderNotFound = () => {
+        return (
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <Text component="h4">Domain kaydı bulunamadı</Text>
+                <Text>Lütfen yetkili ile iletişime geçin</Text>
+            </View>
+        )
+    }
+
     render() {
         return (
-            <View full>{this.state.loading ? this.renderSpinner() : this.renderScreen()}</View>
+            <View full>{this.state.loading ? this.renderSpinner() : this.state.recordNotFound ? this.renderNotFound() : this.renderScreen()}</View>
         );
     }
 }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, Image, StyleSheet } from 'react-native'
+import { ScrollView, Image, StyleSheet, Dimensions } from 'react-native'
 import { View } from './View'
 import theme from 'theme'
 import { Text } from './Text'
@@ -12,6 +12,7 @@ import { screens } from 'navigation'
 import { messageBox, messages } from 'utils'
 import { AddToCart } from './AddToCart'
 
+const { width } = Dimensions.get('screen')
 interface State {
 
 }
@@ -26,11 +27,11 @@ class Index extends React.PureComponent<Props, State>{
     state: State = {}
     renderItems = () => {
         return this.props.items.map(x => (
-            <View key={x.ID} style={{ marginRight: 5, width: 140, marginTop: 5 }}>
+            <View key={x.ID} style={{ marginRight: 5, width: width / 3, minWidth: 130, maxWidth: 200, marginTop: 5, borderRadius: 5, overflow: 'hidden', }}>
                 <TouchableOpacity onPress={() => this.props.navigation.navigate(screens.product, { item: x })}>
                     <Image source={{ uri: x.PREVIEW }} style={[styles.image]} />
                 </TouchableOpacity>
-                <View style={{ paddingHorizontal: 5 }}>
+                <View style={{ paddingHorizontal: 5, paddingBottom: 5 }}>
                     <View style={[styles.productName]}>
                         <Text style={{ textTransform: "capitalize", textAlign: 'center' }}>{x.NAME.slice(0, 100)}</Text>
                         <Text style={{ textAlign: 'center' }}>{`${x.PRICE.toFixed(2).toString()} ₺`}</Text>

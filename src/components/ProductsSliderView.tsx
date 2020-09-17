@@ -37,7 +37,7 @@ export class SliderProducts extends React.PureComponent<Props, State> {
                 <ImageBackground source={{ uri: item.PREVIEW }}
                     resizeMethod="auto"
                     style={{
-                        height: height / 5, width: width
+                        height: height / 4, width: width
                     }}>
                     <View style={{
                         position: 'absolute',
@@ -51,7 +51,6 @@ export class SliderProducts extends React.PureComponent<Props, State> {
                         <Text component="h4" style={{ fontWeight: 'bold' }} color={'#fff'}>{item.NAME}</Text>
                     </View>
                 </ImageBackground>
-
             </TouchableOpacity>
         );
     }
