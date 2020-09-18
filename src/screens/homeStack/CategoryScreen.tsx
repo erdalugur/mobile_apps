@@ -189,17 +189,18 @@ const styles = StyleSheet.create({
         width: 120,
         borderRadius: 10,
         margin: 5,
-        backgroundColor: '#2a2a2f',
+        backgroundColor: 'rgb(18 18 18 / 32%)',
         overflow: 'hidden',
     },
     categoryItemTextContainer: {
         position: 'absolute',
-        justifyContent: 'center',
+        justifyContent: 'flex-end',
         alignItems: 'center',
         width: '100%',
         height: '100%',
-        backgroundColor: '#2a2a2f',
-        opacity: .6
+        backgroundColor: 'rgb(18 18 18 / 32%)',
+        //opacity: .6
+        paddingBottom: 10
     },
     itemContainer: {
         paddingHorizontal: 5,

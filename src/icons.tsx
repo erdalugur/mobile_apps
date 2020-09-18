@@ -75,3 +75,21 @@ export function MoreOption(props: IconProps) {
 export function Phone(props: IconProps) {
     return <AntDesign name="phone" onPress={props.onPress} size={props.size || 30} color={props.color} />
 }
+export function CartIcon(props: IconProps) {
+    return <AntDesign name="hearto" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}
+export function Heart(props: IconProps) {
+    return <AntDesign name="hearto" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}
+export function Heat(props: IconProps) {
+    return <FontAwesome5 name="temperature-high" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}
+export function Fire(props: IconProps) {
+    return <FontAwesome5 name="fire-alt" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}
+export function Time(props: IconProps) {
+    return <Ionicons name="ios-timer" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}
+export function Pencil(props: IconProps) {
+    return <FontAwesome name="pencil" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}

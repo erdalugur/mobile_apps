@@ -19,6 +19,8 @@ export interface Product {
     STOREID: string
     CATEGORYID: string
     ALLERGENS: string
+    CALORI: string
+    PREPARATION_TIME: string
 }
 
 export interface CartItem extends Product {

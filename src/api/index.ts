@@ -253,6 +253,22 @@ export const dataManager = {
             ],
             action: 'public'
         })
+    },
+    loadRecommendedItems: async function (PRODUCTID: number) {
+        return await QueryableIO<IProc>({
+            model: 'MPOS_RECOMMENDED_PRODUCTS',
+            parameters: [
+                { key: 'PRODUCTID', value: PRODUCTID }
+            ],
+            action: 'public'
+        })
+    },
+    loadProductDetail: async function (PRODUCTID: number) {
+        return await QueryableIO<IProc>({
+            model: 'MPOS_PRODUCT_DETAIL',
+            parameters: [{ key: 'PRODUCTID', value: PRODUCTID }],
+            action: 'public'
+        })
     }
 }
 

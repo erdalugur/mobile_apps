@@ -10,13 +10,15 @@ interface Props {
 export const Html = ({
     html,
     onLinkPress
-}: Props) => (
+}: Props) => {
+    if (!html)
+        return null
+
+    return (
         <HtmlRenderer
             containerStyle={{
                 //backgroundColor: 'white',
                 height: '100%',
-                padding: 10,
-
             }}
             baseFontStyle={{
 
@@ -24,5 +26,5 @@ export const Html = ({
             html={`${html || "<p></p>"}`}
             onLinkPress={() => typeof (onLinkPress) === 'function' ? onLinkPress() : null} />
     );
-
+}
 

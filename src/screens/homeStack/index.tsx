@@ -69,7 +69,7 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
             <HomeStack.Screen
                 options={{
                     title: 'Ürünler',
-
+                    header: () => null
                 }}
                 name={screens.product}
                 component={ProductScreen}
