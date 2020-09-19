@@ -1,4 +1,4 @@
-import { AsyncStorage, Alert, Platform, processColor } from 'react-native'
+import { AsyncStorage, Alert, Platform, Dimensions } from 'react-native'
 import { UserModel, CacheResponse, DomainSettingModel, PlaceModel } from 'types'
 import { dataManager } from 'api'
 export { messages } from './messages'
@@ -93,3 +93,26 @@ export const applicationManager = {
     clientIP: async () => Network.getIpAddressAsync(),
     config: configurationManager
 }
+
+interface IphoneSize { height: number, width: number }
+export const sizeManager = {
+    isIphoneX: function () {
+        const dim = Dimensions.get('window');
+        return (
+            // This has to be iOS
+            Platform.OS === 'ios' &&
+
+            // Check either, iPhone X or XR
+            (sizeManager.isIPhoneXSize(dim) || sizeManager.isIPhoneXrSize(dim))
+        );
+    },
+    isIPhoneXSize: function (size: IphoneSize) {
+        return size.height == 812 || size.width == 812;
+    },
+    isIPhoneXrSize: function (size: IphoneSize) {
+        return size.height == 896 || size.width == 896;
+    }
+}
+
+
+

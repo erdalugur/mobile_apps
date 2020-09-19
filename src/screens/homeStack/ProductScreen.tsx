@@ -1,13 +1,13 @@
 import React from 'react';
-import { StyleSheet, Image, Dimensions, ImageBackground, ActivityIndicator } from 'react-native';
+import { StyleSheet, Image, Dimensions, ImageBackground, ActivityIndicator, Modal } from 'react-native';
 import { View, Text, Html, CartButton, AddToCartHeart } from 'components'
-import { NavigationProps, Product, ProductTreeModel, CartItem } from 'types';
+import { NavigationProps, Product, ProductTreeModel, CartItem, IExtra } from 'types';
 import theme from 'theme';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { IAction, actionTypes } from 'myRedux/types';
 import { connect } from 'react-redux';
-import { messageBox, messages } from 'utils'
-import { Back, CartIcon, Plus, Heart, Fire, Time, Pencil, Check, UnCheck } from 'icons';
+import { messageBox, messages, sizeManager } from 'utils'
+import { Back, CartIcon, Plus, Heart, Fire, Time, Pencil, Check, UnCheck, Play } from 'icons';
 import { screens } from 'navigation';
 import { dataManager } from 'api';
 import { AppState } from 'myRedux';
@@ -20,17 +20,12 @@ interface Props extends NavigationProps<{
     cart: { [key: string]: CartItem }
 }
 const { height } = Dimensions.get('window')
-interface IExtra {
-    ID: number
-    NAME: string
-    PRICE: number
-}
-
 interface State {
     recommended: Array<Product>
     item: Product | null
     loading: boolean
     extras: Array<IExtra>
+    modal: boolean
 }
 
 class Index extends React.PureComponent<Props, any> {
@@ -38,7 +33,8 @@ class Index extends React.PureComponent<Props, any> {
         recommended: [],
         item: null,
         loading: false,
-        extras: []
+        extras: [],
+        modal: false
     }
     componentDidMount = () => {
         this.bootstrapAsync();
@@ -46,7 +42,6 @@ class Index extends React.PureComponent<Props, any> {
     }
 
     bootstrapAsync = async () => {
-        this.setTitle();
         let item = this.props.route.params.item
         await this.loadDetailAsync(item);
     }
@@ -75,15 +70,10 @@ class Index extends React.PureComponent<Props, any> {
         }
     }
 
-    setTitle = () => {
-        // this.props.navigation.setOptions({
-        //     title: this.props.route.params.item.NAME
-        // })
-    }
-
     renderHeader = () => {
+        const style = sizeManager.isIphoneX() ? { paddingTop: 50 } : {}
         return (
-            <View style={[styles.header]}>
+            <View style={[styles.header, style]}>
                 <View style={[styles.headerButton]}>
                     <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
                         <Back color={theme.colors.white} size={40} />
@@ -117,10 +107,10 @@ class Index extends React.PureComponent<Props, any> {
     renderExtra = (x: IExtra) => {
         return (
             <View key={x.ID} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text>{x.NAME}</Text>
-                <Text>{`${x.PRICE.toFixed(2)} ₺`}</Text>
+                <Text style={{ fontSize: 12 }}>{x.NAME}</Text>
+                <Text style={{ fontSize: 12 }}>{`${x.PRICE.toFixed(2)} ₺`}</Text>
                 <TouchableOpacity>
-                    <UnCheck color={theme.colors.white} />
+                    <UnCheck color={theme.colors.white} size={25} />
                     {/* <Check color={theme.colors.white} /> */}
                 </TouchableOpacity>
             </View>
@@ -140,6 +130,15 @@ class Index extends React.PureComponent<Props, any> {
             this.props.dispatch({ type: actionTypes.DECREMENT, payload: this.state.item?.ID || 0 });
         }
     }
+
+    onNoteChange = (note: string) => {
+        this.setState((state: State) => {
+            state.item ? state.item.NOTES = note : null
+            return {
+                item: { ...state.item }
+            }
+        })
+    }
     render() {
         const x = this.state.item
         if (x === null) {
@@ -156,14 +155,20 @@ class Index extends React.PureComponent<Props, any> {
                 }}>
                     {this.renderHeader()}
                     <Image source={{ uri: x.PREVIEW }} style={[styles.image]} />
-                    <View style={[styles.heartAdd]} transparent>
-                        <AddToCartHeart item={this.state.item} />
+                    <View style={[styles.imageBottomContainer]} transparent>
+                        <View style={[styles.imageBottom]}>
+                            <TouchableOpacity>
+                                <Play color={theme.colors.white} size={25} />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={[styles.imageBottom]}>
+                            <AddToCartHeart item={this.state.item} />
+                        </View>
                     </View>
                 </View>
                 <View style={{ flex: 2, backgroundColor: theme.colors.card, maxHeight: (height / 3) * 2 }}>
                     <ScrollView>
                         <View transparent style={{
-                            //marginTop: -40,
                             paddingTop: 10,
                             paddingHorizontal: 20,
                             zIndex: 9
@@ -185,15 +190,19 @@ class Index extends React.PureComponent<Props, any> {
                             <View style={[styles.valuesContainer]}>
                                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                                     <Fire color={theme.colors.white} size={20} />
-                                    <Text>{`Kalori: ${x.CALORI ? x.CALORI : '-'}`}</Text>
+                                    <Text style={{ fontSize: 12 }}>{`Kalori: ${x.CALORI ? x.CALORI : '-'}`}</Text>
                                 </View>
                                 <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                                     <Time color={theme.colors.white} size={22} />
-                                    <Text>{`Haz. Süresi: ${x.PREPARATION_TIME ? x.PREPARATION_TIME : '-'}`}</Text>
+                                    <Text style={{ fontSize: 12 }}>{`Haz. Süresi: ${x.PREPARATION_TIME ? x.PREPARATION_TIME : '-'}`}</Text>
                                 </View>
-                                <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center' }}
+                                    onPress={() => this.props.navigation.navigate(screens.noteScreen, {
+                                        onNoteChange: (note: string) => this.onNoteChange(note),
+                                        note: this.state.item?.NOTES
+                                    })}>
                                     <Pencil color={theme.colors.white} size={22} />
-                                    <Text>Not Ekle</Text>
+                                    <Text style={{ fontSize: 12 }}>Not Ekle</Text>
                                 </TouchableOpacity>
                             </View>
                             {this.state.extras.length > 0 &&
@@ -259,6 +268,23 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         position: 'absolute'
     },
+    imageBottomContainer: {
+        width: '100%',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        position: 'absolute',
+        bottom: 20,
+        flexDirection: 'row'
+    },
+    imageBottom: {
+        backgroundColor: '#12121226',
+        marginHorizontal: 10,
+        borderRadius: 10,
+        width: 45,
+        height: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     headerButton: { width: 45, borderRadius: 10, backgroundColor: '#12121226', alignItems: 'center', height: 45, justifyContent: 'center' },
     extraContainer: {
         paddingHorizontal: 20,
@@ -289,7 +315,7 @@ const styles = StyleSheet.create({
         width: 120,
         borderRadius: 10,
         margin: 5,
-        backgroundColor: 'rgb(18 18 18 / 32%)',
+        backgroundColor: '#12121226',
         overflow: 'hidden',
     },
     recommendedItemTextContainer: {
@@ -298,7 +324,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         height: '100%',
-        backgroundColor: 'rgb(18 18 18 / 32%)',
+        backgroundColor: '#12121226',
         paddingBottom: 10
         //opacity: .6
     },

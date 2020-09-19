@@ -20,7 +20,7 @@ import AdditionScreen from 'screens/additionStack/AdditionScreen';
 import CartQRScreen from 'screens/cartStack/CartQRScreen';
 import CartResultScreen from 'screens/cartStack/CartResultScreen';
 import ReadQRTableScreen from 'screens/sharedStack/ReadQRTableScreen';
-
+import { ProductNoteScreen } from 'screens/homeStack/ProductNoteScreen'
 export {
     PresentationScreen,
     HomeScreen,
@@ -43,5 +43,6 @@ export {
     AdditionScreen,
     CartQRScreen,
     CartResultScreen,
-    ReadQRTableScreen
+    ReadQRTableScreen,
+    ProductNoteScreen
 }

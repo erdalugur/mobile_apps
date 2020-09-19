@@ -10,7 +10,8 @@ import {
     PaymentScreen,
     AdditionScreen,
     CartQRScreen,
-    CartResultScreen
+    CartResultScreen,
+    ProductNoteScreen
 } from 'screens'
 
 import {
@@ -105,6 +106,15 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
                 name={screens.payment}
                 component={PaymentScreen}
             />
+            <HomeStack.Screen
+                options={{
+                    title: 'Notlar',
+                    headerRight: () => null
+                }}
+                name={screens.noteScreen}
+                component={ProductNoteScreen}
+            />
+
 
         </HomeStack.Navigator>
     )

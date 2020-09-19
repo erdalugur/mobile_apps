@@ -103,3 +103,7 @@ export function Check(props: IconProps) {
 export function UnCheck(props: IconProps) {
     return <MaterialCommunityIcons name="checkbox-blank-outline" onPress={props.onPress} size={props.size || 30} color={props.color} />
 }
+
+export function Play(props: IconProps) {
+    return <FontAwesome name="youtube-play" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}

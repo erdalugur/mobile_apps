@@ -1,8 +1,6 @@
 
 import { DarkTheme } from '@react-navigation/native';
 
-import { Theme } from '@react-navigation/native/lib/typescript/src/types';
-
 interface ITheme {
     dark: boolean
     colors: {

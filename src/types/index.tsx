@@ -21,6 +21,15 @@ export interface Product {
     ALLERGENS: string
     CALORI: string
     PREPARATION_TIME: string
+    EXTRAS: Array<IExtra>
+    NOTES: string
+    PRIORITY: number
+}
+
+export interface IExtra {
+    ID: number
+    NAME: string
+    PRICE: number
 }
 
 export interface CartItem extends Product {

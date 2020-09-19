@@ -189,7 +189,7 @@ const styles = StyleSheet.create({
         width: 120,
         borderRadius: 10,
         margin: 5,
-        backgroundColor: 'rgb(18 18 18 / 32%)',
+        backgroundColor: '#12121226',
         overflow: 'hidden',
     },
     categoryItemTextContainer: {
@@ -198,7 +198,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         height: '100%',
-        backgroundColor: 'rgb(18 18 18 / 32%)',
+        backgroundColor: '#12121226',
         //opacity: .6
         paddingBottom: 10
     },
