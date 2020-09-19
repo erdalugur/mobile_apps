@@ -76,10 +76,13 @@ export function Phone(props: IconProps) {
     return <AntDesign name="phone" onPress={props.onPress} size={props.size || 30} color={props.color} />
 }
 export function CartIcon(props: IconProps) {
-    return <AntDesign name="hearto" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <AntDesign name="shoppingcart" onPress={props.onPress} size={props.size || 30} color={props.color} />
 }
 export function Heart(props: IconProps) {
     return <AntDesign name="hearto" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}
+export function HeartFull(props: IconProps) {
+    return <AntDesign name="heart" onPress={props.onPress} size={props.size || 30} color={props.color} />
 }
 export function Heat(props: IconProps) {
     return <FontAwesome5 name="temperature-high" onPress={props.onPress} size={props.size || 30} color={props.color} />
@@ -92,4 +95,11 @@ export function Time(props: IconProps) {
 }
 export function Pencil(props: IconProps) {
     return <FontAwesome name="pencil" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}
+export function Check(props: IconProps) {
+    return <MaterialCommunityIcons name="checkbox-intermediate" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}
+
+export function UnCheck(props: IconProps) {
+    return <MaterialCommunityIcons name="checkbox-blank-outline" onPress={props.onPress} size={props.size || 30} color={props.color} />
 }

@@ -48,7 +48,8 @@ export const SearchStackScreen = ({ navigation, route }: any) => {
             />
             <SearchStack.Screen
                 options={{
-                    title: 'Ürün'
+                    title: 'Ürün',
+                    header: () => null
                 }}
                 name={screens.product}
                 component={ProductScreen} />
