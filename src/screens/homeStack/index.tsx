@@ -16,7 +16,8 @@ import {
 
 import {
     HomeOptions,
-    CartOptions
+    CartOptions,
+    ProductNoteOptions
 } from '../../navigation/options'
 import { CartButton } from 'components'
 import theme from 'theme';
@@ -107,10 +108,7 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
                 component={PaymentScreen}
             />
             <HomeStack.Screen
-                options={{
-                    title: 'Notlar',
-                    headerRight: () => null
-                }}
+                options={ProductNoteOptions}
                 name={screens.noteScreen}
                 component={ProductNoteScreen}
             />

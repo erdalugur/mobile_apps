@@ -47,13 +47,18 @@ class Index extends React.PureComponent<Props, any> {
     }
 
     loadDetailAsync = async (item: Product) => {
-        this.setState({ item: item, loading: true });
+        this.setState({ loading: true });
         const result = await dataManager.loadProductDetail(item.ID);
         let items = this.props.items
         if (result.statusCode === 200 && result.data) {
             let __data__ = result.data[0]
             let _recommended_ = JSON.parse(__data__.RECOMMENDED) as { RECOMMENDEDID: number }[]
-            let extras = JSON.parse(__data__.EXTRAS) as IExtra[]
+            let extras = (JSON.parse(__data__.EXTRAS) as IExtra[] || []).map(x => {
+                x.CHECKED = false;
+                x.QUANTITY = 1;
+                x.TOTAL_PRICE = x.QUANTITY * x.PRICE
+                return x
+            })
             let recommended: Array<Product> = []
             if (_recommended_.length > 0) {
                 items.forEach(x => {
@@ -64,9 +69,11 @@ class Index extends React.PureComponent<Props, any> {
                     })
                 })
             }
-            this.setState({ recommended: recommended, extras: extras, loading: false })
+            if (item)
+                item.EXTRAS = extras
+            this.setState({ recommended: recommended, extras: extras, loading: false, item: item })
         } else {
-            this.setState({ loading: false });
+            this.setState({ loading: false, item });
         }
     }
 
@@ -104,14 +111,46 @@ class Index extends React.PureComponent<Props, any> {
         )
     }
 
+    getExtraIndex = (_x_: IExtra) => {
+        return this.state.item == null ? -1 : this.state.item.EXTRAS.findIndex(x => x.ID == _x_.ID)
+    }
+
+    handleExtra = (x: IExtra) => {
+        let i = this.getExtraIndex(x);
+        let item = this.state.item
+        if (i > -1 && item !== null) {
+            let extras = item.EXTRAS;
+            if (extras) {
+                extras[i].CHECKED = !extras[i].CHECKED
+                item.EXTRAS = extras;
+                this.setState({
+                    item: { ...item }
+                })
+            }
+        }
+    }
+
+    getPrice = () => {
+        if (this.state.item) {
+            let price = this.state.item?.PRICE || 0;
+            this.state.item.EXTRAS.filter(x => x.CHECKED).forEach(x => {
+                price += x.PRICE
+            })
+            return price.toFixed(2)
+        } else {
+            return '0'
+        }
+    }
+
     renderExtra = (x: IExtra) => {
         return (
             <View key={x.ID} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Text style={{ fontSize: 12 }}>{x.NAME}</Text>
                 <Text style={{ fontSize: 12 }}>{`${x.PRICE.toFixed(2)} ₺`}</Text>
-                <TouchableOpacity>
-                    <UnCheck color={theme.colors.white} size={25} />
-                    {/* <Check color={theme.colors.white} /> */}
+                <TouchableOpacity onPress={() => this.handleExtra(x)}>
+                    {x.CHECKED ? <Check color={theme.colors.white} size={25} />
+                        : <UnCheck color={theme.colors.white} size={25} />
+                    }
                 </TouchableOpacity>
             </View>
         )
@@ -124,7 +163,7 @@ class Index extends React.PureComponent<Props, any> {
 
     addTocart = () => {
         if (!this.checkCartItem()) {
-            this.props.dispatch({ type: actionTypes.ADD_TO_CART, payload: this.state.item });
+            this.props.dispatch({ type: actionTypes.ADD_TO_CART, payload: { ...this.state.item } });
             messageBox(messages.ADD_TO_CART_SUCCESS.replace('{0}', this.state.item?.NAME || ''))
         } else {
             this.props.dispatch({ type: actionTypes.DECREMENT, payload: this.state.item?.ID || 0 });
@@ -170,9 +209,27 @@ class Index extends React.PureComponent<Props, any> {
                     <ScrollView>
                         <View transparent style={{
                             paddingTop: 10,
-                            paddingHorizontal: 20,
+                            paddingHorizontal: 10,
                             zIndex: 9
                         }}>
+                            <View style={[styles.valuesContainer]}>
+                                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                    <Fire color={theme.colors.white} size={20} />
+                                    <Text style={{ fontSize: 12 }}>{`Kalori: ${x.CALORI ? x.CALORI : '-'}`}</Text>
+                                </View>
+                                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                    <Time color={theme.colors.white} size={22} />
+                                    <Text style={{ fontSize: 12 }}>{`Servis Sür: ${x.PREPARATION_TIME ? x.PREPARATION_TIME : '-'}`}</Text>
+                                </View>
+                                <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center' }}
+                                    onPress={() => this.props.navigation.navigate(screens.noteScreen, {
+                                        onNoteChange: (note: string) => this.onNoteChange(note),
+                                        note: this.state.item?.NOTES
+                                    })}>
+                                    <Pencil color={theme.colors.white} size={22} />
+                                    <Text style={{ fontSize: 12 }}>Not Ekle</Text>
+                                </TouchableOpacity>
+                            </View>
                             <View style={{
                                 padding: 20,
                                 borderRadius: 15,
@@ -187,35 +244,16 @@ class Index extends React.PureComponent<Props, any> {
                                     <Html html={x.DESCRIPTION} />
                                 </ScrollView>
                             </View>
-                            <View style={[styles.valuesContainer]}>
-                                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                                    <Fire color={theme.colors.white} size={20} />
-                                    <Text style={{ fontSize: 12 }}>{`Kalori: ${x.CALORI ? x.CALORI : '-'}`}</Text>
-                                </View>
-                                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                                    <Time color={theme.colors.white} size={22} />
-                                    <Text style={{ fontSize: 12 }}>{`Haz. Süresi: ${x.PREPARATION_TIME ? x.PREPARATION_TIME : '-'}`}</Text>
-                                </View>
-                                <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center' }}
-                                    onPress={() => this.props.navigation.navigate(screens.noteScreen, {
-                                        onNoteChange: (note: string) => this.onNoteChange(note),
-                                        note: this.state.item?.NOTES
-                                    })}>
-                                    <Pencil color={theme.colors.white} size={22} />
-                                    <Text style={{ fontSize: 12 }}>Not Ekle</Text>
-                                </TouchableOpacity>
-                            </View>
-                            {this.state.extras.length > 0 &&
+
+                            {this.state.item != null && this.state.item.EXTRAS.length > 0 &&
                                 <View style={[styles.extraContainer]}>
                                     <ScrollView>
-                                        {this.state.extras.map(e => this.renderExtra(e))}
+                                        {this.state.item.EXTRAS.map(e => this.renderExtra(e))}
                                     </ScrollView>
                                 </View>
                             }
                         </View>
                         <View style={{
-                            //flex: 1,
-                            //maxHeight: 200,
                             backgroundColor: theme.colors.card
                         }}>
                             {this.state.recommended.length > 0 && (<React.Fragment>

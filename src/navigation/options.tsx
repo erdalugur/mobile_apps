@@ -30,3 +30,8 @@ export const SearchOptions: IScreenOptions = {
     // headerShown: false
     header: () => null
 }
+
+export const ProductNoteOptions: IScreenOptions = {
+    title: 'Notlar',
+    headerRight: () => null
+}

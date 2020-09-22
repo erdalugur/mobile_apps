@@ -97,7 +97,7 @@ export function Pencil(props: IconProps) {
     return <FontAwesome name="pencil" onPress={props.onPress} size={props.size || 30} color={props.color} />
 }
 export function Check(props: IconProps) {
-    return <MaterialCommunityIcons name="checkbox-intermediate" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <AntDesign name="checksquareo" onPress={props.onPress} size={props.size || 30} color={props.color} />
 }
 
 export function UnCheck(props: IconProps) {
@@ -106,4 +106,11 @@ export function UnCheck(props: IconProps) {
 
 export function Play(props: IconProps) {
     return <FontAwesome name="youtube-play" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}
+export function Plus2(props: IconProps) {
+    return <AntDesign name="plus" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}
+
+export function Minus2(props: IconProps) {
+    return <AntDesign name="minus" onPress={props.onPress} size={props.size || 30} color={props.color} />
 }

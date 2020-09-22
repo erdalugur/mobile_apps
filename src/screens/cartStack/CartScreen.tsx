@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { AppState } from 'myRedux';
 import theme from 'theme';
 import { SingleMultiType, IAction, actionTypes } from 'myRedux/types';
-import { Plus, Minus, QRCode, Table, EmojiNeutral, Phone } from 'icons';
+import { Plus, Minus, QRCode, Table, EmojiNeutral, Phone, Pencil, Plus2, Minus2 } from 'icons';
 import { screens } from 'navigation';
 import { messageBox, messages, applicationManager } from 'utils';
 import { dataManager } from 'api';
@@ -28,6 +28,7 @@ interface State {
     enableActions: boolean
     packageOrder: boolean
     enableQR: boolean
+    displayList: number[]
 }
 class Index extends React.PureComponent<Props, State> {
 
@@ -35,7 +36,8 @@ class Index extends React.PureComponent<Props, State> {
         table: '',
         enableActions: false,
         packageOrder: false,
-        enableQR: true
+        enableQR: true,
+        displayList: []
     }
 
     componentDidMount = async () => {
@@ -64,33 +66,119 @@ class Index extends React.PureComponent<Props, State> {
         return `${price.toFixed(2)} ₺`
     }
 
+    renderExtras = (key: string) => {
+        let items = this.props.cart.items[key].EXTRAS || []
+        if (items.length > 0) {
+            return (
+                <View style={[styles.extraContainer]}>
+                    <Text style={[styles.extraTitle]}>Esktralar</Text>
+                    {items.map(e => (
+                        <View key={e.ID} style={{
+                            paddingHorizontal: 5,
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            height: 35
+                        }}>
+                            <Text >{e.NAME}</Text>
+                            <Text >{`→ ${e.TOTAL_PRICE.toFixed(2)} ₺`}</Text>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderRadius: 5, backgroundColor: theme.colors.border }}>
+                                <TouchableOpacity style={[styles.extraButton]} onPress={() => {
+                                    this.props.dispatch({ type: actionTypes.HANDLE_EXTRA, payload: { key: key, ID: e.ID, QUANTITY: e.QUANTITY + 1 } })
+                                }}>
+                                    <Plus2 size={20} color={theme.colors.white} />
+                                </TouchableOpacity>
+                                <Text style={{ width: 20, textAlign: 'center' }}>{(e.QUANTITY || 1).toString()}</Text>
+                                <TouchableOpacity style={[styles.extraButton]} onPress={() => {
+                                    this.props.dispatch({ type: actionTypes.HANDLE_EXTRA, payload: { key: key, ID: e.ID, QUANTITY: e.QUANTITY - 1 } })
+                                }}>
+                                    <Minus2 size={25} color={theme.colors.white} />
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    ))}
+                </View>
+            )
+        } else {
+            null
+        }
+    }
+
+    renderNote = (key: string) => {
+        let item = this.props.cart.items[key]
+        return (
+            <View style={[styles.extraContainer]}>
+                <Text style={[styles.extraTitle]}>Notlar</Text>
+                <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                }}>
+                    <Text style={{ paddingHorizontal: 5 }}>{item.NOTES}</Text>
+                    <TouchableOpacity style={{}} onPress={() => this.props.navigation.navigate(screens.noteScreen, {
+                        onNoteChange: (note: string) => {
+                            this.props.dispatch({ type: actionTypes.SET_NOTE, payload: { key: key, note: note } })
+                        },
+                        note: item.NOTES
+                    })}>
+                        <Pencil color={theme.colors.white} size={20} />
+                    </TouchableOpacity>
+                </View>
+
+            </View>
+        )
+    }
+
     RenderItems = () => {
         let { cart } = this.props
         return Object.keys(cart.items).map(x => (
-            <View
-                style={[styles.itemContainer]}
-                key={cart.items[x].ID}>
-                <TouchableOpacity
-                    activeOpacity={0.8}
-                    onPress={() => {
-                        this.props.navigation.navigate(screens.product, { item: cart.items[x] })
-                    }}
-                    style={[styles.imageContainer]}>
-                    <Image source={{ uri: cart.items[x].PREVIEW }} style={[styles.image]} />
-                </TouchableOpacity>
-                <View style={[styles.cartInfo]}>
-                    <Text style={{ textTransform: 'capitalize', fontSize: 20 }}>{cart.items[x].NAME}</Text>
-                    <Text>{`Fiyat → ${cart.items[x].PRICE.toFixed(2).toString()} ₺`}</Text>
-                    <Text>{`Adet → ${cart.items[x].quantity.toString()}`}</Text>
-                    <Text>{`Toplam Fiyat → ${cart.items[x].totalPrice.toFixed(2).toString()} ₺`}</Text>
+            <React.Fragment key={cart.items[x].ID}>
+                <View style={[styles.itemContainer]}>
+                    <TouchableOpacity
+                        activeOpacity={0.8}
+                        onPress={() => {
+                            this.props.navigation.navigate(screens.product, { item: cart.items[x] })
+                        }}
+                        style={[styles.imageContainer]}>
+                        <Image source={{ uri: cart.items[x].PREVIEW }} style={[styles.image]} />
+                    </TouchableOpacity>
+                    <View style={[styles.cartInfo]}>
+                        <Text style={{ textTransform: 'capitalize', fontSize: 20 }}>{cart.items[x].NAME}</Text>
+                        <Text>{`Fiyat → ${cart.items[x].PRICE.toFixed(2).toString()} ₺`}</Text>
+                        {/* {this.renderExtras(x)} */}
+                        <Text>{`Toplam Fiyat → ${cart.items[x].totalPrice.toFixed(2).toString()} ₺`}</Text>
+                        <TouchableOpacity onPress={() => {
+                            this.setState((state: State) => {
+                                let index = state.displayList.indexOf(cart.items[x].ID)
+                                if (index > -1)
+                                    state.displayList.splice(index, 1)
+                                else
+                                    state.displayList.push(cart.items[x].ID)
+
+                                return {
+                                    displayList: [...state.displayList]
+                                }
+                            })
+                        }}>
+                            <Text>{`Diğer Bilgileri ${this.state.displayList.indexOf(cart.items[x].ID) > -1 ? 'Gizle' : 'Göster'}`}</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={[styles.buttonContainer]}>
+                        <Plus color={theme.colors.text}
+                            onPress={() => this.props.dispatch({ type: actionTypes.INCREMENT, payload: cart.items[x].ID })} />
+                        <View>
+                            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{cart.items[x].quantity.toString()}</Text>
+                        </View>
+                        <Minus color={theme.colors.text}
+                            onPress={() => this.props.dispatch({ type: actionTypes.DECREMENT, payload: cart.items[x].ID })} />
+                    </View>
                 </View>
-                <View style={[styles.buttonContainer]}>
-                    <Plus color={theme.colors.text}
-                        onPress={() => this.props.dispatch({ type: actionTypes.INCREMENT, payload: cart.items[x].ID })} />
-                    <Minus color={theme.colors.text}
-                        onPress={() => this.props.dispatch({ type: actionTypes.DECREMENT, payload: cart.items[x].ID })} />
-                </View>
-            </View>
+                {this.state.displayList.indexOf(cart.items[x].ID) > -1 && (
+                    <View style={{ padding: 10 }}>
+                        {this.renderExtras(x)}
+                        {this.renderNote(x)}
+                    </View>
+                )}
+            </React.Fragment>
         ));
     }
 
@@ -224,6 +312,7 @@ const styles = StyleSheet.create({
         width: '10%',
         height: '100%',
         justifyContent: 'space-around',
+        alignItems: 'center',
         opacity: 0.8
     },
     imageContainer: {
@@ -274,4 +363,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         //textAlign: 'center'
     },
+    extraTitle: { backgroundColor: theme.colors.border, paddingHorizontal: 5 },
+    extraContainer: { marginBottom: 10, borderWidth: 1, borderColor: theme.colors.border },
+    extraButton: {
+        width: 25,
+        justifyContent: 'center',
+        alignItems: 'center'
+    }
 });

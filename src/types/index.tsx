@@ -30,6 +30,9 @@ export interface IExtra {
     ID: number
     NAME: string
     PRICE: number
+    CHECKED: boolean
+    QUANTITY: number
+    TOTAL_PRICE: number
 }
 
 export interface CartItem extends Product {

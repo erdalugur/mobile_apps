@@ -24,7 +24,8 @@ import {
     AdditionScreen,
     CartQRScreen,
     ReadQRTableScreen,
-    CartResultScreen
+    CartResultScreen,
+    ProductNoteScreen
 } from 'screens'
 
 import { AntDesign } from '@expo/vector-icons';
@@ -43,6 +44,11 @@ export const CartStackScreen = () => (
             options={CartOptions}
             name={screens.cart}
             component={CartScreen}
+        />
+        <CartStack.Screen
+            options={CartOptions}
+            name={screens.noteScreen}
+            component={ProductNoteScreen}
         />
     </CartStack.Navigator>
 )

@@ -42,7 +42,7 @@ export class ProductNoteScreen extends React.PureComponent<Props, any>{
                     flexDirection: 'row',
 
                 }}>
-                    <View style={[styles.buttonContainer, { borderColor: theme.colors.border, borderWidth: 1 }]}>
+                    <View style={[styles.buttonContainer, { backgroundColor: theme.colors.border }]}>
                         <TouchableOpacity style={[styles.button]} onPress={this.addNote}>
                             <Text>Tamam</Text>
                         </TouchableOpacity>

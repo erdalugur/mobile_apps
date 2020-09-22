@@ -1,7 +1,6 @@
 import { IAction, IState, actionTypes } from './types'
-import { CartItem, UserModel } from 'types';
-
-const InitialState: IState = getInitialState({});
+import { ADD_TO_CART, INCREMENT, DECREMENT, SET_NOTE, HANDLE_EXTRA } from './cart'
+export const InitialState: IState = getInitialState({});
 
 export default function (state: IState = InitialState, action: IAction<any>): IState {
     switch (action.type) {
@@ -20,44 +19,19 @@ export default function (state: IState = InitialState, action: IAction<any>): IS
         case actionTypes.SET_SCREEN:
             console.log(action.payload)
             return { ...state, screen: action.payload }
+        case actionTypes.SET_NOTE:
+            return SET_NOTE(state, action.payload)
+        case actionTypes.HANDLE_EXTRA:
+            return HANDLE_EXTRA(state, action.payload)
         default:
             return state
     }
-}
-
-function INCREMENT(state: IState = InitialState, payload: string) {
-    state.cart.items[payload].quantity++;
-    state.cart.items[payload].totalPrice = state.cart.items[payload].quantity * state.cart.items[payload].PRICE
-    return { ...state, cart: { ...state.cart } }
-}
-
-function DECREMENT(state: IState = InitialState, payload: string) {
-    let q = state.cart.items[payload].quantity
-    if (q > 1) {
-        state.cart.items[payload].quantity--;
-        state.cart.items[payload].totalPrice = state.cart.items[payload].quantity * state.cart.items[payload].PRICE
-
-    }
-    else
-        delete state.cart.items[payload];
-    return { ...state, cart: { ...state.cart } }
 }
 
 function SET_TOKEN(state: IState = InitialState, payload: string) {
     return { ...state, token: payload };
 }
 
-function ADD_TO_CART(state: IState = InitialState, payload: CartItem) {
-    const { ID } = payload;
-    if (!state.cart.items[ID])
-        payload.quantity = 1;
-    else if (state.cart.items[ID])
-        payload.quantity++;
-
-    payload.totalPrice = payload.quantity * payload.PRICE;
-    state.cart.items[ID] = { ...payload };
-    return { ...state, cart: { ...state.cart } };
-}
 
 export function getInitialState(__data__: any): IState {
     return {
