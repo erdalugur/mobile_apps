@@ -19,6 +19,8 @@ export { ProductsWithoutImageView } from './ProductsWithoutImageView'
 export { AddToCartHeart } from './AddToCartHeart'
 export { ProductExtra } from './ProductExtra'
 export { Layout } from './Layout'
+export { ProductNote } from './ProductNote'
+
 
 
 

@@ -35,3 +35,6 @@ export const ProductNoteOptions: IScreenOptions = {
     title: 'Notlar',
     headerRight: () => null
 }
+export const SurveyOptions: IScreenOptions = {
+    title: "Anket"
+}

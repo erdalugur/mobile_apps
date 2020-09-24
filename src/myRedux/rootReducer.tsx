@@ -1,5 +1,6 @@
 import { IAction, IState, actionTypes } from './types'
 import { ADD_TO_CART, INCREMENT, DECREMENT, SET_NOTE, HANDLE_EXTRA } from './cart'
+import { ProductTreeModel } from 'types';
 export const InitialState: IState = getInitialState({});
 
 export default function (state: IState = InitialState, action: IAction<any>): IState {
@@ -32,6 +33,27 @@ function SET_TOKEN(state: IState = InitialState, payload: string) {
     return { ...state, token: payload };
 }
 
+function flattenExtras(data: any) {
+    let response = {} as any
+    data.forEach((e: any) => {
+        e.QUANTITY = 0;
+        e.TOTAL_PRICE = 0;
+        e.CHECKED = false;
+        response[e.ID] = e
+    })
+    return response
+}
+function flattenProducts(data: any) {
+    let items = (data.JSON && JSON.parse(data.JSON) || []) as any[]
+    items = items.map(x => {
+        x.PRODUCTS.map((p: any) => {
+            p.EXTRAS = flattenExtras(p.EXTRAS)
+            return p
+        });
+        return x;
+    })
+    return items;
+}
 
 export function getInitialState(__data__: any): IState {
     return {
@@ -53,8 +75,9 @@ export function getInitialState(__data__: any): IState {
         },
         menu: {
             domain: __data__.DOMAIN && JSON.parse(__data__.DOMAIN) || {},
-            tree: __data__.JSON && JSON.parse(__data__.JSON) || [],
+            tree: flattenProducts(__data__),
             status: "fetching"
         }
     }
 }
+

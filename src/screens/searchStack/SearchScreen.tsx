@@ -9,13 +9,14 @@ import { AppState } from 'myRedux';
 import { screens } from 'navigation';
 import { IAction, SingleMultiType, actionTypes } from 'myRedux/types';
 import { dataManager } from 'api';
+import { constands } from 'constands';
 
 interface Props extends NavigationProps<any, any> {
     items: ProductTreeModel[]
     dispatch: (param: IAction<number | Product | FetchAllModel>) => void
-    cart: SingleMultiType<any, {
+    cart: {
         [key: string]: CartItem;
-    }>
+    }
 }
 
 interface State {
@@ -64,7 +65,7 @@ class Index extends React.PureComponent<Props, State> {
                 </TouchableOpacity>
                 <View style={[styles.cartInfo]}>
                     <Text style={{ textTransform: 'capitalize', fontSize: 20 }}>{x.NAME}</Text>
-                    <Text>{`Fiyat → ${x.PRICE.toFixed(2).toString()} ₺`}</Text>
+                    <Text>{`Fiyat ${constands.arrowRight} ${x.PRICE.toFixed(2).toString()} ${constands.try}`}</Text>
                     <AddToCart item={x} />
                 </View>
             </View>

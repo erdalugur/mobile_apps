@@ -115,3 +115,6 @@ export function Plus2(props: IconProps) {
 export function Minus2(props: IconProps) {
     return <AntDesign name="minus" onPress={props.onPress} size={props.size || 30} color={props.color} />
 }
+export function Survey(props: IconProps) {
+    return <MaterialIcons name="question-answer" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}

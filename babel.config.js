@@ -17,7 +17,8 @@ module.exports = function (api) {
             navigation: "./src/navigation",
             types: "./src/types",
             icons: "./src/icons",
-            utils: "./src/utils"
+            utils: "./src/utils",
+            constands: "./src/constands"
           }
         }
       ]

@@ -10,6 +10,7 @@ import { Plus, Minus, QRCode, Table, EmojiNeutral, Phone, Pencil, Plus2, Minus2 
 import { screens } from 'navigation';
 import { messageBox, messages, applicationManager } from 'utils';
 import { dataManager } from 'api';
+import { constands } from 'constands';
 
 type screenOptions = 'Home' | 'Search' | 'Cashier' | 'Kitchen'
 
@@ -66,7 +67,7 @@ class Index extends React.PureComponent<Props, State> {
     handleExtra = (key: string, extra: IExtra) => {
         if (extra.QUANTITY < 0) return;
         let item = this.props.cart[key]
-        item.EXTRAS = { ...item.EXTRAS, [extra.ID]: { ...extra } }
+        item.EXTRAS = Object.assign({}, item.EXTRAS, { [extra.ID]: extra })
         this.props.dispatch({ type: actionTypes.HANDLE_EXTRA, payload: { ...item } })
     }
 
@@ -118,7 +119,6 @@ class Index extends React.PureComponent<Props, State> {
 
     RenderItems = () => {
         let { cart } = this.props
-        console.log(cart)
         return Object.keys(cart).map(x => (
             <View key={cart[x].ID} style={{ borderBottomColor: theme.colors.border, borderBottomWidth: 1 }}>
                 <View style={[styles.itemContainer]}>
@@ -132,9 +132,9 @@ class Index extends React.PureComponent<Props, State> {
                     </TouchableOpacity>
                     <View style={[styles.cartInfo]}>
                         <Text style={{ textTransform: 'capitalize', fontSize: 20 }}>{cart[x].NAME}</Text>
-                        <Text>{`Fiyat → ${cart[x].PRICE.toFixed(2).toString()} ₺`}</Text>
+                        <Text>{`Fiyat ${constands.arrowRight} ${cart[x].PRICE.toFixed(2).toString()} ₺`}</Text>
                         {/* {this.renderExtras(x)} */}
-                        <Text>{`Toplam Fiyat → ${cart[x].totalPrice.toFixed(2).toString()} ₺`}</Text>
+                        <Text>{`Toplam Fiyat ${constands.arrowRight} ${cart[x].totalPrice.toFixed(2).toString()} ₺`}</Text>
                         <TouchableOpacity onPress={() => {
                             this.setState((state: State) => {
                                 let index = state.displayList.indexOf(cart[x].ID)

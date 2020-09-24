@@ -17,15 +17,15 @@ import {
 import {
     HomeOptions,
     CartOptions,
-    ProductNoteOptions
+    ProductNoteOptions, SurveyOptions
 } from '../../navigation/options'
-import { CartButton } from 'components'
+import { CartButton, View } from 'components'
 import theme from 'theme';
-import { HeaderBack } from 'icons'
+import { HeaderBack, Survey } from 'icons'
 import { screens } from 'navigation'
 import { VideoScreen } from './VideoScreen';
-import { sizeManager } from 'utils';
-
+import { SurveyScreen } from './SurveyScreen'
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 export const HomeStack = createStackNavigator();
 
@@ -42,7 +42,19 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
         <HomeStack.Navigator
             headerMode="screen"
             screenOptions={{
-                headerRight: ({ tintColor }: any) => <CartButton />,
+                headerRight: ({ tintColor }: any) => (
+                    <View style={{
+                        width: 80,
+                        flexDirection: 'row',
+                        backgroundColor: 'transparent',
+                        alignItems: 'center'
+                    }}>
+                        <CartButton />
+                        <TouchableOpacity style={{ marginTop: 2 }} onPress={() => navigation.navigate(screens.surveyScreen)}>
+                            <Survey color={theme.colors.white} size={25} />
+                        </TouchableOpacity>
+                    </View>
+                ),
                 headerBackTitleVisible: false,
                 headerBackTitleStyle: { color: theme.colors.text },
                 headerBackImage: ({ tintColor }: any) => <HeaderBack />
@@ -118,6 +130,11 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
                 options={ProductNoteOptions}
                 name={screens.noteScreen}
                 component={ProductNoteScreen}
+            />
+            <HomeStack.Screen
+                options={SurveyOptions}
+                name={screens.surveyScreen}
+                component={SurveyScreen}
             />
             <HomeStack.Screen
                 options={{

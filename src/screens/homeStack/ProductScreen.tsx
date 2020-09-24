@@ -12,6 +12,7 @@ import { screens } from 'navigation';
 import { dataManager } from 'api';
 import { AppState } from 'myRedux';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { constands } from 'constands';
 
 interface Props extends NavigationProps<{
     item: Product
@@ -183,6 +184,16 @@ class Index extends React.PureComponent<Props, any> {
         })
     }
 
+    getTime = (x: Product) => {
+        let time = x.PREPARATION_TIME ? x.PREPARATION_TIME : constands.notDefined
+        return `Servis Sür: ${time}`
+    }
+
+    getCalori = (x: Product) => {
+        let cal = x.CALORI ? x.CALORI : constands.notDefined
+        return `Kalori: ${cal}`
+    }
+
     render() {
         const x = this.state.item as Product
         return (
@@ -219,11 +230,11 @@ class Index extends React.PureComponent<Props, any> {
                                     <View style={[styles.valuesContainer]}>
                                         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                                             <Fire color={theme.colors.white} size={20} />
-                                            <Text style={{ fontSize: 12 }}>{`Kalori: ${x.CALORI ? x.CALORI : '-'}`}</Text>
+                                            <Text style={{ fontSize: 12 }}>{this.getCalori(x)}</Text>
                                         </View>
                                         <View style={{ justifyContent: 'center', alignItems: 'center' }}>
                                             <Time color={theme.colors.white} size={22} />
-                                            <Text style={{ fontSize: 12 }}>{`Servis Sür: ${x.PREPARATION_TIME ? x.PREPARATION_TIME : '-'}`}</Text>
+                                            <Text style={{ fontSize: 12 }}>{this.getTime(x)}</Text>
                                         </View>
                                         <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center' }}
                                             onPress={() => this.props.navigation.navigate(screens.noteScreen, {
@@ -242,20 +253,20 @@ class Index extends React.PureComponent<Props, any> {
                                     }}>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                             <Text component="h6" style={{ fontWeight: 'bold' }}>{x.NAME}</Text>
-                                            <Text style={{ fontWeight: 'bold' }}>{`${x.PRICE.toFixed(2)} ₺`}</Text>
+                                            <Text style={{ fontWeight: 'bold' }}>{`${x.PRICE.toFixed(2)} ${constands.try}`}</Text>
                                         </View>
                                         <ScrollView>
                                             <Html html={x.DESCRIPTION} />
                                         </ScrollView>
                                     </View>
 
-                                    {this.state.item != null && Object.keys(this.state.item.EXTRAS).length > 0 &&
+                                    {this.state.item != null && Object.keys(this.state.item.EXTRAS).length > 0 && (
                                         <View style={[styles.extraContainer]}>
                                             <ScrollView>
                                                 {Object.keys(this.state.item.EXTRAS).map(e => this.renderExtra(parseInt(e)))}
                                             </ScrollView>
                                         </View>
-                                    }
+                                    )}
                                 </View>
                                 <View style={{
                                     backgroundColor: theme.colors.card
@@ -289,7 +300,7 @@ const mapState = (state: AppState) => ({
 export default connect(mapState)(Index)
 
 
-const bgColor = '#ffffff4d'
+const bgColor = '#00000057'
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -337,7 +348,7 @@ const styles = StyleSheet.create({
     imageBottom2: {
         marginHorizontal: 10,
         width: 100,
-        //backgroundColor: '#12121226',
+        backgroundColor: 'transparent',
         borderRadius: 10
     },
     headerButton: {
