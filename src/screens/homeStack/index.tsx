@@ -24,6 +24,7 @@ import theme from 'theme';
 import { HeaderBack } from 'icons'
 import { screens } from 'navigation'
 import { VideoScreen } from './VideoScreen';
+import { sizeManager } from 'utils';
 
 
 export const HomeStack = createStackNavigator();
@@ -38,12 +39,14 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
     })
 
     return (
-        <HomeStack.Navigator screenOptions={{
-            headerRight: ({ tintColor }: any) => <CartButton />,
-            headerBackTitleVisible: false,
-            headerBackTitleStyle: { color: theme.colors.text },
-            headerBackImage: ({ tintColor }: any) => <HeaderBack />
-        }}>
+        <HomeStack.Navigator
+            headerMode="screen"
+            screenOptions={{
+                headerRight: ({ tintColor }: any) => <CartButton />,
+                headerBackTitleVisible: false,
+                headerBackTitleStyle: { color: theme.colors.text },
+                headerBackImage: ({ tintColor }: any) => <HeaderBack />
+            }}>
             <HomeStack.Screen
                 options={HomeOptions}
                 name={screens.home}
@@ -71,7 +74,10 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
             />
             <HomeStack.Screen
                 options={{
-                    title: 'Ürünler',
+                    title: '',
+                    headerStyle: {
+                        backgroundColor: 'transparent'
+                    },
                     header: () => null
                 }}
                 name={screens.product}

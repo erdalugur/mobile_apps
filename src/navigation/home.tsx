@@ -32,6 +32,7 @@ export const HomeTabs = ({ navigation, route }: { navigation: any, route: any })
                     title: "Menü",
 
                 }}
+
                 component={HomeStackScreen}
                 name={screens.home} />
 

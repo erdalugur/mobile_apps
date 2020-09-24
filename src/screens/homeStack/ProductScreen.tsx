@@ -1,9 +1,9 @@
 import React from 'react';
-import { StyleSheet, Image, Dimensions, ImageBackground, ActivityIndicator, Modal } from 'react-native';
-import { View, Text, Html, CartButton, AddToCartHeart, AddToCart, ProductExtra } from 'components'
+import { StyleSheet, Image, Dimensions, ImageBackground, ActivityIndicator, Modal, Platform, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, Html, CartButton, AddToCartHeart, AddToCart, ProductExtra, Layout } from 'components'
 import { NavigationProps, Product, ProductTreeModel, CartItem, IExtra } from 'types';
 import theme from 'theme';
-import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { } from 'react-native-gesture-handler';
 import { IAction, actionTypes } from 'myRedux/types';
 import { connect } from 'react-redux';
 import { messageBox, messages, sizeManager } from 'utils'
@@ -11,6 +11,7 @@ import { Back, CartIcon, Plus, Heart, Fire, Time, Pencil, Check, UnCheck, Play, 
 import { screens } from 'navigation';
 import { dataManager } from 'api';
 import { AppState } from 'myRedux';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface Props extends NavigationProps<{
     item: Product
@@ -79,7 +80,7 @@ class Index extends React.PureComponent<Props, any> {
     }
 
     renderHeader = () => {
-        const style = sizeManager.isIphoneX() ? { paddingTop: 50 } : {}
+        const style = sizeManager.isIphoneX() ? { paddingTop: 50 } : (Platform.OS !== 'web' ? { paddingTop: 20 } : {});
         return (
             <View style={[styles.header, style]}>
                 <View style={[styles.headerButton]}>
@@ -183,100 +184,99 @@ class Index extends React.PureComponent<Props, any> {
     }
 
     render() {
-        const x = this.state.item
-        if (x === null) {
-            return (
-                <ActivityIndicator />
-            )
-        }
+        const x = this.state.item as Product
         return (
-            <View style={styles.container}>
-                <View style={{
-                    flex: 1,
-                    maxHeight: (height / 2) - 100,
-                    minHeight: (height / 2) - 100
-                }}>
-                    {this.renderHeader()}
-                    <Image source={{ uri: x.PREVIEW }} style={[styles.image]} />
-                    <View style={[styles.imageBottomContainer]} transparent>
-                        <View style={[styles.imageBottom, { opacity: x.VIDEO_URL ? 1 : 0 }]}>
-                            <TouchableOpacity
-                                onPress={() => x.VIDEO_URL && this.props.navigation.navigate(screens.videoScreen, { uri: x.VIDEO_URL })}>
-                                <Play color={theme.colors.white} size={25} />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={[!this.checkCartItem() ? styles.imageBottom : styles.imageBottom2]}>
-                            {this.checkCartItem() ? <AddToCart style={{ borderWidth: 0, width: 100 }} item={this.state.item as Product} /> :
-                                <AddToCartHeart item={this.state.item} />}
-                        </View>
-                    </View>
-                </View>
-                <View style={{ flex: 2, backgroundColor: theme.colors.card, maxHeight: (height / 3) * 2 }}>
-                    <ScrollView>
-                        <View transparent style={{
-                            paddingTop: 10,
-                            paddingHorizontal: 10,
-                            zIndex: 9
-                        }}>
-                            <View style={[styles.valuesContainer]}>
-                                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                                    <Fire color={theme.colors.white} size={20} />
-                                    <Text style={{ fontSize: 12 }}>{`Kalori: ${x.CALORI ? x.CALORI : '-'}`}</Text>
-                                </View>
-                                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                                    <Time color={theme.colors.white} size={22} />
-                                    <Text style={{ fontSize: 12 }}>{`Servis Sür: ${x.PREPARATION_TIME ? x.PREPARATION_TIME : '-'}`}</Text>
-                                </View>
-                                <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center' }}
-                                    onPress={() => this.props.navigation.navigate(screens.noteScreen, {
-                                        onNoteChange: (note: string) => this.onNoteChange(note),
-                                        note: this.state.item?.NOTES
-                                    })}>
-                                    <Pencil color={theme.colors.white} size={22} />
-                                    <Text style={{ fontSize: 12 }}>{`${this.state.item?.NOTES ? 'Notu Düzenle' : 'Not Ekle'}`}</Text>
-                                </TouchableOpacity>
-                            </View>
-                            <View style={{
-                                padding: 20,
-                                borderRadius: 15,
-                                maxHeight: height / 4,
-                                marginBottom: 10
-                            }}>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <Text component="h6" style={{ fontWeight: 'bold' }}>{x.NAME}</Text>
-                                    <Text style={{ fontWeight: 'bold' }}>{`${x.PRICE.toFixed(2)} ₺`}</Text>
-                                </View>
-                                <ScrollView>
-                                    <Html html={x.DESCRIPTION} />
-                                </ScrollView>
-                            </View>
-
-                            {this.state.item != null && Object.keys(this.state.item.EXTRAS).length > 0 &&
-                                <View style={[styles.extraContainer]}>
-                                    <ScrollView>
-                                        {Object.keys(this.state.item.EXTRAS).map(e => this.renderExtra(parseInt(e)))}
-                                    </ScrollView>
-                                </View>
-                            }
-                        </View>
+            <Layout loading={x === null} style={styles.container}>
+                {x !== null && (
+                    <React.Fragment>
                         <View style={{
-                            backgroundColor: theme.colors.card
+                            flex: 1,
+                            maxHeight: (height / 2) - 100,
+                            minHeight: (height / 2) - 100
                         }}>
-                            {this.state.recommended.length > 0 && (<React.Fragment>
-                                <View style={{ paddingHorizontal: 10, paddingVertical: 5 }}>
-                                    <Text component="h6">Önerilerimiz</Text>
+                            {this.renderHeader()}
+                            <Image source={{ uri: x.PREVIEW }} style={[styles.image]} />
+                            <View style={[styles.imageBottomContainer]} transparent>
+                                <View style={[styles.imageBottom, { opacity: x.VIDEO_URL ? 1 : 0 }]}>
+                                    <TouchableOpacity
+                                        onPress={() => x.VIDEO_URL && this.props.navigation.navigate(screens.videoScreen, { uri: x.VIDEO_URL })}>
+                                        <Play color={theme.colors.white} size={25} />
+                                    </TouchableOpacity>
                                 </View>
-                                {this.state.recommended.length > 0 &&
-                                    <ScrollView horizontal>
-                                        {this.state.recommended.map(x => this.renderRecommended(x))}
-                                    </ScrollView>
-                                }
-                            </React.Fragment>
-                            )}
+                                <View style={[!this.checkCartItem() ? styles.imageBottom : styles.imageBottom2]}>
+                                    {this.checkCartItem() ? <AddToCart style={{ borderWidth: 0, width: 100 }} item={this.state.item as Product} /> :
+                                        <AddToCartHeart item={this.state.item} />}
+                                </View>
+                            </View>
                         </View>
-                    </ScrollView>
-                </View>
-            </View >
+                        <View style={{ flex: 2, backgroundColor: theme.colors.card, maxHeight: (height / 3) * 2 }}>
+                            <ScrollView>
+                                <View transparent style={{
+                                    paddingTop: 10,
+                                    paddingHorizontal: 10,
+                                    zIndex: 9
+                                }}>
+                                    <View style={[styles.valuesContainer]}>
+                                        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                            <Fire color={theme.colors.white} size={20} />
+                                            <Text style={{ fontSize: 12 }}>{`Kalori: ${x.CALORI ? x.CALORI : '-'}`}</Text>
+                                        </View>
+                                        <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                                            <Time color={theme.colors.white} size={22} />
+                                            <Text style={{ fontSize: 12 }}>{`Servis Sür: ${x.PREPARATION_TIME ? x.PREPARATION_TIME : '-'}`}</Text>
+                                        </View>
+                                        <TouchableOpacity style={{ justifyContent: 'center', alignItems: 'center' }}
+                                            onPress={() => this.props.navigation.navigate(screens.noteScreen, {
+                                                onNoteChange: (note: string) => this.onNoteChange(note),
+                                                note: this.state.item?.NOTES
+                                            })}>
+                                            <Pencil color={theme.colors.white} size={22} />
+                                            <Text style={{ fontSize: 12 }}>{`${this.state.item?.NOTES ? 'Notu Düzenle' : 'Not Ekle'}`}</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                    <View style={{
+                                        padding: 20,
+                                        borderRadius: 15,
+                                        maxHeight: height / 4,
+                                        marginBottom: 10
+                                    }}>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                            <Text component="h6" style={{ fontWeight: 'bold' }}>{x.NAME}</Text>
+                                            <Text style={{ fontWeight: 'bold' }}>{`${x.PRICE.toFixed(2)} ₺`}</Text>
+                                        </View>
+                                        <ScrollView>
+                                            <Html html={x.DESCRIPTION} />
+                                        </ScrollView>
+                                    </View>
+
+                                    {this.state.item != null && Object.keys(this.state.item.EXTRAS).length > 0 &&
+                                        <View style={[styles.extraContainer]}>
+                                            <ScrollView>
+                                                {Object.keys(this.state.item.EXTRAS).map(e => this.renderExtra(parseInt(e)))}
+                                            </ScrollView>
+                                        </View>
+                                    }
+                                </View>
+                                <View style={{
+                                    backgroundColor: theme.colors.card
+                                }}>
+                                    {this.state.recommended.length > 0 && (<React.Fragment>
+                                        <View style={{ paddingHorizontal: 10, paddingVertical: 5 }}>
+                                            <Text component="h6">Önerilerimiz</Text>
+                                        </View>
+                                        {this.state.recommended.length > 0 &&
+                                            <ScrollView horizontal>
+                                                {this.state.recommended.map(x => this.renderRecommended(x))}
+                                            </ScrollView>
+                                        }
+                                    </React.Fragment>
+                                    )}
+                                </View>
+                            </ScrollView>
+                        </View>
+                    </React.Fragment>)
+                }
+            </Layout>
         );
     }
 
@@ -288,11 +288,12 @@ const mapState = (state: AppState) => ({
 })
 export default connect(mapState)(Index)
 
+
 const bgColor = '#ffffff4d'
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: theme.colors.card
+        backgroundColor: theme.colors.card,
     },
     header: {
         height: 60,
@@ -342,7 +343,8 @@ const styles = StyleSheet.create({
     headerButton: {
         width: 45, borderRadius: 10,
         backgroundColor: bgColor,//'#12121226',
-        alignItems: 'center', height: 45, justifyContent: 'center'
+        alignItems: 'center', height: 45,
+        justifyContent: 'center'
     },
     extraContainer: {
         paddingHorizontal: 20,

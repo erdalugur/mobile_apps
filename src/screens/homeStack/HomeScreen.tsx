@@ -1,6 +1,6 @@
 import React from 'react';
 import { RefreshControl, ScrollView, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
-import { View, Slider, Text } from 'components'
+import { View, Slider, Text, Layout } from 'components'
 import { NavigationProps, FetchAllModel, ProductTreeModel } from 'types'
 import { connect } from 'react-redux';
 import { AppState, IState } from 'myRedux';
@@ -48,15 +48,6 @@ class Home extends React.PureComponent<Props, State> {
         let result = await dataManager.loadAll();
         this.props.dispatch({ type: actionTypes.FETCH_ALL, payload: result });
         this.setState({ loading: false });
-    }
-
-    renderSpinner = () => {
-        return (
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <ActivityIndicator color={theme.colors.white} size={40} />
-                <Text>Yükleniyor...</Text>
-            </View>
-        )
     }
 
     renderScreen = () => {
@@ -114,8 +105,10 @@ class Home extends React.PureComponent<Props, State> {
 
     render() {
         return (
-            <View full>{this.state.loading ? this.renderSpinner() : this.state.recordNotFound ? this.renderNotFound() : this.renderScreen()}</View>
-        );
+            <Layout loading={this.state.loading} style={{ flex: 1 }}>
+                {this.state.recordNotFound ? this.renderNotFound() : this.renderScreen()}
+            </Layout>
+        )
     }
 }
 
