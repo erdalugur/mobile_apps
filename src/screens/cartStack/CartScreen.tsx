@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Image, TouchableOpacity, Dimensions, ScrollView, SafeAreaView, Platform, Linking } from 'react-native';
-import { CartItem, NavigationProps } from 'types';
-import { View, Text } from 'components'
+import { CartItem, NavigationProps, IExtra } from 'types';
+import { View, Text, ProductExtra } from 'components'
 import { connect } from 'react-redux';
 import { AppState } from 'myRedux';
 import theme from 'theme';
@@ -63,37 +63,27 @@ class Index extends React.PureComponent<Props, State> {
         })
         return `${price.toFixed(2)} ₺`
     }
+    handleExtra = (key: string, extra: IExtra) => {
+        if (extra.QUANTITY < 0) return;
+        let item = this.props.cart[key]
+        item.EXTRAS = { ...item.EXTRAS, [extra.ID]: { ...extra } }
+        this.props.dispatch({ type: actionTypes.HANDLE_EXTRA, payload: { ...item } })
+    }
 
     renderExtras = (key: string) => {
-        let items = this.props.cart[key].EXTRAS || []
-        if (items.length > 0) {
+        let item = this.props.cart[key]
+        if (item.EXTRAS) {
+            let items = Object.keys(item.EXTRAS).map(x => item.EXTRAS[x]) || []
             return (
                 <View style={[styles.extraContainer]}>
                     <Text style={[styles.extraTitle]}>Esktralar</Text>
-                    {items.map(e => (
-                        <View key={e.ID} style={{
-                            paddingHorizontal: 5,
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            height: 35
-                        }}>
-                            <Text >{e.NAME}</Text>
-                            <Text >{`→ ${e.TOTAL_PRICE.toFixed(2)} ₺`}</Text>
-                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', borderRadius: 5, backgroundColor: theme.colors.border }}>
-                                <TouchableOpacity style={[styles.extraButton]} onPress={() => {
-                                    this.props.dispatch({ type: actionTypes.HANDLE_EXTRA, payload: { key: key, ID: e.ID, QUANTITY: e.QUANTITY + 1 } })
-                                }}>
-                                    <Plus2 size={20} color={theme.colors.white} />
-                                </TouchableOpacity>
-                                <Text style={{ width: 20, textAlign: 'center' }}>{(e.QUANTITY || 1).toString()}</Text>
-                                <TouchableOpacity style={[styles.extraButton]} onPress={() => {
-                                    this.props.dispatch({ type: actionTypes.HANDLE_EXTRA, payload: { key: key, ID: e.ID, QUANTITY: e.QUANTITY - 1 } })
-                                }}>
-                                    <Minus2 size={25} color={theme.colors.white} />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
+                    {items.map((e, i) => (
+                        <ProductExtra
+                            extra={e}
+                            productKey={key}
+                            handleExtra={ee => this.handleExtra(key, ee)}
+                            key={i}
+                        />
                     ))}
                 </View>
             )

@@ -17,5 +17,6 @@ export { BarcodeScanner } from './BarcodeScanner'
 export { SliderProducts } from './ProductsSliderView'
 export { ProductsWithoutImageView } from './ProductsWithoutImageView'
 export { AddToCartHeart } from './AddToCartHeart'
+export { ProductExtra } from './ProductExtra'
 
 

@@ -21,7 +21,7 @@ export interface Product {
     ALLERGENS: string
     CALORI: string
     PREPARATION_TIME: string
-    EXTRAS: Array<IExtra>
+    EXTRAS: { [key: string]: IExtra }
     NOTES: string
     PRIORITY: number
     VIDEO_URL: string

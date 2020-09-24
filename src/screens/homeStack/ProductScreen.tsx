@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Image, Dimensions, ImageBackground, ActivityIndicator, Modal } from 'react-native';
-import { View, Text, Html, CartButton, AddToCartHeart, AddToCart } from 'components'
+import { View, Text, Html, CartButton, AddToCartHeart, AddToCart, ProductExtra } from 'components'
 import { NavigationProps, Product, ProductTreeModel, CartItem, IExtra } from 'types';
 import theme from 'theme';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
@@ -24,7 +24,6 @@ interface State {
     recommended: Array<Product>
     item: Product | null
     loading: boolean
-    extras: Array<IExtra>
     modal: boolean
 }
 
@@ -33,7 +32,6 @@ class Index extends React.PureComponent<Props, any> {
         recommended: [],
         item: null,
         loading: false,
-        extras: [],
         modal: false
     }
     componentDidMount = () => {
@@ -53,11 +51,12 @@ class Index extends React.PureComponent<Props, any> {
         if (result.statusCode === 200 && result.data) {
             let __data__ = result.data[0]
             let _recommended_ = JSON.parse(__data__.RECOMMENDED) as { RECOMMENDEDID: number }[]
-            let extras = (JSON.parse(__data__.EXTRAS) as IExtra[] || []).map(x => {
+            let extras = {} as { [key: string]: IExtra }
+            (JSON.parse(__data__.EXTRAS) as IExtra[] || []).forEach(x => {
                 x.CHECKED = false;
                 x.QUANTITY = 0;
                 x.TOTAL_PRICE = x.QUANTITY * x.PRICE
-                return x
+                extras[x.ID] = x
             })
             let recommended: Array<Product> = []
             if (_recommended_.length > 0) {
@@ -73,7 +72,7 @@ class Index extends React.PureComponent<Props, any> {
                 item.EXTRAS = extras
                 item.VIDEO_URL = __data__.VIDEO_URL
             }
-            this.setState({ recommended: recommended, extras: extras, loading: false, item: item })
+            this.setState({ recommended: recommended, extras: extras, loading: false, item: { ...item } })
         } else {
             this.setState({ loading: false, item });
         }
@@ -121,31 +120,26 @@ class Index extends React.PureComponent<Props, any> {
         )
     }
 
-    getExtraIndex = (_x_: IExtra) => {
-        return this.state.item == null ? -1 : this.state.item.EXTRAS.findIndex(x => x.ID == _x_.ID)
-    }
-
-    handleExtra = (x: IExtra, operation: 'plus' | 'minus') => {
-        let i = this.getExtraIndex(x);
-        let item = this.state.item
-        if (i > -1 && item !== null) {
-            let extras = item.EXTRAS;
-            if (extras) {
-                let q = operation === 'plus' ? extras[i].QUANTITY + 1 : extras[i].QUANTITY - 1
-                extras[i].QUANTITY = q
-                extras[i].TOTAL_PRICE = q * extras[i].PRICE
-                item.EXTRAS = extras;
-                this.setState({
-                    item: { ...item }
-                })
-            }
+    handleExtra = (key: number, x: IExtra) => {
+        if (!this.checkCartItem()) {
+            let item = this.state.item as Product
+            item.EXTRAS = { ...item.EXTRAS, [x.ID]: { ...x } };
+            this.setState({
+                item: { ...item }
+            })
+        } else {
+            let item = this.props.cart[key]
+            item.EXTRAS = { ...item.EXTRAS, [x.ID]: { ...x } }
+            this.props.dispatch({ type: actionTypes.HANDLE_EXTRA, payload: { ...item } })
         }
     }
 
     getPrice = () => {
-        if (this.state.item) {
-            let price = this.state.item?.PRICE || 0;
-            this.state.item.EXTRAS.forEach(x => {
+        let item = this.state.item as Product
+        if (item) {
+            let price = item.PRICE || 0;
+            Object.keys(item.EXTRAS).forEach(key => {
+                let x = item.EXTRAS[key]
                 price += x.TOTAL_PRICE
             })
             return price.toFixed(2)
@@ -154,40 +148,25 @@ class Index extends React.PureComponent<Props, any> {
         }
     }
 
-    renderExtra = (x: IExtra) => {
-        return (
-            <View key={x.ID} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                <Text style={{ fontSize: 12 }}>{x.NAME}</Text>
-                <Text style={{ fontSize: 12 }}>{`${((x.PRICE * x.QUANTITY) || x.PRICE).toFixed(2)} ₺`}</Text>
-                {x.QUANTITY !== 0 ? (
-                    <View style={{ flexDirection: 'row' }}>
-                        <TouchableOpacity style={{ backgroundColor: theme.colors.border, borderTopLeftRadius: 5, borderBottomLeftRadius: 5 }} onPress={() => this.handleExtra(x, 'plus')}>
-                            <Plus2 color={theme.colors.white} size={20} />
-                        </TouchableOpacity>
-                        <View style={{ backgroundColor: theme.colors.border, justifyContent: 'center', alignItems: 'center', width: 40 }}>
-                            <Text>{x.QUANTITY.toString()}</Text>
-                        </View>
-                        <TouchableOpacity style={{ backgroundColor: theme.colors.border, borderTopRightRadius: 5, borderBottomRightRadius: 5 }} onPress={() => this.handleExtra(x, 'minus')}>
-                            <Minus2 color={theme.colors.white} size={20} />
-                        </TouchableOpacity>
-                    </View>
-                ) : (
-                        <TouchableOpacity onPress={() => this.handleExtra(x, 'plus')}>
-                            <Text>Ekle</Text>
-                        </TouchableOpacity>
-                    )}
-            </View>
-        )
+    renderExtra = (key: number) => {
+        let item = this.state.item as Product
+        let x = item.EXTRAS[key] as IExtra
+        return <ProductExtra
+            key={x.ID}
+            extra={x}
+            productKey={item.ID.toString()}
+            handleExtra={(extra) => this.handleExtra(item.ID, extra)}
+        />
     }
 
     checkCartItem = () => {
-        console.log(this.props.cart)
         return this.state.item !== null && this.props.cart[this.state.item.ID] != undefined
     }
 
     addTocart = () => {
         if (!this.checkCartItem()) {
-            this.props.dispatch({ type: actionTypes.ADD_TO_CART, payload: { ...this.state.item } });
+            let item = Object.assign({}, this.state.item) as Product
+            this.props.dispatch({ type: actionTypes.ADD_TO_CART, payload: item });
             messageBox(messages.ADD_TO_CART_SUCCESS.replace('{0}', this.state.item?.NAME || ''))
         } else {
             this.props.dispatch({ type: actionTypes.DECREMENT, payload: this.state.item?.ID || 0 });
@@ -272,10 +251,10 @@ class Index extends React.PureComponent<Props, any> {
                                 </ScrollView>
                             </View>
 
-                            {this.state.item != null && this.state.item.EXTRAS.length > 0 &&
+                            {this.state.item != null && Object.keys(this.state.item.EXTRAS).length > 0 &&
                                 <View style={[styles.extraContainer]}>
                                     <ScrollView>
-                                        {this.state.item.EXTRAS.map(e => this.renderExtra(e))}
+                                        {Object.keys(this.state.item.EXTRAS).map(e => this.renderExtra(parseInt(e)))}
                                     </ScrollView>
                                 </View>
                             }
