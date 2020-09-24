@@ -43,12 +43,18 @@ export class SliderProducts extends React.PureComponent<Props, State> {
                         position: 'absolute',
                         height: '100%',
                         width: '100%',
-                        backgroundColor: '#2a2a2f',
-                        opacity: .6,
-                        justifyContent: 'center',
+                        backgroundColor: '#12121226',
+                        justifyContent: 'flex-end',
                         alignItems: 'center'
                     }}>
-                        <Text component="h4" style={{ fontWeight: 'bold' }} color={'#fff'}>{item.NAME}</Text>
+                        <Text
+                            component="h4" style={{
+                                fontWeight: 'bold',
+                                backgroundColor: '#12121226',
+                                height: 50,
+                                width: '100%',
+                                textAlign: 'center'
+                            }} color={'#fff'}>{item.NAME}</Text>
                     </View>
                 </ImageBackground>
             </TouchableOpacity>

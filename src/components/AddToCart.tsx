@@ -1,23 +1,24 @@
 import React from 'react'
 import { Product, CartItem } from 'types';
 import { IAction, SingleMultiType, actionTypes } from 'myRedux/types';
-import { StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, ScrollView, TouchableOpacity, ViewStyle } from 'react-native';
 import { View, Text, Button, Header, Input, CartButton } from 'components'
 import theme from 'theme';
 import { messages } from 'utils';
-import { Plus, Minus } from 'icons';
+import { Plus, Minus, Plus2, Minus2 } from 'icons';
 import { connect } from 'react-redux';
 import { AppState } from 'myRedux';
 
 interface Props {
     item: Product
     dispatch: (param: IAction<number | Product>) => void
-    cart: SingleMultiType<any, {
-        [key: string]: CartItem;
-    }>
+    cart: {
+        [key: string]: CartItem
+    }
+    style?: ViewStyle
 }
 function Index(props: Props) {
-    let item = props.cart.items[props.item.ID]
+    let item = props.cart[props.item.ID]
     return (
         <React.Fragment>
             {!item &&
@@ -27,11 +28,11 @@ function Index(props: Props) {
                     }}>
                     <Text>{messages.ADD_TO_CART}</Text>
                 </TouchableOpacity> ||
-                <View style={[styles.buttonContainer]}>
-                    <Minus size={22} color={theme.colors.text}
+                <View style={[styles.buttonContainer, props.style]}>
+                    <Minus2 size={22} color={theme.colors.text}
                         onPress={() => props.dispatch({ type: actionTypes.DECREMENT, payload: props.item.ID })} />
                     <Text style={{ width: '70%', textAlign: 'center' }}>{item.quantity.toString()}</Text>
-                    <Plus size={22} color={theme.colors.text}
+                    <Plus2 size={22} color={theme.colors.text}
                         onPress={() => props.dispatch({ type: actionTypes.INCREMENT, payload: props.item.ID })} />
                 </View>
             }
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
     buttonContainer: {
         borderWidth: 1,
         borderColor: theme.colors.text,
-        borderRadius: 2,
+        borderRadius: 10,
         padding: 5,
         alignItems: 'center',
         flexDirection: 'row',
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: theme.colors.text,
         height: 35,
-        borderRadius: 2,
+        borderRadius: 10,
         opacity: 0.8
     },
 });

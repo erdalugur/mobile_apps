@@ -23,6 +23,7 @@ import { CartButton } from 'components'
 import theme from 'theme';
 import { HeaderBack } from 'icons'
 import { screens } from 'navigation'
+import { VideoScreen } from './VideoScreen';
 
 
 export const HomeStack = createStackNavigator();
@@ -112,7 +113,14 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
                 name={screens.noteScreen}
                 component={ProductNoteScreen}
             />
-
+            <HomeStack.Screen
+                options={{
+                    title: '',
+                    header: () => null
+                }}
+                name={screens.videoScreen}
+                component={VideoScreen}
+            />
 
         </HomeStack.Navigator>
     )

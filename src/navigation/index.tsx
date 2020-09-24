@@ -48,7 +48,8 @@ export const screens = {
     cartQR: 'CartQR',
     cartResult: 'CartResult',
     tableQR: 'TableQR',
-    noteScreen: 'NoteScreen'
+    noteScreen: 'NoteScreen',
+    videoScreen: 'VideoScreen'
 }
 
 export const AppStack = createStackNavigator();

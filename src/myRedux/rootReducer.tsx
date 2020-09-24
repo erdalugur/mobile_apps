@@ -15,7 +15,7 @@ export default function (state: IState = InitialState, action: IAction<any>): IS
         case actionTypes.DECREMENT:
             return DECREMENT(state, action.payload);
         case actionTypes.REMOVE_CART:
-            return { ...state, cart: { items: {}, item: null } };
+            return { ...state, cart: {} };
         case actionTypes.SET_SCREEN:
             console.log(action.payload)
             return { ...state, screen: action.payload }
@@ -42,10 +42,7 @@ export function getInitialState(__data__: any): IState {
             item: null,
             items: []
         },
-        cart: {
-            item: null,
-            items: {}
-        },
+        cart: {},
         product: {
             item: null,
             items: []

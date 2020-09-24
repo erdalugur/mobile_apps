@@ -14,9 +14,7 @@ import { dataManager } from 'api';
 type screenOptions = 'Home' | 'Search' | 'Cashier' | 'Kitchen'
 
 interface Props extends NavigationProps<any, any> {
-    cart: SingleMultiType<any, {
-        [key: string]: CartItem;
-    }>
+    cart: { [key: string]: CartItem }
     dispatch: (param: IAction<number | any>) => void
     routeScreen: screenOptions
 }
@@ -59,7 +57,7 @@ class Index extends React.PureComponent<Props, State> {
     }
 
     totalPrice = (): string => {
-        let { items } = this.props.cart, price = 0;
+        let items = this.props.cart, price = 0;
         Object.keys(items).forEach(key => {
             price = price + items[key].totalPrice
         })
@@ -67,7 +65,7 @@ class Index extends React.PureComponent<Props, State> {
     }
 
     renderExtras = (key: string) => {
-        let items = this.props.cart.items[key].EXTRAS || []
+        let items = this.props.cart[key].EXTRAS || []
         if (items.length > 0) {
             return (
                 <View style={[styles.extraContainer]}>
@@ -105,7 +103,7 @@ class Index extends React.PureComponent<Props, State> {
     }
 
     renderNote = (key: string) => {
-        let item = this.props.cart.items[key]
+        let item = this.props.cart[key]
         return (
             <View style={[styles.extraContainer]}>
                 <Text style={[styles.extraTitle]}>Notlar</Text>
@@ -130,66 +128,67 @@ class Index extends React.PureComponent<Props, State> {
 
     RenderItems = () => {
         let { cart } = this.props
-        return Object.keys(cart.items).map(x => (
-            <React.Fragment key={cart.items[x].ID}>
+        console.log(cart)
+        return Object.keys(cart).map(x => (
+            <View key={cart[x].ID} style={{ borderBottomColor: theme.colors.border, borderBottomWidth: 1 }}>
                 <View style={[styles.itemContainer]}>
                     <TouchableOpacity
                         activeOpacity={0.8}
                         onPress={() => {
-                            this.props.navigation.navigate(screens.product, { item: cart.items[x] })
+                            this.props.navigation.navigate(screens.product, { item: cart[x] })
                         }}
                         style={[styles.imageContainer]}>
-                        <Image source={{ uri: cart.items[x].PREVIEW }} style={[styles.image]} />
+                        <Image source={{ uri: cart[x].PREVIEW }} style={[styles.image]} />
                     </TouchableOpacity>
                     <View style={[styles.cartInfo]}>
-                        <Text style={{ textTransform: 'capitalize', fontSize: 20 }}>{cart.items[x].NAME}</Text>
-                        <Text>{`Fiyat → ${cart.items[x].PRICE.toFixed(2).toString()} ₺`}</Text>
+                        <Text style={{ textTransform: 'capitalize', fontSize: 20 }}>{cart[x].NAME}</Text>
+                        <Text>{`Fiyat → ${cart[x].PRICE.toFixed(2).toString()} ₺`}</Text>
                         {/* {this.renderExtras(x)} */}
-                        <Text>{`Toplam Fiyat → ${cart.items[x].totalPrice.toFixed(2).toString()} ₺`}</Text>
+                        <Text>{`Toplam Fiyat → ${cart[x].totalPrice.toFixed(2).toString()} ₺`}</Text>
                         <TouchableOpacity onPress={() => {
                             this.setState((state: State) => {
-                                let index = state.displayList.indexOf(cart.items[x].ID)
+                                let index = state.displayList.indexOf(cart[x].ID)
                                 if (index > -1)
                                     state.displayList.splice(index, 1)
                                 else
-                                    state.displayList.push(cart.items[x].ID)
+                                    state.displayList.push(cart[x].ID)
 
                                 return {
                                     displayList: [...state.displayList]
                                 }
                             })
                         }}>
-                            <Text>{`Diğer Bilgileri ${this.state.displayList.indexOf(cart.items[x].ID) > -1 ? 'Gizle' : 'Göster'}`}</Text>
+                            <Text>{`Diğer Bilgileri ${this.state.displayList.indexOf(cart[x].ID) > -1 ? 'Gizle' : 'Göster'}`}</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={[styles.buttonContainer]}>
                         <Plus color={theme.colors.text}
-                            onPress={() => this.props.dispatch({ type: actionTypes.INCREMENT, payload: cart.items[x].ID })} />
+                            onPress={() => this.props.dispatch({ type: actionTypes.INCREMENT, payload: cart[x].ID })} />
                         <View>
-                            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{cart.items[x].quantity.toString()}</Text>
+                            <Text style={{ fontSize: 16, fontWeight: 'bold' }}>{cart[x].quantity.toString()}</Text>
                         </View>
                         <Minus color={theme.colors.text}
-                            onPress={() => this.props.dispatch({ type: actionTypes.DECREMENT, payload: cart.items[x].ID })} />
+                            onPress={() => this.props.dispatch({ type: actionTypes.DECREMENT, payload: cart[x].ID })} />
                     </View>
                 </View>
-                {this.state.displayList.indexOf(cart.items[x].ID) > -1 && (
+                {this.state.displayList.indexOf(cart[x].ID) > -1 && (
                     <View style={{ padding: 10 }}>
                         {this.renderExtras(x)}
                         {this.renderNote(x)}
                     </View>
                 )}
-            </React.Fragment>
+            </View>
         ));
     }
 
-    checkCartItems = () => Object.keys(this.props.cart.items).length > 0
+    checkCartItems = () => Object.keys(this.props.cart).length > 0
 
     complete = async () => {
         if (this.state.table === '') {
             messageBox('Lütfen bir masa seçin')
             return;
         }
-        let { items } = this.props.cart
+        let items = this.props.cart
         if (!this.checkCartItems()) {
             messageBox(messages.EMPTY_CART_MESSAGE)
         } else {

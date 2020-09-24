@@ -24,6 +24,7 @@ export interface Product {
     EXTRAS: Array<IExtra>
     NOTES: string
     PRIORITY: number
+    VIDEO_URL: string
 }
 
 export interface IExtra {

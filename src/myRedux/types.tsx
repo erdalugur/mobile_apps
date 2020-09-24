@@ -16,7 +16,7 @@ export interface IState {
     category: SingleMultiType<any, Array<any>>
     product: SingleMultiType<any, Array<any>>
     campaign: SingleMultiType<any, Array<any>>
-    cart: SingleMultiType<any, { [key: string]: CartItem }>
+    cart: { [key: string]: CartItem }
     menu: FetchAllModel
     sliderItems: Array<any>
 }

@@ -1,13 +1,13 @@
 import React from 'react';
 import { StyleSheet, Image, Dimensions, ImageBackground, ActivityIndicator, Modal } from 'react-native';
-import { View, Text, Html, CartButton, AddToCartHeart } from 'components'
+import { View, Text, Html, CartButton, AddToCartHeart, AddToCart } from 'components'
 import { NavigationProps, Product, ProductTreeModel, CartItem, IExtra } from 'types';
 import theme from 'theme';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import { IAction, actionTypes } from 'myRedux/types';
 import { connect } from 'react-redux';
 import { messageBox, messages, sizeManager } from 'utils'
-import { Back, CartIcon, Plus, Heart, Fire, Time, Pencil, Check, UnCheck, Play } from 'icons';
+import { Back, CartIcon, Plus, Heart, Fire, Time, Pencil, Check, UnCheck, Play, Plus2, Minus2 } from 'icons';
 import { screens } from 'navigation';
 import { dataManager } from 'api';
 import { AppState } from 'myRedux';
@@ -55,7 +55,7 @@ class Index extends React.PureComponent<Props, any> {
             let _recommended_ = JSON.parse(__data__.RECOMMENDED) as { RECOMMENDEDID: number }[]
             let extras = (JSON.parse(__data__.EXTRAS) as IExtra[] || []).map(x => {
                 x.CHECKED = false;
-                x.QUANTITY = 1;
+                x.QUANTITY = 0;
                 x.TOTAL_PRICE = x.QUANTITY * x.PRICE
                 return x
             })
@@ -69,8 +69,10 @@ class Index extends React.PureComponent<Props, any> {
                     })
                 })
             }
-            if (item)
+            if (item) {
                 item.EXTRAS = extras
+                item.VIDEO_URL = __data__.VIDEO_URL
+            }
             this.setState({ recommended: recommended, extras: extras, loading: false, item: item })
         } else {
             this.setState({ loading: false, item });
@@ -104,7 +106,15 @@ class Index extends React.PureComponent<Props, any> {
                     source={{ uri: x.PREVIEW }}
                     style={[styles.recommendedItemImageContainer]}>
                     <View style={[styles.recommendedItemTextContainer]}>
-                        <Text style={{ fontWeight: 'bold' }} color={'#fff'}>{x.NAME}</Text>
+                        <Text style={{
+                            fontWeight: 'bold',
+                            backgroundColor: '#00000066',
+                            width: '100%',
+                            height: 25,
+                            textAlign: 'center',
+                            alignItems: 'center',
+                            justifyContent: 'center'
+                        }} color={'#fff'}>{x.NAME}</Text>
                     </View>
                 </ImageBackground>
             </TouchableOpacity>
@@ -115,13 +125,15 @@ class Index extends React.PureComponent<Props, any> {
         return this.state.item == null ? -1 : this.state.item.EXTRAS.findIndex(x => x.ID == _x_.ID)
     }
 
-    handleExtra = (x: IExtra) => {
+    handleExtra = (x: IExtra, operation: 'plus' | 'minus') => {
         let i = this.getExtraIndex(x);
         let item = this.state.item
         if (i > -1 && item !== null) {
             let extras = item.EXTRAS;
             if (extras) {
-                extras[i].CHECKED = !extras[i].CHECKED
+                let q = operation === 'plus' ? extras[i].QUANTITY + 1 : extras[i].QUANTITY - 1
+                extras[i].QUANTITY = q
+                extras[i].TOTAL_PRICE = q * extras[i].PRICE
                 item.EXTRAS = extras;
                 this.setState({
                     item: { ...item }
@@ -133,8 +145,8 @@ class Index extends React.PureComponent<Props, any> {
     getPrice = () => {
         if (this.state.item) {
             let price = this.state.item?.PRICE || 0;
-            this.state.item.EXTRAS.filter(x => x.CHECKED).forEach(x => {
-                price += x.PRICE
+            this.state.item.EXTRAS.forEach(x => {
+                price += x.TOTAL_PRICE
             })
             return price.toFixed(2)
         } else {
@@ -146,12 +158,24 @@ class Index extends React.PureComponent<Props, any> {
         return (
             <View key={x.ID} style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Text style={{ fontSize: 12 }}>{x.NAME}</Text>
-                <Text style={{ fontSize: 12 }}>{`${x.PRICE.toFixed(2)} ₺`}</Text>
-                <TouchableOpacity onPress={() => this.handleExtra(x)}>
-                    {x.CHECKED ? <Check color={theme.colors.white} size={25} />
-                        : <UnCheck color={theme.colors.white} size={25} />
-                    }
-                </TouchableOpacity>
+                <Text style={{ fontSize: 12 }}>{`${((x.PRICE * x.QUANTITY) || x.PRICE).toFixed(2)} ₺`}</Text>
+                {x.QUANTITY !== 0 ? (
+                    <View style={{ flexDirection: 'row' }}>
+                        <TouchableOpacity style={{ backgroundColor: theme.colors.border, borderTopLeftRadius: 5, borderBottomLeftRadius: 5 }} onPress={() => this.handleExtra(x, 'plus')}>
+                            <Plus2 color={theme.colors.white} size={20} />
+                        </TouchableOpacity>
+                        <View style={{ backgroundColor: theme.colors.border, justifyContent: 'center', alignItems: 'center', width: 40 }}>
+                            <Text>{x.QUANTITY.toString()}</Text>
+                        </View>
+                        <TouchableOpacity style={{ backgroundColor: theme.colors.border, borderTopRightRadius: 5, borderBottomRightRadius: 5 }} onPress={() => this.handleExtra(x, 'minus')}>
+                            <Minus2 color={theme.colors.white} size={20} />
+                        </TouchableOpacity>
+                    </View>
+                ) : (
+                        <TouchableOpacity onPress={() => this.handleExtra(x, 'plus')}>
+                            <Text>Ekle</Text>
+                        </TouchableOpacity>
+                    )}
             </View>
         )
     }
@@ -178,6 +202,7 @@ class Index extends React.PureComponent<Props, any> {
             }
         })
     }
+
     render() {
         const x = this.state.item
         if (x === null) {
@@ -195,13 +220,15 @@ class Index extends React.PureComponent<Props, any> {
                     {this.renderHeader()}
                     <Image source={{ uri: x.PREVIEW }} style={[styles.image]} />
                     <View style={[styles.imageBottomContainer]} transparent>
-                        <View style={[styles.imageBottom]}>
-                            <TouchableOpacity>
+                        <View style={[styles.imageBottom, { opacity: x.VIDEO_URL ? 1 : 0 }]}>
+                            <TouchableOpacity
+                                onPress={() => x.VIDEO_URL && this.props.navigation.navigate(screens.videoScreen, { uri: x.VIDEO_URL })}>
                                 <Play color={theme.colors.white} size={25} />
                             </TouchableOpacity>
                         </View>
-                        <View style={[styles.imageBottom]}>
-                            <AddToCartHeart item={this.state.item} />
+                        <View style={[!this.checkCartItem() ? styles.imageBottom : styles.imageBottom2]}>
+                            {this.checkCartItem() ? <AddToCart style={{ borderWidth: 0, width: 100 }} item={this.state.item as Product} /> :
+                                <AddToCartHeart item={this.state.item} />}
                         </View>
                     </View>
                 </View>
@@ -227,7 +254,7 @@ class Index extends React.PureComponent<Props, any> {
                                         note: this.state.item?.NOTES
                                     })}>
                                     <Pencil color={theme.colors.white} size={22} />
-                                    <Text style={{ fontSize: 12 }}>Not Ekle</Text>
+                                    <Text style={{ fontSize: 12 }}>{`${this.state.item?.NOTES ? 'Notu Düzenle' : 'Not Ekle'}`}</Text>
                                 </TouchableOpacity>
                             </View>
                             <View style={{
@@ -273,12 +300,16 @@ class Index extends React.PureComponent<Props, any> {
             </View >
         );
     }
+
+
 }
 const mapState = (state: AppState) => ({
     items: state.app.menu.tree,
-    cart: state.app.cart.items
+    cart: state.app.cart
 })
 export default connect(mapState)(Index)
+
+const bgColor = '#ffffff4d'
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -298,7 +329,7 @@ const styles = StyleSheet.create({
     heartAdd: {
         bottom: 20,
         right: 10,
-        backgroundColor: '#12121226',
+        backgroundColor: bgColor,//'#12121226',
         width: 45,
         height: 40,
         borderRadius: 10,
@@ -315,7 +346,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row'
     },
     imageBottom: {
-        backgroundColor: '#12121226',
+        backgroundColor: bgColor,//'#12121226',
         marginHorizontal: 10,
         borderRadius: 10,
         width: 45,
@@ -323,7 +354,17 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    headerButton: { width: 45, borderRadius: 10, backgroundColor: '#12121226', alignItems: 'center', height: 45, justifyContent: 'center' },
+    imageBottom2: {
+        marginHorizontal: 10,
+        width: 100,
+        //backgroundColor: '#12121226',
+        borderRadius: 10
+    },
+    headerButton: {
+        width: 45, borderRadius: 10,
+        backgroundColor: bgColor,//'#12121226',
+        alignItems: 'center', height: 45, justifyContent: 'center'
+    },
     extraContainer: {
         paddingHorizontal: 20,
         paddingVertical: 5,
@@ -353,7 +394,7 @@ const styles = StyleSheet.create({
         width: 120,
         borderRadius: 10,
         margin: 5,
-        backgroundColor: '#12121226',
+        backgroundColor: '#12121247',//'#12121226',
         overflow: 'hidden',
     },
     recommendedItemTextContainer: {
@@ -363,7 +404,7 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         backgroundColor: '#12121226',
-        paddingBottom: 10
+        //paddingBottom: 10
         //opacity: .6
     },
     buttonContainer: {

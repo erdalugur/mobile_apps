@@ -3,38 +3,39 @@ import { CartItem } from 'types';
 import { InitialState } from 'myRedux/rootReducer';
 
 export function INCREMENT(state: IState = InitialState, payload: string) {
-    state.cart.items[payload].quantity++;
-    state.cart.items[payload].totalPrice = getPrice(state.cart.items[payload]);
+    state.cart[payload].quantity++;
+    state.cart[payload].totalPrice = getPrice(state.cart[payload]);
     return { ...state, cart: { ...state.cart } }
 }
 
 export function DECREMENT(state: IState = InitialState, payload: string) {
-    let q = state.cart.items[payload].quantity
+    let q = state.cart[payload].quantity
     if (q > 1) {
-        state.cart.items[payload].quantity--;
-        state.cart.items[payload].totalPrice = getPrice(state.cart.items[payload])
+        state.cart[payload].quantity--;
+        state.cart[payload].totalPrice = getPrice(state.cart[payload])
     }
     else
-        delete state.cart.items[payload];
+        delete state.cart[payload];
     return { ...state, cart: { ...state.cart } }
 }
 
-export function ADD_TO_CART(state: IState = InitialState, payload: CartItem) {
+export function ADD_TO_CART(state: IState = InitialState, _payload: CartItem) {
+    let payload = { ..._payload }
     const { ID } = payload;
-    if (!state.cart.items[ID])
+    if (!state.cart[ID])
         payload.quantity = 1;
-    else if (state.cart.items[ID])
+    else if (state.cart[ID])
         payload.quantity++;
 
     payload.totalPrice = getPrice(payload);
-    state.cart.items = { ...state.cart.items, [ID]: { ...payload } };
+    state.cart = Object.assign({ ...state.cart, [ID]: Object.assign({}, payload) });
     return { ...state, cart: { ...state.cart } };
 }
 
 export function getPrice(payload: CartItem) {
     let price = payload.quantity * payload.PRICE
     let extras = payload.EXTRAS || []
-    extras.filter(x => x.CHECKED).forEach(x => {
+    extras.forEach(x => {
         price += (x.PRICE * (x.QUANTITY || 1))
     });
     return price;
@@ -43,7 +44,7 @@ export function getPrice(payload: CartItem) {
 export function SET_NOTE(
     state: IState = InitialState,
     payload: { note: string, key: string }) {
-    state.cart.items[payload.key].NOTES = payload.note
+    state.cart[payload.key].NOTES = payload.note
     return { ...state, cart: { ...state.cart } }
 }
 
@@ -52,7 +53,7 @@ export function HANDLE_EXTRA(
     payload: { ID: number, QUANTITY: number, key: string }
 ) {
     const { key, ID, QUANTITY } = payload
-    let item = Object.assign({}, state.cart.items[key]);
+    let item = Object.assign({}, state.cart[key]);
     let index = item.EXTRAS.findIndex(x => x.ID == ID)
     let extra = Object.assign({}, item.EXTRAS[index]);
     if (extra) {
@@ -63,7 +64,8 @@ export function HANDLE_EXTRA(
             extra.TOTAL_PRICE = QUANTITY * extra.PRICE
             item.EXTRAS[index] = { ...extra }
         }
-        state.cart.items = Object.assign({}, { ...state.cart.items, [key]: { ...item } });
+        item.totalPrice = getPrice(item)
+        state.cart = Object.assign({}, { ...state.cart, [key]: { ...item } });
         return Object.assign({}, { ...state, cart: { ...state.cart } });
     }
     return state

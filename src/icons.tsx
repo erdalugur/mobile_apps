@@ -105,8 +105,9 @@ export function UnCheck(props: IconProps) {
 }
 
 export function Play(props: IconProps) {
-    return <FontAwesome name="youtube-play" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <AntDesign name="playcircleo" onPress={props.onPress} size={props.size || 30} color={props.color} />
 }
+
 export function Plus2(props: IconProps) {
     return <AntDesign name="plus" onPress={props.onPress} size={props.size || 30} color={props.color} />
 }

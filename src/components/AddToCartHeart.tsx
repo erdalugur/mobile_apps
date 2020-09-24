@@ -12,12 +12,12 @@ import { AppState } from 'myRedux';
 interface Props {
     item: Product | null
     dispatch: (param: IAction<number | Product>) => void
-    cart: SingleMultiType<any, {
+    cart: {
         [key: string]: CartItem;
-    }>
+    }
 }
 function Index(props: Props) {
-    let item = props.cart.items[props.item && props.item.ID || -1]
+    let item = props.cart[props.item && props.item.ID || -1]
     let color = item ? 'red' : theme.colors.white
 
     let addTocart = () => {
