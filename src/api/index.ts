@@ -278,7 +278,7 @@ export const dataManager = {
             action: 'public'
         });
     },
-    sendAnswerAsync: async function (items: any[], FIRST_NAME: string = 'misafir', LAST_NAME: string = 'deneme') {
+    sendAnswerAsync: async function (items: any[], FIRST_NAME: string = '', LAST_NAME: string = '') {
         let place = await configurationManager.getPlace();
         let user = await userManager.get();
         return await QueryableIO<IProc>({
