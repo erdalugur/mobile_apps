@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 import { Text, View } from 'components'
 import { TouchableOpacity } from 'react-native';
 import theme from 'theme';
@@ -34,17 +34,19 @@ function Index(props: Props) {
             }}>
                 <Text>Hesap Ayarları</Text>
             </TouchableOpacity>
-            <TouchableOpacity
-                onPress={logout}
-                style={{
-                    backgroundColor: theme.colors.border,
-                    height: 40,
-                    justifyContent: 'center',
-                    marginTop: 5,
-                    alignItems: 'center'
-                }}>
-                <Text>Çıkış Yap</Text>
-            </TouchableOpacity>
+            { Platform.OS !== 'web' &&
+                <TouchableOpacity
+                    onPress={logout}
+                    style={{
+                        backgroundColor: theme.colors.border,
+                        height: 40,
+                        justifyContent: 'center',
+                        marginTop: 5,
+                        alignItems: 'center'
+                    }}>
+                    <Text>Çıkış Yap</Text>
+                </TouchableOpacity>
+            }
         </View>
     );
 }

@@ -6,6 +6,7 @@ import { HomeStackScreen } from 'screens/homeStack'
 import { SearchStackScreen } from 'screens/searchStack'
 import { AdditionStackScreen } from 'screens/additionStack'
 import { screens } from './index'
+import { Menu } from 'icons';
 
 const Tab = createBottomTabNavigator();
 
@@ -16,7 +17,8 @@ export const HomeTabs = ({ navigation, route }: { navigation: any, route: any })
                 tabBarIcon: ({ color, size }) => {
                     let iconName: string = "";
                     if (route.name === screens.home)
-                        iconName = 'appstore1'
+                        return <Menu color={color} size={size} />
+
                     else if (route.name === screens.search)
                         iconName = 'search1';
                     else if (route.name === screens.profile)

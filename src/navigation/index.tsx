@@ -50,7 +50,10 @@ export const screens = {
     tableQR: 'TableQR',
     noteScreen: 'NoteScreen',
     videoScreen: 'VideoScreen',
-    surveyScreen: 'SurveyScreen'
+    surveyScreen: 'SurveyScreen',
+    navigationScreen: 'NavigationScreen',
+    campaignScreen: 'CampaignScreen',
+    activityScreen: 'ActivityScreen'
 }
 
 export const AppStack = createStackNavigator();

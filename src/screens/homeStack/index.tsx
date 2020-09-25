@@ -21,11 +21,15 @@ import {
 } from '../../navigation/options'
 import { CartButton, View } from 'components'
 import theme from 'theme';
-import { HeaderBack, Survey } from 'icons'
+import { Close, HeaderBack, MoreOption, Survey } from 'icons'
 import { screens } from 'navigation'
 import { VideoScreen } from './VideoScreen';
 import { SurveyScreen } from './SurveyScreen'
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { NavigationScreen } from './NavigationScreen';
+import ProfileScreen from 'screens/settingStack/ProfileScreen';
+import { ActivityScreen } from './ActivityScreen';
+import { CampaignScreen } from './CampaignScreen';
 
 export const HomeStack = createStackNavigator();
 
@@ -38,29 +42,29 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
         ...options
     })
 
+    const DrawerMenu = () => (
+        <TouchableOpacity style={{ marginHorizontal: 5 }} onPress={() => navigation.navigate(screens.navigationScreen)}>
+            <MoreOption color={theme.colors.white} size={25} />
+        </TouchableOpacity>
+    )
+
     return (
         <HomeStack.Navigator
             headerMode="screen"
             screenOptions={{
                 headerRight: ({ tintColor }: any) => (
-                    <View style={{
-                        width: 80,
-                        flexDirection: 'row',
-                        backgroundColor: 'transparent',
-                        alignItems: 'center'
-                    }}>
-                        <CartButton />
-                        <TouchableOpacity style={{ marginTop: 2 }} onPress={() => navigation.navigate(screens.surveyScreen)}>
-                            <Survey color={theme.colors.white} size={25} />
-                        </TouchableOpacity>
-                    </View>
+                    <CartButton />
                 ),
                 headerBackTitleVisible: false,
                 headerBackTitleStyle: { color: theme.colors.text },
                 headerBackImage: ({ tintColor }: any) => <HeaderBack />
             }}>
             <HomeStack.Screen
-                options={HomeOptions}
+                options={{
+                    headerLeft: ({ }) => (
+                        <DrawerMenu />
+                    ),
+                }}
                 name={screens.home}
                 component={HomeScreen} />
             <HomeStack.Screen
@@ -132,9 +136,48 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
                 component={ProductNoteScreen}
             />
             <HomeStack.Screen
-                options={SurveyOptions}
+                options={{
+                    title: 'Anket',
+                    headerRight: () => null,
+                    headerLeft: () => (
+                        <DrawerMenu />
+                    )
+                }}
                 name={screens.surveyScreen}
                 component={SurveyScreen}
+            />
+            <HomeStack.Screen
+                options={{
+                    title: 'Hesabım',
+                    headerRight: () => null,
+                    headerLeft: () => (
+                        <DrawerMenu />
+                    )
+                }}
+                name={screens.profile}
+                component={ProfileScreen}
+            />
+            <HomeStack.Screen
+                options={{
+                    title: 'Aktiviteler',
+                    headerRight: () => null,
+                    headerLeft: () => (
+                        <DrawerMenu />
+                    )
+                }}
+                name={screens.activityScreen}
+                component={ActivityScreen}
+            />
+            <HomeStack.Screen
+                options={{
+                    title: 'Kampanyalar',
+                    headerRight: () => null,
+                    headerLeft: () => (
+                        <DrawerMenu />
+                    )
+                }}
+                name={screens.campaignScreen}
+                component={CampaignScreen}
             />
             <HomeStack.Screen
                 options={{
@@ -143,6 +186,19 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
                 }}
                 name={screens.videoScreen}
                 component={VideoScreen}
+            />
+            <HomeStack.Screen
+                options={{
+                    title: '',
+                    headerRight: () => null,
+                    headerLeft: ({ }) => (
+                        <TouchableOpacity style={{ marginHorizontal: 5 }} onPress={() => navigation.popToTop()}>
+                            <Close color={theme.colors.white} size={25} />
+                        </TouchableOpacity>
+                    ),
+                }}
+                name={screens.navigationScreen}
+                component={NavigationScreen}
             />
 
         </HomeStack.Navigator>

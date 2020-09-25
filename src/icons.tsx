@@ -118,3 +118,18 @@ export function Minus2(props: IconProps) {
 export function Survey(props: IconProps) {
     return <MaterialIcons name="question-answer" onPress={props.onPress} size={props.size || 30} color={props.color} />
 }
+
+export function Close(props: IconProps) {
+    return <AntDesign name="close" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}
+
+export function Star(props: IconProps) {
+    return <AntDesign name="star" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}
+
+export function User(props: IconProps) {
+    return <AntDesign name="user" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}
+export function Activity(props: IconProps) {
+    return <Feather name="activity" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}
