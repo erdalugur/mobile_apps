@@ -28,7 +28,7 @@ import { SurveyScreen } from './Survey/SurveyScreen'
 import { NavigationScreen } from './NavigationScreen';
 import ProfileScreen from 'screens/settingStack/ProfileScreen';
 import { ActivityScreen } from './ActivityScreen';
-import { CampaignScreen } from './CampaignScreen';
+import { CampaignScreen } from './Campaign/CampaignScreen';
 
 export const HomeStack = createStackNavigator();
 

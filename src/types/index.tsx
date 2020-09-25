@@ -96,3 +96,11 @@ export interface SetCartRequest {
         QUANTITY: string
     }>
 }
+
+export interface AuthContextProps {
+    context: {
+        signIn: (user: UserModel) => Promise<void>,
+        signUp: (user: UserModel) => Promise<void>
+        signOut: () => Promise<void>
+    }
+}

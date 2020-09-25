@@ -20,6 +20,7 @@ export { AddToCartHeart } from './AddToCartHeart'
 export { ProductExtra } from './ProductExtra'
 export { Layout } from './Layout'
 export { ProductNote } from './ProductNote'
+export { useAuthContext } from './useAuthContext'
 
 
 

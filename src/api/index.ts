@@ -292,6 +292,16 @@ export const dataManager = {
             ],
             action: 'public'
         })
+    },
+    loadCampaignsAsync: async function () {
+        let place = await configurationManager.getPlace();
+        return await QueryableIO<IProc>({
+            model: 'MPOS_GET_CAMPAIGNS',
+            parameters: [
+                { key: 'STOREID', value: place?.ID }
+            ],
+            action: 'public'
+        })
     }
 }
 

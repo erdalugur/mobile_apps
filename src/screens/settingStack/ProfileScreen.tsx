@@ -3,20 +3,17 @@ import { Platform, StyleSheet } from 'react-native';
 import { Text, View } from 'components'
 import { TouchableOpacity } from 'react-native';
 import theme from 'theme';
-import { userManager } from 'utils';
 import { IAction, actionTypes } from 'myRedux/types';
-import { NavigationProps } from 'types';
-import { connect } from 'react-redux';
+import { AuthContextProps, NavigationProps } from 'types';
 import { screens } from 'navigation';
 import { AuthContext } from 'navigation'
 interface State { }
 
-interface Props extends NavigationProps<{}, any> {
+interface Props extends NavigationProps<{}, any>, AuthContextProps {
     dispatch: (param: IAction<string>) => void
 }
 
 function Index(props: Props) {
-
     const { signOut } = React.useContext(AuthContext);
 
     const logout = async () => {
@@ -51,8 +48,7 @@ function Index(props: Props) {
     );
 }
 
-
-export default connect()(Index);
+export default Index
 
 const styles = StyleSheet.create({
     container: {
