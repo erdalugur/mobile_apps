@@ -1,6 +1,6 @@
 import { IResponse, IProc, ILogin } from './types'
 import config from 'config';
-import { messages, userManager, configurationManager } from 'utils';
+import { messages, userManager, configurationManager, applicationManager } from 'utils';
 import { FetchAllModel, SetCartRequest } from 'types';
 import { getInitialState } from 'myRedux/rootReducer';
 
@@ -267,6 +267,29 @@ export const dataManager = {
         return await QueryableIO<IProc>({
             model: 'MPOS_PRODUCT_DETAIL',
             parameters: [{ key: 'PRODUCTID', value: PRODUCTID }],
+            action: 'public'
+        })
+    },
+    loadSurveyAsync: async function () {
+        let place = await configurationManager.getPlace();
+        return await QueryableIO<IProc>({
+            model: 'MPOS_GET_SURVEY',
+            parameters: [{ key: 'STOREID', value: place?.ID }],
+            action: 'public'
+        });
+    },
+    sendAnswerAsync: async function (items: any[], FIRST_NAME: string = 'misafir', LAST_NAME: string = 'deneme') {
+        let place = await configurationManager.getPlace();
+        let user = await userManager.get();
+        return await QueryableIO<IProc>({
+            model: 'MPOS_SEND_ANSWER',
+            parameters: [
+                { key: 'ANSWER', value: JSON.stringify(items) },
+                { key: 'STOREID', value: place?.ID },
+                { key: 'USERID', value: user?.ID || 0 },
+                { key: 'FIRSTNAME', value: FIRST_NAME },
+                { key: 'LASTNAME', value: LAST_NAME },
+            ],
             action: 'public'
         })
     }

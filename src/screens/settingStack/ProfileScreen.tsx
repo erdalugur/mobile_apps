@@ -34,19 +34,19 @@ function Index(props: Props) {
             }}>
                 <Text>Hesap Ayarları</Text>
             </TouchableOpacity>
-            { Platform.OS !== 'web' &&
-                <TouchableOpacity
-                    onPress={logout}
-                    style={{
-                        backgroundColor: theme.colors.border,
-                        height: 40,
-                        justifyContent: 'center',
-                        marginTop: 5,
-                        alignItems: 'center'
-                    }}>
-                    <Text>Çıkış Yap</Text>
-                </TouchableOpacity>
-            }
+            {/* { Platform.OS !== 'web' && */}
+            <TouchableOpacity
+                onPress={logout}
+                style={{
+                    backgroundColor: theme.colors.border,
+                    height: 40,
+                    justifyContent: 'center',
+                    marginTop: 5,
+                    alignItems: 'center'
+                }}>
+                <Text>Çıkış Yap</Text>
+            </TouchableOpacity>
+            {/* } */}
         </View>
     );
 }

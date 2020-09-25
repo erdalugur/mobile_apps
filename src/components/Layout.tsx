@@ -5,7 +5,7 @@ import theme from 'theme'
 
 interface Props {
     loading?: boolean
-    style?: ViewStyle
+    style?: ViewStyle | ViewStyle[]
 }
 export class Layout extends React.PureComponent<Props, any> {
 

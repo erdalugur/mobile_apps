@@ -1,6 +1,6 @@
 import React from 'react';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
-import { Platform } from 'react-native'
+import { Platform, TouchableOpacity } from 'react-native'
 import {
     HomeScreen,
     CartScreen,
@@ -24,8 +24,7 @@ import theme from 'theme';
 import { Close, HeaderBack, MoreOption, Survey } from 'icons'
 import { screens } from 'navigation'
 import { VideoScreen } from './VideoScreen';
-import { SurveyScreen } from './SurveyScreen'
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { SurveyScreen } from './Survey/SurveyScreen'
 import { NavigationScreen } from './NavigationScreen';
 import ProfileScreen from 'screens/settingStack/ProfileScreen';
 import { ActivityScreen } from './ActivityScreen';
@@ -192,7 +191,7 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
                     title: '',
                     headerRight: () => null,
                     headerLeft: ({ }) => (
-                        <TouchableOpacity style={{ marginHorizontal: 5 }} onPress={() => navigation.popToTop()}>
+                        <TouchableOpacity style={{ marginHorizontal: 5 }} onPress={() => navigation.goBack()}>
                             <Close color={theme.colors.white} size={25} />
                         </TouchableOpacity>
                     ),

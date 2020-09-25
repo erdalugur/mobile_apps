@@ -9,8 +9,9 @@ interface Props {
     color?: string
     component?: "p" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
     style?: StyleProp<TextStyle>
+    center?: boolean
 }
-export function Text({ color, children, component = "p", style }: Props) {
+export function Text({ color, children, component = "p", style, center }: Props) {
     let fontSize: number = 20;
     let _color = color || colors.text
     switch (component) {
@@ -40,7 +41,7 @@ export function Text({ color, children, component = "p", style }: Props) {
         <TextBase style={[{
             color: _color,
             fontSize
-        }, style]}>
+        }, style, center ? { textAlign: 'center' } : {}]}>
             {children}
         </TextBase>
     )
