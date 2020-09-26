@@ -29,6 +29,9 @@ import { NavigationScreen } from './NavigationScreen';
 import ProfileScreen from 'screens/settingStack/ProfileScreen';
 import { ActivityScreen } from './ActivityScreen';
 import { CampaignScreen } from './Campaign/CampaignScreen';
+import { ReservationRequestScreen } from './ReservationRequestScreen';
+import { OrganizationScreen } from './Organization/OrganizationScreen';
+import { OrganizationRequestScreen } from './Organization/OrganizationRequestScreen';
 
 export const HomeStack = createStackNavigator();
 
@@ -158,7 +161,7 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
             />
             <HomeStack.Screen
                 options={{
-                    title: 'Aktiviteler',
+                    title: 'Etkinlikler',
                     headerRight: () => null,
                     headerLeft: () => (
                         <DrawerMenu />
@@ -166,6 +169,25 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
                 }}
                 name={screens.activityScreen}
                 component={ActivityScreen}
+            />
+            <HomeStack.Screen
+                options={{
+                    title: 'Organizasyon',
+                    headerRight: () => null,
+                    headerLeft: () => (
+                        <DrawerMenu />
+                    )
+                }}
+                name={screens.organizatonScreen}
+                component={OrganizationScreen}
+            />
+            <HomeStack.Screen
+                options={{
+                    title: 'Teklif Al',
+                    headerRight: () => null,
+                }}
+                name={screens.organizatonRequestScreen}
+                component={OrganizationRequestScreen}
             />
             <HomeStack.Screen
                 options={{
@@ -185,6 +207,17 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
                 }}
                 name={screens.videoScreen}
                 component={VideoScreen}
+            />
+            <HomeStack.Screen
+                options={{
+                    title: 'Rezervasyon Talep Formu',
+                    headerRight: () => null,
+                    headerLeft: () => (
+                        <DrawerMenu />
+                    )
+                }}
+                name={screens.reservationRequestScreen}
+                component={ReservationRequestScreen}
             />
             <HomeStack.Screen
                 options={{

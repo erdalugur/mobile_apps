@@ -21,6 +21,8 @@ export { ProductExtra } from './ProductExtra'
 export { Layout } from './Layout'
 export { ProductNote } from './ProductNote'
 export { useAuthContext } from './useAuthContext'
+export { ContactRequestForm } from './ContactRequestForm'
+
 
 
 

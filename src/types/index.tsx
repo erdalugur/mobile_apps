@@ -104,3 +104,15 @@ export interface AuthContextProps {
         signOut: () => Promise<void>
     }
 }
+
+export interface ContactRequestProps {
+    PHONE: string
+    FIRST_NAME: string,
+    LAST_NAME: string
+    PAX: string
+    REQUEST_DATE: string
+    REQUEST_TIME: string
+    NOTE: string
+    REQUEST_TYPE: string
+    REQUESTID: number
+}

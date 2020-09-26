@@ -157,6 +157,8 @@ class Index extends React.PureComponent<Props, State> {
 }
 
 export default connect()(Index);
+
+const bg = '#0000009c'
 const styles = StyleSheet.create({
     container: {
     },
@@ -189,7 +191,7 @@ const styles = StyleSheet.create({
         width: 120,
         borderRadius: 10,
         margin: 5,
-        backgroundColor: '#12121226',
+        backgroundColor: bg,
         overflow: 'hidden',
     },
     categoryItemTextContainer: {
@@ -198,7 +200,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         height: '100%',
-        backgroundColor: '#12121226',
+        backgroundColor: bg,
         //opacity: .6
         paddingBottom: 10
     },

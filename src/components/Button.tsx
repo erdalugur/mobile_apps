@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { StyleSheet, TouchableOpacity, StyleProp, ViewStyle, ActivityIndicator } from 'react-native';
+import { StyleSheet, TouchableOpacity, StyleProp, ViewStyle, ActivityIndicator, TextStyle } from 'react-native';
 import { Text } from './Text'
 import theme from 'theme'
 
@@ -13,6 +13,9 @@ interface ButtonProps {
     activeOpacity?: number
     loading?: boolean
     textColor?: string
+    spinnerColor?: string
+    spinnerSize?: number
+    textStyle?: StyleProp<TextStyle>
 }
 
 export function Button(props: ButtonProps) {
@@ -23,9 +26,15 @@ export function Button(props: ButtonProps) {
             onPress={props.onPress}
             {...props.nativeProps}
             style={[styles[props.size || "full"], props.style]}>
-            {props.loading ? <ActivityIndicator /> :
-                <Text color={props.textColor}>{props.children}</Text>
-            }
+            {props.loading ? (
+                <ActivityIndicator
+                    color={props.spinnerColor || theme.colors.white}
+                    size={props.spinnerSize || 30} />
+            ) : (
+                    <Text
+                        style={[props.textStyle]}
+                        color={props.textColor}>{props.children}</Text>
+                )}
         </TouchableOpacity>
     );
 };

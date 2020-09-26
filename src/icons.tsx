@@ -133,3 +133,13 @@ export function User(props: IconProps) {
 export function Activity(props: IconProps) {
     return <Feather name="activity" onPress={props.onPress} size={props.size || 30} color={props.color} />
 }
+export function Email(props: IconProps) {
+    return <AntDesign name="mail" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}
+export function Form(props: IconProps) {
+    return <AntDesign name="form" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}
+
+export function HeartBeat(props: IconProps) {
+    return <FontAwesome name="heartbeat" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}

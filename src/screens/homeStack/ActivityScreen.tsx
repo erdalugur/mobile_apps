@@ -5,7 +5,7 @@ export class ActivityScreen extends React.PureComponent<any, any> {
     render() {
         return (
             <Layout style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <Text>Size sunabileceğimiz aktivitemiz henüz bulunmuyor.</Text>
+                <Text>Henüz etkinlik/aktivite bulunmuyor.</Text>
             </Layout>
         )
     }

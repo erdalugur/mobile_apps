@@ -53,7 +53,11 @@ export const screens = {
     surveyScreen: 'SurveyScreen',
     navigationScreen: 'NavigationScreen',
     campaignScreen: 'CampaignScreen',
-    activityScreen: 'ActivityScreen'
+    activityScreen: 'ActivityScreen',
+    reservationRequestScreen: 'ReservationRequestScreen',
+    organizatonScreen: 'OrganizationScreen',
+    organizatonRequestScreen: 'OrganizatonRequestScreen',
+
 }
 
 export const AppStack = createStackNavigator();

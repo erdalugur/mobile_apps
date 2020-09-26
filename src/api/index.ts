@@ -1,7 +1,7 @@
 import { IResponse, IProc, ILogin } from './types'
 import config from 'config';
 import { messages, userManager, configurationManager, applicationManager } from 'utils';
-import { FetchAllModel, SetCartRequest } from 'types';
+import { ContactRequestProps, FetchAllModel, SetCartRequest } from 'types';
 import { getInitialState } from 'myRedux/rootReducer';
 
 async function toJSON(e: any) {
@@ -299,6 +299,33 @@ export const dataManager = {
             model: 'MPOS_GET_CAMPAIGNS',
             parameters: [
                 { key: 'STOREID', value: place?.ID }
+            ],
+            action: 'public'
+        })
+    },
+    loadOrganizations: async function () {
+        let place = await configurationManager.getPlace();
+        return await QueryableIO<IProc>({
+            model: 'MPOS_GET_ORGANIZATIONS',
+            parameters: [{ key: 'STOREID', value: place?.ID }],
+            action: 'public'
+        })
+    },
+    makeRequest: async function (params: ContactRequestProps) {
+        let store = await configurationManager.getPlace();
+        return await QueryableIO<IProc>({
+            model: 'MPOS_SEND_REQUEST',
+            parameters: [
+                { key: 'STOREID', value: store?.ID },
+                { key: 'FIRST_NAME', value: params.FIRST_NAME },
+                { key: 'LAST_NAME', value: params.LAST_NAME },
+                { key: 'PHONE', value: params.PHONE },
+                { key: 'PAX', value: params.PAX },
+                { key: 'REQUEST_DATE', value: params.REQUEST_DATE },
+                { key: 'REQUEST_TIME', value: params.REQUEST_TIME },
+                { key: 'REQUEST_TYPE', value: params.REQUEST_TYPE },
+                { key: 'REQUESTID', value: params.REQUESTID },
+                { key: 'NOTE', value: params.NOTE },
             ],
             action: 'public'
         })

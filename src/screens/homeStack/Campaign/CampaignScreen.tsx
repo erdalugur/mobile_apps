@@ -4,6 +4,7 @@ import { Star } from 'icons';
 import React from 'react'
 import { ScrollView, ImageBackground, Dimensions, StyleSheet } from 'react-native';
 import theme from 'theme';
+import { applicationManager } from 'utils';
 import { DiscoutnComponent } from './DiscountComponent';
 import { StarComponent } from './StarComponent';
 
@@ -59,10 +60,10 @@ export class CampaignScreen extends React.PureComponent<Props, State> {
     renderDates = (x: ItemProps) => {
         let dates;
         if (x.START_DATE) {
-            dates = x.START_DATE.split('T')[0]
+            dates = applicationManager.formatDate(x.START_DATE)
         }
         if (x.END_DATE) {
-            dates += ` ile ${x.END_DATE.split('T')[0]}`
+            dates += ` ~ ${applicationManager.formatDate(x.END_DATE)}`
         }
         if (dates) {
             return (
@@ -86,11 +87,14 @@ export class CampaignScreen extends React.PureComponent<Props, State> {
                 source={{ uri: x.IMAGE_URL }}
                 resizeMethod="auto"
                 style={{
-                    height: (height / 4) - 20, width: width - 20,
+                    height: (height / 4) - 20,
+                    width: width - 20,
                     marginTop: 10,
                     marginHorizontal: 10,
                     borderRadius: 5,
                     overflow: 'hidden',
+                    minHeight: 140,
+                    maxHeight: 180
                 }}>
                 <View style={{ backgroundColor: '#0000009c', height: '100%', width: '100%' }}>
                     {this.renderChildren(x)}
