@@ -107,7 +107,7 @@ export class CampaignScreen extends React.PureComponent<Props, State> {
 
     render() {
         return (
-            <Layout style={{ flex: 1 }}>
+            <Layout style={{ flex: 1 }} loading={this.state.loading}>
                 {this.state.items.length > 0 ? (
                     <ScrollView>
                         {this.state.items.map(x => this.renderItem(x))}

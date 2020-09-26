@@ -303,11 +303,14 @@ export const dataManager = {
             action: 'public'
         })
     },
-    loadOrganizations: async function () {
+    loadOrganizations: async function (TYPE: number) {
         let place = await configurationManager.getPlace();
         return await QueryableIO<IProc>({
             model: 'MPOS_GET_ORGANIZATIONS',
-            parameters: [{ key: 'STOREID', value: place?.ID }],
+            parameters: [
+                { key: 'STOREID', value: place?.ID },
+                { key: 'TYPE', value: TYPE }
+            ],
             action: 'public'
         })
     },

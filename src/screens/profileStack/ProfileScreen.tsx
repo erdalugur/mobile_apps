@@ -1,0 +1,42 @@
+import React from 'react';
+import { Platform, StyleSheet } from 'react-native';
+import { Text, View } from 'components'
+import { TouchableOpacity } from 'react-native';
+import theme from 'theme';
+import { IAction, actionTypes } from 'myRedux/types';
+import { AuthContextProps, NavigationProps } from 'types';
+import { screens } from 'navigation';
+import { AuthContext } from 'navigation'
+interface State { }
+
+interface Props extends NavigationProps<{}, any>, AuthContextProps {
+    dispatch: (param: IAction<string>) => void
+}
+
+export function ProfileScreen(props: Props) {
+    const { signOut } = React.useContext(AuthContext);
+
+    const logout = async () => {
+        signOut();
+        props.navigation.navigate(screens.auth);
+    }
+    return (
+        <View style={styles.container}>
+            <Text>Hesabım</Text>
+        </View>
+    );
+}
+
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    item: {
+        backgroundColor: theme.colors.border,
+        height: 40,
+        justifyContent: 'center',
+        marginTop: 5,
+        alignItems: 'center'
+    }
+});

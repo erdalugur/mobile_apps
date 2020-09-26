@@ -25,7 +25,7 @@ interface State {
     items: Array<ItemProps>
     error: { [key: string]: string }
 }
-export class OrganizationScreen extends React.PureComponent<Props, State> {
+export class ActivityScreen extends React.PureComponent<Props, State> {
 
     state: State = {
         loading: false,
@@ -40,7 +40,7 @@ export class OrganizationScreen extends React.PureComponent<Props, State> {
     loadAsync = async () => {
         this.setState({ loading: true })
 
-        const result = await dataManager.loadOrganizations(1);
+        const result = await dataManager.loadOrganizations(2);
         if (result.statusCode === 200 && result.data) {
             this.setState({ items: result.data, loading: false })
         } else {
@@ -51,23 +51,12 @@ export class OrganizationScreen extends React.PureComponent<Props, State> {
     renderItem = (x: ItemProps) => {
         return (
             <TouchableOpacity
-                style={{
-                    paddingTop: 10,
-                    paddingHorizontal: 10,
-                    height: (height / 4) - 20,
-                    minHeight: 140,
-                    maxHeight: 180
-                }}
-                key={x.ID} onPress={() => this.props.navigation.navigate(screens.organizatonRequestScreen, { ID: x.ID, NAME: x.NAME })}>
+                style={[styles.item]}
+                key={x.ID} onPress={() => this.props.navigation.navigate(screens.activityRequestScreen, { ID: x.ID, NAME: x.NAME })}>
                 <ImageBackground
                     source={{ uri: x.IMAGE_URL }}
                     resizeMethod="auto"
-                    style={{
-                        height: '100%',
-                        width: '100%',
-                        borderRadius: 5,
-                        overflow: 'hidden',
-                    }}>
+                    style={[styles.image]}>
                     <View style={{ backgroundColor: '#0000009c', height: '100%', width: '100%' }}>
                         <Text style={[styles.title]}>{x.NAME}</Text>
                     </View>
@@ -118,4 +107,17 @@ const styles = StyleSheet.create({
         top: '50%',
         fontWeight: 'bold'
     },
+    item: {
+        paddingTop: 10,
+        paddingHorizontal: 10,
+        height: (height / 4) - 20,
+        minHeight: 140,
+        maxHeight: 180
+    },
+    image: {
+        height: '100%',
+        width: '100%',
+        borderRadius: 5,
+        overflow: 'hidden',
+    }
 })

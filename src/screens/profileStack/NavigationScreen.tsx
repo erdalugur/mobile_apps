@@ -13,7 +13,21 @@ interface Props extends NavigationProps<{}, any>, AuthContextProps {
     dispatch: (param: IAction<string>) => void
 }
 
-function Index(props: Props) {
+interface MenuItemProps {
+    title: string
+    onPress: () => void
+}
+function MenuItem(props: MenuItemProps) {
+    return (
+        <TouchableOpacity
+            style={[styles.item]}
+            onPress={props.onPress}>
+            <Text>{props.title}</Text>
+        </TouchableOpacity>
+    )
+}
+
+export function SettingNavigationScreen(props: Props) {
     const { signOut } = React.useContext(AuthContext);
 
     const logout = async () => {
@@ -22,15 +36,18 @@ function Index(props: Props) {
     }
     return (
         <View style={styles.container}>
-            <TouchableOpacity style={{
-                backgroundColor: theme.colors.border,
-                height: 40,
-                justifyContent: 'center',
-                marginTop: 5,
-                alignItems: 'center'
-            }}>
-                <Text>Hesap Ayarları</Text>
-            </TouchableOpacity>
+            <MenuItem
+                title="Rezervasyonlarım"
+                onPress={() => props.navigation.navigate(screens.myReservations)}
+            />
+            <MenuItem
+                title="İşlem Geçmişi"
+                onPress={() => props.navigation.navigate(screens.myHistory)}
+            />
+            <MenuItem
+                title="Hesap Ayarları"
+                onPress={() => props.navigation.navigate(screens.myProfile)}
+            />
             { Platform.OS !== 'web' &&
                 <TouchableOpacity
                     onPress={logout}
@@ -48,10 +65,17 @@ function Index(props: Props) {
     );
 }
 
-export default Index
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
+    item: {
+        backgroundColor: theme.colors.border,
+        height: 40,
+        justifyContent: 'center',
+        marginTop: 5,
+        alignItems: 'flex-start',
+        paddingHorizontal: 10
+    }
 });

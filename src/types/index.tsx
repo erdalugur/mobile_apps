@@ -77,6 +77,12 @@ export interface PlaceModel {
     PHONE: string
     PACKAGE_ORDER: boolean
     CATEGORY_THEME_N0: string
+    USE_GUEST_MODULE: boolean,
+    USE_CAMPAIGN_MODULE: boolean,
+    USE_ORGANIZATION_MODULE: boolean,
+    USE_SURVEY_MODULE: boolean,
+    USE_ACTIVITY_MODULE: boolean,
+    USE_RESERVATION_MODULE: boolean
 }
 
 export interface DomainSettingModel extends PlaceModel { }

@@ -11,7 +11,7 @@ import {
     AdditionScreen,
     CartQRScreen,
     CartResultScreen,
-    ProductNoteScreen
+    ProductNoteScreen, ProfileScreen
 } from 'screens'
 
 import {
@@ -23,15 +23,18 @@ import { CartButton, View } from 'components'
 import theme from 'theme';
 import { Close, HeaderBack, MoreOption, Survey } from 'icons'
 import { screens } from 'navigation'
-import { VideoScreen } from './VideoScreen';
+import { VideoScreen } from './Product/VideoScreen';
 import { SurveyScreen } from './Survey/SurveyScreen'
 import { NavigationScreen } from './NavigationScreen';
-import ProfileScreen from 'screens/settingStack/ProfileScreen';
-import { ActivityScreen } from './ActivityScreen';
+import { ActivityScreen } from './Activity/ActivityScreen';
 import { CampaignScreen } from './Campaign/CampaignScreen';
-import { ReservationRequestScreen } from './ReservationRequestScreen';
+import { ReservationRequestScreen } from './Reservation/ReservationRequestScreen';
 import { OrganizationScreen } from './Organization/OrganizationScreen';
 import { OrganizationRequestScreen } from './Organization/OrganizationRequestScreen';
+import { ActivityRequestScreen } from './Activity/ActivityRequestScreen';
+import { SettingNavigationScreen } from 'screens/profileStack/NavigationScreen';
+import MyReservationScreen from 'screens/profileStack/MyReservationScreen';
+import { HistoryScreen } from 'screens/profileStack/HistoryScreen';
 
 export const HomeStack = createStackNavigator();
 
@@ -156,8 +159,32 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
                         <DrawerMenu />
                     )
                 }}
-                name={screens.profile}
+                name={screens.profileNavigation}
+                component={SettingNavigationScreen}
+            />
+            <HomeStack.Screen
+                options={{
+                    title: 'Hesabım',
+                    headerRight: () => null
+                }}
+                name={screens.myProfile}
                 component={ProfileScreen}
+            />
+            <HomeStack.Screen
+                options={{
+                    title: 'Rezervasyonlarım',
+                    headerRight: () => null
+                }}
+                name={screens.myReservations}
+                component={MyReservationScreen}
+            />
+            <HomeStack.Screen
+                options={{
+                    title: 'İşlem Geçmişi',
+                    headerRight: () => null
+                }}
+                name={screens.myHistory}
+                component={HistoryScreen}
             />
             <HomeStack.Screen
                 options={{
@@ -169,6 +196,14 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
                 }}
                 name={screens.activityScreen}
                 component={ActivityScreen}
+            />
+            <HomeStack.Screen
+                options={{
+                    title: 'Etkinlik Talep Formu',
+                    headerRight: () => null
+                }}
+                name={screens.activityRequestScreen}
+                component={ActivityRequestScreen}
             />
             <HomeStack.Screen
                 options={{

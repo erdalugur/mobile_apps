@@ -11,7 +11,8 @@ import { UserModel } from 'types';
 import { KitchenStackScreen } from 'screens/kitchenStack'
 import { ReportStackScreen } from 'screens/reportStack'
 import { CachierStackScreen } from 'screens/cashierStack'
-import { SettingStackScreen } from 'screens/settingStack'
+import { SettingNavigationScreen } from 'screens/profileStack/NavigationScreen'
+import { ProfileScreen } from 'screens/profileStack/ProfileScreen'
 import { NotificationStackScreen } from 'screens/notificationStack'
 import { HomeTabs, StaffTabs } from './home'
 import {
@@ -32,6 +33,8 @@ export const screens = {
     search: 'Search',
     notification: 'Notification',
     profile: 'Profile',
+    profileNavigation: 'ProfileNavigation',
+    myProfile: 'MyProfileScreen',
     signin: 'Signin',
     loginQR: 'LoginQR',
     presentation: 'Presentation',
@@ -54,10 +57,12 @@ export const screens = {
     navigationScreen: 'NavigationScreen',
     campaignScreen: 'CampaignScreen',
     activityScreen: 'ActivityScreen',
+    activityRequestScreen: 'ActivityRequestScreen',
     reservationRequestScreen: 'ReservationRequestScreen',
     organizatonScreen: 'OrganizationScreen',
     organizatonRequestScreen: 'OrganizatonRequestScreen',
-
+    myReservations: 'MyReservations',
+    myHistory: 'MyHistory'
 }
 
 export const AppStack = createStackNavigator();
@@ -249,9 +254,11 @@ export default function ({ navigation }: any) {
                                                 name={screens.search} />
 
                                             <AppStack.Screen
-                                                component={SettingStackScreen}
+                                                component={SettingNavigationScreen}
                                                 name={screens.settings} />
-
+                                            <AppStack.Screen
+                                                component={ProfileScreen}
+                                                name={screens.profile} />
                                             <AppStack.Screen
                                                 component={KitchenStackScreen}
                                                 name={screens.kitchen} />
