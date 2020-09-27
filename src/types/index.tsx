@@ -122,3 +122,11 @@ export interface ContactRequestProps {
     REQUEST_TYPE: string
     REQUESTID: number
 }
+
+export interface TicketItemProps {
+    THEME_NO: number
+    ID: number
+    NAME: string
+    IMAGE_URL: string
+    DESCRIPTION: string
+}

@@ -1,10 +1,10 @@
 import React from 'react'
-import { Button, Input, Layout, Text, View } from 'components'
+import { Button, Input, Layout, Text, View, TicketOne, TicketTwo } from 'components'
 import { StyleSheet, TouchableOpacity, ScrollView, ImageBackground, Dimensions } from 'react-native'
 import theme from 'theme'
 import { messageBox } from 'utils'
 import { dataManager } from 'api'
-import { NavigationProps } from 'types'
+import { NavigationProps, TicketItemProps } from 'types'
 import { screens } from 'navigation'
 
 const { width, height } = Dimensions.get('window')
@@ -13,18 +13,18 @@ interface Props extends NavigationProps<any, any> {
 
 }
 
-interface ItemProps {
-    ID: number
-    NAME: string
-    IMAGE_URL: string
-    DESCRIPTION: string
-}
 
 interface State {
     loading: boolean
-    items: Array<ItemProps>
+    items: Array<TicketItemProps>
     error: { [key: string]: string }
 }
+
+const themes: { [key: string]: any } = {
+    1: TicketOne,
+    2: TicketTwo
+}
+
 export class ActivityScreen extends React.PureComponent<Props, State> {
 
     state: State = {
@@ -48,20 +48,15 @@ export class ActivityScreen extends React.PureComponent<Props, State> {
         }
     }
 
-    renderItem = (x: ItemProps) => {
+    renderItem = (x: TicketItemProps) => {
+        x.THEME_NO = x.THEME_NO || 1;
+        let Component = themes[x.THEME_NO]
         return (
-            <TouchableOpacity
-                style={[styles.item]}
-                key={x.ID} onPress={() => this.props.navigation.navigate(screens.activityRequestScreen, { ID: x.ID, NAME: x.NAME })}>
-                <ImageBackground
-                    source={{ uri: x.IMAGE_URL }}
-                    resizeMethod="auto"
-                    style={[styles.image]}>
-                    <View style={{ backgroundColor: '#0000009c', height: '100%', width: '100%' }}>
-                        <Text style={[styles.title]}>{x.NAME}</Text>
-                    </View>
-                </ImageBackground>
-            </TouchableOpacity>
+            <Component
+                key={x.ID}
+                onPress={() => this.props.navigation.navigate(screens.activityRequestScreen, { ID: x.ID, NAME: x.NAME })}
+                {...x}
+            />
         )
     }
 

@@ -22,6 +22,8 @@ export { Layout } from './Layout'
 export { ProductNote } from './ProductNote'
 export { useAuthContext } from './useAuthContext'
 export { ContactRequestForm } from './ContactRequestForm'
+export { TicketOne } from './Ticket/TicketOne'
+export { TicketTwo } from './Ticket/TicketTwo'
 
 
 
