@@ -1,12 +1,13 @@
 import React from 'react'
 import { Input, Layout, Text, View } from 'components'
-import { StyleSheet, ScrollView } from 'react-native'
+import { StyleSheet, ScrollView, Dimensions } from 'react-native'
 import { dataManager } from 'api'
 import { Emoji } from './Emoji'
 import theme from 'theme'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { configurationManager, messageBox, userManager } from 'utils'
 import { constands } from 'constands'
+const { height } = Dimensions.get('window')
 interface Props {
 
 }
@@ -187,9 +188,8 @@ export class SurveyScreen extends React.PureComponent<Props, State> {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: theme.colors.card
-        //alignItems: 'center',
-        //justifyContent: 'center'
+        backgroundColor: theme.colors.card,
+        height: height - 80
     },
     infoRow: { borderColor: theme.colors.border, borderBottomWidth: 1, marginTop: 10 }
 })

@@ -236,11 +236,12 @@ export const dataManager = {
             return await errorPromise(messages.PLEASE_LOGIN_FIRST);
         }
     },
-    loadPlace: async function (storeId: string) {
+    loadPlace: async function ({ storeId = "0", domain = "" }) {
         return await QueryableIO<IProc>({
             model: 'MPOS_GET_PLACE',
             parameters: [
-                { key: 'STOREID', value: storeId }
+                { key: 'STOREID', value: storeId },
+                { key: 'DOMAIN', value: domain }
             ],
             action: 'public'
         })
@@ -316,6 +317,7 @@ export const dataManager = {
     },
     makeRequest: async function (params: ContactRequestProps) {
         let store = await configurationManager.getPlace();
+        let user = await userManager.get();
         return await QueryableIO<IProc>({
             model: 'MPOS_SEND_REQUEST',
             parameters: [
@@ -329,6 +331,7 @@ export const dataManager = {
                 { key: 'REQUEST_TYPE', value: params.REQUEST_TYPE },
                 { key: 'REQUESTID', value: params.REQUESTID },
                 { key: 'NOTE', value: params.NOTE },
+                { key: 'USERID', value: user?.ID || 0 },
             ],
             action: 'public'
         })

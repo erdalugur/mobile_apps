@@ -1,10 +1,11 @@
 import React from 'react'
 import { Button, ContactRequestForm, Input, Layout, Text, View } from 'components'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
 import theme from 'theme'
 import { messageBox } from 'utils'
 import { ContactRequestProps } from 'types'
 import { dataManager } from 'api'
+const { height } = Dimensions.get('window')
 
 interface Props { }
 
@@ -47,9 +48,8 @@ export class ReservationRequestScreen extends React.PureComponent<any, State> {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: theme.colors.card
-        //alignItems: 'center',
-        //justifyContent: 'center'
+        backgroundColor: theme.colors.card,
+        height: height - 80
     },
     infoRow: { borderColor: theme.colors.border, borderBottomWidth: 1, marginTop: 10 },
     button: {

@@ -65,7 +65,7 @@ export class ContactRequestForm extends React.PureComponent<Props, State> {
 
     render() {
         return (
-            <ScrollView>
+            <React.Fragment>
                 <View style={[styles.infoRow]}>
                     <Input
                         placeholder="Tarih"
@@ -124,7 +124,7 @@ export class ContactRequestForm extends React.PureComponent<Props, State> {
                     onPress={this.makeRequestAsync}>
                     Gönder
                 </Button>
-            </ScrollView>
+            </React.Fragment>
         )
     }
 }

@@ -1,11 +1,12 @@
 import React from 'react'
 import { Button, ContactRequestForm, Input, Layout, Text, View } from 'components'
-import { StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
+import { StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
 import theme from 'theme'
 import { messageBox } from 'utils'
 import { ContactRequestProps, NavigationProps } from 'types'
 import { dataManager } from 'api'
 
+const { height } = Dimensions.get('window')
 interface Props extends NavigationProps<{
     ID: number
     NAME: string
@@ -118,9 +119,8 @@ export class ActivityRequestScreen extends React.PureComponent<Props, State> {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: theme.colors.card
-        //alignItems: 'center',
-        //justifyContent: 'center'
+        backgroundColor: theme.colors.card,
+        height: height - 80
     },
     infoRow: { borderColor: theme.colors.border, borderBottomWidth: 1, marginTop: 10 },
     button: {

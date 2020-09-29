@@ -109,61 +109,31 @@ export default function ({ navigation }: any) {
         }
     );
 
-    async function getPlaceAsync(storeId: string) {
-        const { data, statusCode, error } = await dataManager.loadPlace(storeId)
-        return new Promise<'ok' | 'nok'>((resolve, reject) => {
-            if (statusCode === 200 && data) {
-                configurationManager.setPlace(data[0]).then(x => {
-                    return resolve('ok')
-                })
-            } else {
-                configurationManager.removePlace().then(x => {
-                    return resolve('nok')
-                })
-            }
-        })
-
-    }
-
-    const handleWebApp = async () => {
-        try {
-            const domain = applicationManager.domain();
-            const { data, statusCode, error } = await dataManager.loadPlaceByDomain(domain);
-            if (statusCode === 200 && data) {
-                configurationManager.setPlace(data[0])
-                dispatch({ type: 'MAKE_WEB' });
-            } else {
-                configurationManager.removePlace();
-            }
-        } catch (error) { }
-    }
-
-    const handleMobileApp = async () => {
-        try {
-            let user = await userManager.get();
-            if (user) {
-                let result = await getPlaceAsync(user.STOREID)
-                if (result === 'ok') {
-                    dispatch({ type: 'RESTORE_TOKEN', token: user.token });
-                } else {
-                    configurationManager.removePlace();
-                    dispatch({ type: 'RESTORE_TOKEN', token: null });
-                }
-            } else {
-                dispatch({ type: 'RESTORE_TOKEN', token: null });
-            }
-        } catch (e) {
-            dispatch({ type: 'RESTORE_TOKEN', token: null });
+    const applicationParams = async () => {
+        let user = await userManager.get();
+        let domain = Platform.OS === 'web' && applicationManager.domain() || "";
+        return {
+            storeId: user?.STOREID || "0",
+            domain: domain,
+            token: user?.token
         }
     }
 
     React.useEffect(() => {
         // Fetch the token from storage then navigate to our appropriate place
         const bootstrapAsync = async () => {
-            if (Platform.OS === 'web') {
-                await handleWebApp();
+            const { domain, storeId, token } = await applicationParams();
+            debugger
+            const { data, statusCode, error } = await dataManager.loadPlace({ domain, storeId })
+            if (statusCode === 200 && data) {
+                configurationManager.setPlace(data[0])
+                if (Platform.OS === 'web') {
+                    dispatch({ type: 'MAKE_WEB' });
+                } else {
+                    dispatch({ type: 'RESTORE_TOKEN', token: token });
+                }
             } else {
-                await handleMobileApp();
+                configurationManager.removePlace();
             }
         };
 
@@ -174,9 +144,7 @@ export default function ({ navigation }: any) {
         () => ({
             signIn: async (user: UserModel) => {
                 await userManager.set(user)
-                let result = await getPlaceAsync(user.STOREID)
-                if (result === 'ok')
-                    dispatch({ type: 'SIGN_IN', token: user.token });
+                dispatch({ type: 'SIGN_IN', token: user.token });
             },
             signOut: async () => {
                 await userManager.remove();
@@ -185,9 +153,7 @@ export default function ({ navigation }: any) {
             },
             signUp: async (user: UserModel) => {
                 await userManager.set(user)
-                let result = await getPlaceAsync(user.STOREID)
-                if (result === 'ok')
-                    dispatch({ type: 'SIGN_IN', token: user.token });
+                dispatch({ type: 'SIGN_IN', token: user.token });
             },
         }),
         []
