@@ -13,9 +13,7 @@ import { SingleMultiType, actionTypes, IAction } from 'myRedux/types';
 const { height } = Dimensions.get('screen')
 type screenOptions = 'Home' | 'Search' | 'Cashier' | 'Kitchen'
 interface Props extends NavigationProps<any, any> {
-    cart: SingleMultiType<any, {
-        [key: string]: CartItem;
-    }>
+    cart: { [key: string]: CartItem }
     dispatch: (param: IAction<any>) => void
     routeScreen: screenOptions
 }
@@ -121,7 +119,7 @@ class Index extends React.PureComponent<Props, State>{
             messageBox('Lütfen bir masa seçin')
             return;
         }
-        let { items } = this.props.cart
+        let items = this.props.cart
         if (Object.keys(items).length === 0) {
             messageBox(messages.EMPTY_CART_MESSAGE)
         } else {
@@ -144,9 +142,9 @@ class Index extends React.PureComponent<Props, State>{
     }
 
     renderSendButton = () => {
-        const { routeScreen, cart, navigation } = this.props
+        let { routeScreen = "", cart, navigation } = this.props
         let fromCart = routeScreen === 'Search'
-        return fromCart && Object.keys(cart.items).length > 0 && <TouchableOpacity
+        return fromCart && Object.keys(cart).length > 0 && <TouchableOpacity
             onPress={this.sendOrder}
             activeOpacity={0.8} style={[styles.sendOrder]}>
             <Text>{messages.SEND_CART}</Text>

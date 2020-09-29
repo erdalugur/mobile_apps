@@ -119,31 +119,31 @@ export default function ({ navigation }: any) {
         }
     }
 
-    React.useEffect(() => {
-        // Fetch the token from storage then navigate to our appropriate place
-        const bootstrapAsync = async () => {
-            const { domain, storeId, token } = await applicationParams();
-            debugger
-            const { data, statusCode, error } = await dataManager.loadPlace({ domain, storeId })
-            if (statusCode === 200 && data) {
-                configurationManager.setPlace(data[0])
-                if (Platform.OS === 'web') {
-                    dispatch({ type: 'MAKE_WEB' });
-                } else {
-                    dispatch({ type: 'RESTORE_TOKEN', token: token });
-                }
+    const bootstrapAsync = async (token: string | undefined, domain: string, storeId: string) => {
+        const { data, statusCode, error } = await dataManager.loadPlace({ domain, storeId })
+        if (statusCode === 200 && data) {
+            configurationManager.setPlace(data[0])
+            if (Platform.OS === 'web') {
+                dispatch({ type: 'MAKE_WEB' });
             } else {
-                configurationManager.removePlace();
+                dispatch({ type: 'RESTORE_TOKEN', token: token });
             }
-        };
+        } else {
+            configurationManager.removePlace();
+        }
+    };
 
-        bootstrapAsync();
+    React.useEffect(() => {
+        applicationParams().then(({ token, domain, storeId }) => {
+            bootstrapAsync(token, domain, storeId);
+        })
     }, []);
 
     const authContext = React.useMemo(
         () => ({
             signIn: async (user: UserModel) => {
                 await userManager.set(user)
+                await bootstrapAsync(user.token, '', user.STOREID);
                 dispatch({ type: 'SIGN_IN', token: user.token });
             },
             signOut: async () => {
@@ -153,6 +153,7 @@ export default function ({ navigation }: any) {
             },
             signUp: async (user: UserModel) => {
                 await userManager.set(user)
+                await bootstrapAsync(user.token, '', user.STOREID);
                 dispatch({ type: 'SIGN_IN', token: user.token });
             },
         }),
