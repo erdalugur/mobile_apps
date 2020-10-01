@@ -130,3 +130,11 @@ export interface TicketItemProps {
     IMAGE_URL: string
     DESCRIPTION: string
 }
+
+export interface RegisterGuestProps {
+    FIRST_NAME: string
+    LAST_NAME: string
+    PHONE: string
+    ADDRESS: string
+    PASSWORD: string
+}

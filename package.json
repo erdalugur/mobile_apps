@@ -9,6 +9,7 @@
     "buid:web": "expo build:web"
   },
   "dependencies": {
+    "@eva-design/eva": "^2.0.0",
     "@react-native-community/masked-view": "0.1.6",
     "@react-navigation/bottom-tabs": "^5.2.8",
     "@react-navigation/native": "^5.2.3",
@@ -16,6 +17,7 @@
     "@types/react-native-snap-carousel": "^3.8.1",
     "@types/react-native-text-input-mask": "^0.7.4",
     "@types/react-redux": "^7.1.7",
+    "@ui-kitten/components": "^5.0.0",
     "babel-plugin-module-resolver": "^4.0.0",
     "expo": "~37.0.3",
     "expo-av": "~8.1.0",
@@ -32,6 +34,7 @@
     "react-native-safe-area-context": "0.7.3",
     "react-native-screens": "~2.2.0",
     "react-native-snap-carousel": "^3.9.0",
+    "react-native-svg": "^12.1.0",
     "react-native-text-input-mask": "^2.0.0",
     "react-native-web": "~0.11.7",
     "react-native-webview": "^9.4.0",

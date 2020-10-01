@@ -62,7 +62,9 @@ export const screens = {
     organizatonScreen: 'OrganizationScreen',
     organizatonRequestScreen: 'OrganizatonRequestScreen',
     myReservations: 'MyReservations',
-    myHistory: 'MyHistory'
+    myHistory: 'MyHistory',
+    loginGuest: 'LoginGuest',
+    registerGuest: 'RegisterGuest'
 }
 
 export const AppStack = createStackNavigator();

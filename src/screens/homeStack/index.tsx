@@ -35,6 +35,8 @@ import { ActivityRequestScreen } from './Activity/ActivityRequestScreen';
 import { SettingNavigationScreen } from 'screens/profileStack/NavigationScreen';
 import MyReservationScreen from 'screens/profileStack/MyReservationScreen';
 import { HistoryScreen } from 'screens/profileStack/HistoryScreen';
+import LoginGuestScreen from './Auth/LoginGuestScreen';
+import RegisterGuestScreen from './Auth/RegisterGuestScreen';
 
 export const HomeStack = createStackNavigator();
 
@@ -55,6 +57,7 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
 
     return (
         <HomeStack.Navigator
+            //initialRouteName={screens.loginGuest}
             headerMode="screen"
             screenOptions={{
                 headerRight: ({ tintColor }: any) => (
@@ -111,6 +114,20 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
                 }}
                 name={screens.cartQR}
                 component={CartQRScreen}
+            />
+            <HomeStack.Screen
+                options={{
+                    header: () => null
+                }}
+                name={screens.loginGuest}
+                component={LoginGuestScreen}
+            />
+            <HomeStack.Screen
+                options={{
+                    header: () => null
+                }}
+                name={screens.registerGuest}
+                component={RegisterGuestScreen}
             />
             <HomeStack.Screen
                 options={{

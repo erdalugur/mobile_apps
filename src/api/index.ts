@@ -1,7 +1,7 @@
-import { IResponse, IProc, ILogin } from './types'
+import { IResponse, IProc, ILogin, IRegister } from './types'
 import config from 'config';
 import { messages, userManager, configurationManager, applicationManager } from 'utils';
-import { ContactRequestProps, FetchAllModel, SetCartRequest } from 'types';
+import { ContactRequestProps, FetchAllModel, RegisterGuestProps, SetCartRequest } from 'types';
 import { getInitialState } from 'myRedux/rootReducer';
 
 async function toJSON(e: any) {
@@ -128,6 +128,40 @@ export const dataManager = {
             fields: ['ID'],
             filters: [{ key: 'STOREID', value: store, operator: '=' }],
         })
+    },
+    loginGuest: async function (username: string, password: string) {
+        let place = await configurationManager.getPlace();
+        return await QueryableIO<ILogin>({
+            action: 'login',
+            keyField: {
+                key: 'PHONE', value: username
+            },
+            valueField: {
+                key: 'PASSWORD', value: password
+            },
+            model: 'USERS',
+            fields: ['ID'],
+            filters: [{ key: 'STOREID', value: place?.ID || "0", operator: '=' }],
+        })
+    },
+    registerGuest: async function (param: RegisterGuestProps) {
+        let place = await configurationManager.getPlace();
+        if (place) {
+            return await QueryableIO<IProc>({
+                model: 'MPOS_GUEST_REGISTER',
+                action: 'public',
+                parameters: [
+                    { key: 'PHONE', value: param.PHONE },
+                    { key: 'FIRST_NAME', value: param.FIRST_NAME },
+                    { key: 'LAST_NAME', value: param.LAST_NAME },
+                    { key: 'PASSWORD', value: param.PASSWORD },
+                    { key: 'ADDRESS', value: param.ADDRESS },
+                    { key: 'STOREID', value: place.ID },
+                ]
+            })
+        } else {
+            return errorPromise('Tesis kaydı bulunamadı')
+        }
     },
     loadWaiting: async function () {
         let user = await userManager.get();

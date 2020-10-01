@@ -8,7 +8,7 @@ import theme from 'theme';
 import { SingleMultiType, IAction, actionTypes } from 'myRedux/types';
 import { Plus, Minus, QRCode, Table, EmojiNeutral, Phone, Pencil, Plus2, Minus2 } from 'icons';
 import { screens } from 'navigation';
-import { messageBox, messages, applicationManager, confirmBox } from 'utils';
+import { messageBox, messages, applicationManager, confirmBox, userManager } from 'utils';
 import { dataManager } from 'api';
 import { constands } from 'constands';
 
@@ -27,8 +27,7 @@ interface State {
     enableActions: boolean
     packageOrder: boolean
     enableQR: boolean
-    displayList: number[],
-    usePhone: boolean
+    displayList: number[]
 }
 class Index extends React.PureComponent<Props, State> {
 
@@ -179,12 +178,16 @@ class Index extends React.PureComponent<Props, State> {
             messageBox('Lütfen bir masa seçin')
             return;
         }
+        this.sendAsync()
+    }
+
+    sendAsync = async () => {
         let items = this.props.cart
         if (!this.checkCartItems()) {
             messageBox(messages.EMPTY_CART_MESSAGE)
         } else {
             let { statusCode, data, error } = await dataManager.setCart({
-                TABLEID: this.state.table,
+                TABLEID: this.state.table || "0",
                 JSON: Object.keys(items).map(x => {
                     return {
                         PRODUCTID: items[x].ID.toString(),
@@ -246,10 +249,14 @@ class Index extends React.PureComponent<Props, State> {
         }
     }
 
-    sendQuestion = () => {
-        confirmBox('Giriş yaparak devam etmek ister misiniz?', (result) => {
-            debugger
-        })
+    sendQuestion = async () => {
+        if (await userManager.isAuthenticated()) {
+            this.sendAsync();
+        } else {
+            confirmBox('Giriş yaparak devam etmek ister misiniz?', (result) => {
+                this.props.navigation.navigate(screens.loginGuest, { action: this.sendAsync })
+            })
+        }
     }
 
     renderActions = () => {

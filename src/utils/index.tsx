@@ -52,6 +52,10 @@ export const userManager = {
     },
     remove: async function () {
         return AsyncStorage.removeItem(cacheKeys.user);
+    },
+    isAuthenticated: async function () {
+        let result = await userManager.get();
+        return result !== null
     }
 }
 

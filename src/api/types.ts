@@ -131,6 +131,7 @@ export interface IMultiUpdate {
 
 
 export interface IRegister {
+    action: 'register'
     model: string,
     username: string
     afterSelect: string[]
