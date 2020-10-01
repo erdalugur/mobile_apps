@@ -43,8 +43,6 @@ export const cacheService = {
     }
 }
 
-
-
 export const userManager = {
     get: async function () {
         return cacheService.get<UserModel>(cacheKeys.user);
@@ -83,6 +81,27 @@ export function messageBox(message: string) {
         alert(message)
     }
     return Alert.alert(message);
+}
+
+export function confirmBox(message: string, callback: (result: boolean) => void) {
+    if (Platform.OS === 'web') {
+        let result = confirm(message)
+        callback(result)
+    } else {
+        Alert.alert(
+            '',
+            message,
+            [
+                {
+                    text: 'Vazgeç',
+                    onPress: () => callback(false),
+                    style: 'cancel'
+                },
+                { text: 'Tamam', onPress: () => callback(true) }
+            ],
+            { cancelable: true }
+        );
+    }
 }
 
 export const applicationManager = {

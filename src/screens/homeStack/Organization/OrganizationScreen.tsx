@@ -53,7 +53,7 @@ export class OrganizationScreen extends React.PureComponent<Props, State> {
         return (
             <Component
                 key={x.ID}
-                onPress={() => this.props.navigation.navigate(screens.activityRequestScreen, { ID: x.ID, NAME: x.NAME })}
+                onPress={() => this.props.navigation.navigate(screens.organizatonRequestScreen, { ID: x.ID, NAME: x.NAME })}
                 {...x}
             />
         )

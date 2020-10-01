@@ -8,7 +8,7 @@ import theme from 'theme';
 import { SingleMultiType, IAction, actionTypes } from 'myRedux/types';
 import { Plus, Minus, QRCode, Table, EmojiNeutral, Phone, Pencil, Plus2, Minus2 } from 'icons';
 import { screens } from 'navigation';
-import { messageBox, messages, applicationManager } from 'utils';
+import { messageBox, messages, applicationManager, confirmBox } from 'utils';
 import { dataManager } from 'api';
 import { constands } from 'constands';
 
@@ -27,7 +27,8 @@ interface State {
     enableActions: boolean
     packageOrder: boolean
     enableQR: boolean
-    displayList: number[]
+    displayList: number[],
+    usePhone: boolean
 }
 class Index extends React.PureComponent<Props, State> {
 
@@ -245,10 +246,16 @@ class Index extends React.PureComponent<Props, State> {
         }
     }
 
+    sendQuestion = () => {
+        confirmBox('Giriş yaparak devam etmek ister misiniz?', (result) => {
+            debugger
+        })
+    }
+
     renderActions = () => {
-        return (
-            <View style={[styles.bottomButton]}>
-                {this.state.enableActions ? (<>
+        if (Platform.OS !== 'web') {
+            return (
+                <View style={[styles.bottomButton]}>
                     {this.state.enableQR &&
                         <TouchableOpacity onPress={() => {
                             this.props.navigation.navigate(screens.cartQR, { fromScreen: 'cart' })
@@ -256,21 +263,27 @@ class Index extends React.PureComponent<Props, State> {
                             <QRCode color={theme.colors.white} />
                         </TouchableOpacity>
                     }
-                    {this.props.routeScreen !== 'Home' && Platform.OS !== 'web' &&
+                    {this.props.routeScreen !== 'Home' &&
                         <TouchableOpacity onPress={() => {
                             this.props.navigation.navigate(screens.tables, { fromScreen: 'cart' })
                         }}>
                             <Table color={theme.colors.white} />
                         </TouchableOpacity>
                     }
-                </>) : this.state.packageOrder ? (
-                    <TouchableOpacity onPress={() => this.callPhone()}>
-                        <Phone color={theme.colors.white} />
-                    </TouchableOpacity>
-                ) : null
-                }
-            </View>
-        )
+                </View>
+            )
+        } else {
+            return (
+                <View style={[styles.bottomButton]}>
+                    {this.state.packageOrder ? (
+                        <TouchableOpacity onPress={() => this.sendQuestion()}>
+                            <Text>Gönder</Text>
+                        </TouchableOpacity>
+                    ) : null}
+                </View>
+
+            )
+        }
     }
 
     render() {

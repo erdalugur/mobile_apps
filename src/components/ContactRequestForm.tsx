@@ -5,8 +5,6 @@ import theme from 'theme'
 import { messageBox } from 'utils'
 import { ContactRequestProps } from 'types'
 
-
-
 interface State extends ContactRequestProps {
     error: { [key: string]: string }
 }
@@ -67,20 +65,23 @@ export class ContactRequestForm extends React.PureComponent<Props, State> {
         return (
             <React.Fragment>
                 <View style={[styles.infoRow]}>
+                    <Text style={[styles.label]}>Tarih</Text>
                     <Input
-                        placeholder="Tarih"
+                        placeholder="dd.mm.yyyy"
                         value={this.state.REQUEST_DATE}
                         onChangeText={REQUEST_DATE => this.setState({ REQUEST_DATE })} />
                     {this.state.error['REQUEST_DATE'] && <Text style={{ marginLeft: 5, color: 'red' }}>Boş Geçilemez</Text>}
                 </View>
                 <View style={[styles.infoRow]}>
+                    <Text style={[styles.label]}>Saat</Text>
                     <Input
-                        placeholder="Saat"
+                        placeholder="mm:hh"
                         value={this.state.REQUEST_TIME}
                         onChangeText={REQUEST_TIME => this.setState({ REQUEST_TIME })} />
                     {this.state.error['REQUEST_TIME'] && <Text style={{ marginLeft: 5, color: 'red' }}>Boş Geçilemez</Text>}
                 </View>
                 <View style={[styles.infoRow]}>
+                    <Text style={[styles.label]}>Ad</Text>
                     <Input
                         placeholder="Ad"
                         value={this.state.FIRST_NAME}
@@ -88,6 +89,7 @@ export class ContactRequestForm extends React.PureComponent<Props, State> {
                     {this.state.error['FIRST_NAME'] && <Text style={{ marginLeft: 5, color: 'red' }}>Boş Geçilemez</Text>}
                 </View>
                 <View style={[styles.infoRow]}>
+                    <Text style={[styles.label]}>Soyad</Text>
                     <Input
                         placeholder="Soyad"
                         value={this.state.LAST_NAME}
@@ -95,6 +97,7 @@ export class ContactRequestForm extends React.PureComponent<Props, State> {
                     {this.state.error['LAST_NAME'] && <Text style={{ marginLeft: 5, color: 'red' }}>Boş Geçilemez</Text>}
                 </View>
                 <View style={[styles.infoRow]}>
+                    <Text style={[styles.label]}>Telefon</Text>
                     <Input
                         placeholder="Telefon"
                         value={this.state.PHONE}
@@ -102,6 +105,7 @@ export class ContactRequestForm extends React.PureComponent<Props, State> {
                     {this.state.error['PHONE'] && <Text style={{ marginLeft: 5, color: 'red' }}>Boş Geçilemez</Text>}
                 </View>
                 <View style={[styles.infoRow]}>
+                    <Text style={[styles.label]}>Kişi Sayısı</Text>
                     <Input
                         placeholder="Kişi Sayısı"
                         value={this.state.PAX}
@@ -110,6 +114,7 @@ export class ContactRequestForm extends React.PureComponent<Props, State> {
                     {this.state.error['PAX'] && <Text style={{ marginLeft: 5, color: 'red' }}>Boş Geçilemez</Text>}
                 </View>
                 <View style={[styles.infoRow]}>
+                    <Text style={[styles.label]}>Ekstra Not</Text>
                     <Input
                         placeholder="Ekstra Not"
                         value={this.state.NOTE}
@@ -147,5 +152,9 @@ const styles = StyleSheet.create({
     },
     text: {
         fontWeight: 'bold'
+    },
+    label: {
+        color: theme.colors.text,
+        marginHorizontal: 10
     }
 })

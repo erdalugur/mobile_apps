@@ -1252,6 +1252,14 @@
     "@types/react" "*"
     "@types/react-native" "*"
 
+"@types/react-native-text-input-mask@^0.7.4":
+  version "0.7.4"
+  resolved "https://registry.yarnpkg.com/@types/react-native-text-input-mask/-/react-native-text-input-mask-0.7.4.tgz#f21f852afe02b3c1f71bfbb0eb0938e443837970"
+  integrity sha512-Ie1Hf1D5DqtP2dfuVWSB6wKlU1N7An+EJlWSdLUsjZELgYiugOsM6nsFrjvbwqLmB3McQLlWXOD2YiO3EZgf7Q==
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "*"
+
 "@types/react-native@*":
   version "0.62.14"
   resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.62.14.tgz#13ce7dab136bb124b6f394fe7510442557b16d29"
@@ -4582,6 +4590,11 @@ react-native-snap-carousel@^3.9.0:
   dependencies:
     prop-types "^15.6.1"
     react-addons-shallow-compare "15.6.2"
+
+react-native-text-input-mask@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-text-input-mask/-/react-native-text-input-mask-2.0.0.tgz#9cb793e764355d9282d92ea5231d8030a7ca5692"
+  integrity sha512-kP8gURb1+6iR6CxfUx802f4ja9Jzer76hY1w0cjaCVsfbbzyykYIAANTnlxbmFFv/8pQl4NTm1CbQqkg0Cp/gA==
 
 react-native-view-shot@3.1.2:
   version "3.1.2"

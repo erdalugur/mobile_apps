@@ -5,6 +5,7 @@ import theme from 'theme'
 import { messageBox } from 'utils'
 import { ContactRequestProps, NavigationProps } from 'types'
 import { dataManager } from 'api'
+
 const { height } = Dimensions.get('window')
 
 interface Props extends NavigationProps<{
