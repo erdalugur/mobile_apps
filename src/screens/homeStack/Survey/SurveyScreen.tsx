@@ -1,5 +1,5 @@
 import React from 'react'
-import { Input, Layout, Text, View } from 'components'
+import { Button, FormRow, Input, Layout, Text, View } from 'components'
 import { StyleSheet, ScrollView, Dimensions } from 'react-native'
 import { dataManager } from 'api'
 import { Emoji } from './Emoji'
@@ -7,6 +7,7 @@ import theme from 'theme'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { configurationManager, messageBox, userManager } from 'utils'
 import { constands } from 'constands'
+import { debug } from 'react-native-reanimated'
 const { height } = Dimensions.get('window')
 interface Props {
 
@@ -27,6 +28,7 @@ interface State {
     step: '1' | '0' | '2',
     firstName: string,
     lastName: string
+    phone: string
     error: { [key: string]: string }
 }
 
@@ -44,7 +46,8 @@ export class SurveyScreen extends React.PureComponent<Props, State> {
         step: '0',
         firstName: '',
         lastName: '',
-        error: {}
+        error: {},
+        phone: ''
     }
 
     componentDidMount = async () => {
@@ -92,10 +95,13 @@ export class SurveyScreen extends React.PureComponent<Props, State> {
             this.setState({ step: '1' });
             return
         }
+
         if (user === null) {
             let errors = {} as { [key: string]: string }
             this.state.firstName ? null : (errors['firstName'] = 'firstName')
             this.state.lastName ? null : (errors['lastName'] = 'lastName')
+            this.state.phone ? null : (errors['phone'] = 'phone')
+
             this.setState({ error: errors })
             if (Object.keys(errors).length > 0) {
                 return
@@ -108,10 +114,14 @@ export class SurveyScreen extends React.PureComponent<Props, State> {
             }
         });
         this.setState({ loading: true })
-        const result = await dataManager.sendAnswerAsync(items, this.state.firstName, this.state.lastName)
+        const result = await dataManager.sendAnswerAsync(
+            items,
+            this.state.firstName,
+            this.state.lastName,
+            this.state.phone)
         if (result.statusCode === 200 && result.data) {
             let __data__ = result.data[0] as { ID: string, token: string, NEW_RECORD: boolean, PASSWORD: string, STOREID: string }
-            if (__data__.NEW_RECORD) {
+            if (__data__.NEW_RECORD && user === null) {
                 userManager.set({
                     ID: __data__.ID,
                     PASSWORD: __data__.PASSWORD,
@@ -135,21 +145,33 @@ export class SurveyScreen extends React.PureComponent<Props, State> {
         if (this.state.step === '2') return null
 
         return (
-            <View transparent>
-                <View style={[styles.infoRow]}>
+            <View transparent style={{ paddingHorizontal: 20 }}>
+                <FormRow errorMessage={this.state.error['firstName']} label="Ad">
                     <Input
                         placeholder="Ad"
                         value={this.state.firstName}
                         onChangeText={firstName => this.setState({ firstName })} />
-                    {this.state.error['firstName'] && <Text style={{ marginLeft: 5, color: 'red' }}>Boş Geçilemez</Text>}
-                </View>
-                <View style={[styles.infoRow]}>
+                </FormRow>
+                <FormRow label="Soyad" errorMessage={this.state.error['lastName']}>
                     <Input
                         placeholder="Soyad"
                         value={this.state.lastName}
                         onChangeText={lastName => this.setState({ lastName })} />
-                    {this.state.error['firstName'] && <Text style={{ marginLeft: 5, color: 'red' }}>Boş Geçilemez</Text>}
-                </View>
+                </FormRow>
+                <FormRow label="Telefon" errorMessage={this.state.error['phone']}>
+                    <Input
+                        keyboardType="number-pad"
+                        placeholder="Telefon"
+                        value={this.state.phone}
+                        onChangeText={phone => this.setState({ phone })} />
+                </FormRow>
+                {this.state.step === '1' && (
+                    <Button textStyle={{ fontWeight: 'bold' }} style={{
+                        marginTop: 10
+                    }} onPress={this.sendAnswersAsync}>
+                        Gönder
+                    </Button>
+                )}
             </View>
         )
     }
@@ -161,20 +183,15 @@ export class SurveyScreen extends React.PureComponent<Props, State> {
                 { this.state.step === '0' ? (
                     <ScrollView>
                         {this.state.items.map((x, i) => this.renderItem(x, i))}
+                        {this.state.canSend && (
+                            <Button textStyle={{ fontWeight: 'bold' }} style={{
+                                marginTop: 10
+                            }} onPress={this.sendAnswersAsync}>
+                                Gönder
+                            </Button>
+                        )}
                     </ScrollView>
                 ) : this.renderStepOne()}
-                { this.state.canSend && this.state.step !== '2' && (
-                    <TouchableOpacity style={{
-                        backgroundColor: theme.colors.background,
-                        height: 50,
-                        width: '100%',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        marginTop: 10
-                    }} onPress={this.sendAnswersAsync}>
-                        <Text>Gönder</Text>
-                    </TouchableOpacity>
-                )}
                 {this.state.step === '2' && (
                     <View transparent style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
                         <Text>{`Anketimize katıldığınız için teşekkür ederiz ${constands.happyEmoji}`}</Text>
@@ -189,7 +206,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: theme.colors.card,
-        height: height - 80
+        height: height - 80,
     },
-    infoRow: { borderColor: theme.colors.border, borderBottomWidth: 1, marginTop: 10 }
+    infoRow: { borderColor: theme.colors.border, borderBottomWidth: 1, marginTop: 10 },
+    title: {
+        marginHorizontal: 10
+    }
 })

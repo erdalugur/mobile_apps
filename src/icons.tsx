@@ -143,3 +143,6 @@ export function Form(props: IconProps) {
 export function HeartBeat(props: IconProps) {
     return <FontAwesome name="heartbeat" onPress={props.onPress} size={props.size || 30} color={props.color} />
 }
+export function Send(props: IconProps) {
+    return <Ionicons name="ios-send" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}

@@ -49,7 +49,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: theme.colors.card,
-        height: height - 80
+        height: height - 80,
+        paddingHorizontal: 10
     },
     infoRow: { borderColor: theme.colors.border, borderBottomWidth: 1, marginTop: 10 },
     button: {

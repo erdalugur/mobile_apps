@@ -1,9 +1,10 @@
 import React from 'react'
-import { Button, Input, Layout, Text, View } from 'components'
-import { StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
+import { Button, Input } from 'components'
+import { StyleSheet, ScrollView, Dimensions } from 'react-native'
 import theme from 'theme'
-import { messageBox } from 'utils'
 import { ContactRequestProps } from 'types'
+import { FormRow } from './FormRow'
+import { validationManager } from 'utils'
 
 const { height } = Dimensions.get('window')
 interface State extends ContactRequestProps {
@@ -32,11 +33,11 @@ export class ContactRequestForm extends React.PureComponent<Props, State> {
 
     makeRequestAsync = async () => {
         let { FIRST_NAME, LAST_NAME, REQUEST_DATE, PAX, REQUEST_TIME, PHONE } = this.state, error = {} as { [key: string]: string }
-        PHONE ? null : error['PHONE'] = 'Boş geçilemez'
+        PHONE ? validationManager.checkPhone(PHONE) ? null : error['PHONE'] = '11 Hane giriniz' : error['PHONE'] = 'Boş geçilemez'
         FIRST_NAME ? null : error['FIRST_NAME'] = 'Boş geçilemez'
         LAST_NAME ? null : error['LAST_NAME'] = 'Boş geçilemez'
-        PAX ? null : error['pax'] = 'Boş geçilemez'
-        REQUEST_DATE ? null : error['REQUEST_DATE'] = 'Boş geçilemez'
+        PAX ? null : error['PAX'] = 'Boş geçilemez'
+        REQUEST_DATE ? validationManager.checkDate(REQUEST_DATE) ? null : error['REQUEST_DATE'] = 'Geçersiz tarih' : error['REQUEST_DATE'] = 'Boş geçilemez'
         REQUEST_TIME ? null : error['REQUEST_TIME'] = 'Boş geçilemez'
         this.setState({ error })
         if (Object.keys(error).length > 0) {
@@ -62,67 +63,80 @@ export class ContactRequestForm extends React.PureComponent<Props, State> {
         }
     }
 
+    onDateChange = (value: string) => {
+        // if (value.length > 10) return
+
+        // value.length === 2 ? value += '-' : null;
+        // value.length === 5 ? value += '-' : null;
+
+        // if (value.length === 10) {
+        //     let now = new Date().getFullYear()
+        //     let _ = value.split('-')[2]
+        //     if (parseInt(_) < now) {
+        //         this.setState((state: State) => {
+        //             state.error['REQUEST_DATE'] = 'Geçmiş tarih girilemez'
+        //             return {
+        //                 error: { ...state.error }
+        //             }
+        //         })
+        //         return
+        //     }
+        // }
+        this.setState({ REQUEST_DATE: value })
+    }
+
     render() {
         return (
             <ScrollView style={{ height: height - 70 }}>
-                <View style={[styles.infoRow]}>
-                    <Text style={[styles.label]}>Tarih</Text>
+                <FormRow
+                    label="Tarih"
+                    errorMessage={this.state.error['REQUEST_DATE']}>
                     <Input
                         placeholder="dd.mm.yyyy"
                         value={this.state.REQUEST_DATE}
-                        onChangeText={REQUEST_DATE => this.setState({ REQUEST_DATE })} />
-                    {this.state.error['REQUEST_DATE'] && <Text style={{ marginLeft: 5, color: 'red' }}>Boş Geçilemez</Text>}
-                </View>
-                <View style={[styles.infoRow]}>
-                    <Text style={[styles.label]}>Saat</Text>
+                        onChangeText={REQUEST_DATE => this.onDateChange(REQUEST_DATE)} />
+                </FormRow>
+                <FormRow label="Saat" errorMessage={this.state.error['REQUEST_TIME']}>
                     <Input
                         placeholder="mm:hh"
                         value={this.state.REQUEST_TIME}
                         onChangeText={REQUEST_TIME => this.setState({ REQUEST_TIME })} />
-                    {this.state.error['REQUEST_TIME'] && <Text style={{ marginLeft: 5, color: 'red' }}>Boş Geçilemez</Text>}
-                </View>
-                <View style={[styles.infoRow]}>
-                    <Text style={[styles.label]}>Ad</Text>
+                </FormRow>
+                <FormRow label="Ad" errorMessage={this.state.error['FIRST_NAME']}>
                     <Input
                         placeholder="Ad"
                         value={this.state.FIRST_NAME}
                         onChangeText={FIRST_NAME => this.setState({ FIRST_NAME })} />
-                    {this.state.error['FIRST_NAME'] && <Text style={{ marginLeft: 5, color: 'red' }}>Boş Geçilemez</Text>}
-                </View>
-                <View style={[styles.infoRow]}>
-                    <Text style={[styles.label]}>Soyad</Text>
+                </FormRow>
+                <FormRow label="Soyad" errorMessage={this.state.error['LAST_NAME']}>
                     <Input
                         placeholder="Soyad"
                         value={this.state.LAST_NAME}
                         onChangeText={LAST_NAME => this.setState({ LAST_NAME })} />
-                    {this.state.error['LAST_NAME'] && <Text style={{ marginLeft: 5, color: 'red' }}>Boş Geçilemez</Text>}
-                </View>
-                <View style={[styles.infoRow]}>
-                    <Text style={[styles.label]}>Telefon</Text>
+                </FormRow>
+                <FormRow label="Telefon" errorMessage={this.state.error['PHONE']}>
                     <Input
                         placeholder="Telefon"
+                        keyboardType="number-pad"
+                        maxLength={11}
                         value={this.state.PHONE}
                         onChangeText={PHONE => this.setState({ PHONE })} />
-                    {this.state.error['PHONE'] && <Text style={{ marginLeft: 5, color: 'red' }}>Boş Geçilemez</Text>}
-                </View>
-                <View style={[styles.infoRow]}>
-                    <Text style={[styles.label]}>Kişi Sayısı</Text>
+                </FormRow>
+                <FormRow label="Kişi Sayısı" errorMessage={this.state.error['PAX']}>
                     <Input
                         placeholder="Kişi Sayısı"
                         value={this.state.PAX}
                         keyboardType="number-pad"
                         onChangeText={PAX => this.setState({ PAX })} />
-                    {this.state.error['PAX'] && <Text style={{ marginLeft: 5, color: 'red' }}>Boş Geçilemez</Text>}
-                </View>
-                <View style={[styles.infoRow]}>
-                    <Text style={[styles.label]}>Ekstra Not</Text>
+                </FormRow>
+                <FormRow label="Ekstra Not">
                     <Input
                         placeholder="Ekstra Not"
                         value={this.state.NOTE}
                         multiline
                         numberOfLines={4}
                         onChangeText={NOTE => this.setState({ NOTE })} />
-                </View>
+                </FormRow>
                 <Button
                     loading={this.props.loading}
                     style={[styles.button]}
@@ -136,7 +150,6 @@ export class ContactRequestForm extends React.PureComponent<Props, State> {
 }
 
 const styles = StyleSheet.create({
-    infoRow: { borderColor: theme.colors.border, borderBottomWidth: 1, marginTop: 10 },
     button: {
         backgroundColor: theme.colors.primary,
         height: 50,

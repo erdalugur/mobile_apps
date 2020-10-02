@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { AppState } from 'myRedux';
 import theme from 'theme';
 import { SingleMultiType, IAction, actionTypes } from 'myRedux/types';
-import { Plus, Minus, QRCode, Table, EmojiNeutral, Phone, Pencil, Plus2, Minus2 } from 'icons';
+import { Plus, Minus, QRCode, Table, EmojiNeutral, Phone, Pencil, Plus2, Minus2, Send } from 'icons';
 import { screens } from 'navigation';
 import { messageBox, messages, applicationManager, confirmBox, userManager } from 'utils';
 import { dataManager } from 'api';
@@ -49,9 +49,9 @@ class Index extends React.PureComponent<Props, State> {
         let isAuthenticated = await userManager.isAuthenticated();
         if (Platform.OS === 'web') {
             let place = await applicationManager.config.getPlace();
-            let clientIP = await applicationManager.clientIP();
+            //let clientIP = await applicationManager.clientIP();
             this.setState({
-                enableActions: place !== null && place.LOCAL_IP === clientIP,
+                //enableActions: place !== null && place.LOCAL_IP === clientIP,
                 packageOrder: place !== null && place.PACKAGE_ORDER,
                 enableQR: place !== null && place.USE_GUEST_COMPLETE,
                 isAuthenticated
@@ -186,19 +186,40 @@ class Index extends React.PureComponent<Props, State> {
     }
 
     sendAsync = async (fromGuest: boolean = false) => {
-        let items = this.props.cart
         if (!this.checkCartItems()) {
             messageBox(messages.EMPTY_CART_MESSAGE)
         } else {
+            let extras = [] as {
+                ID: number
+                QUANTITY: number
+                PRODUCTID: number
+                PRICE: number
+            }[]
+            let items = Object.keys(this.props.cart).map(x => {
+                let item = this.props.cart[x]
+                Object.keys(item.EXTRAS).forEach(e => {
+                    let ex = item.EXTRAS[e]
+                    if (ex.QUANTITY > 0) {
+                        extras.push({
+                            ID: ex.ID,
+                            PRICE: ex.PRICE,
+                            PRODUCTID: item.ID,
+                            QUANTITY: ex.QUANTITY
+                        })
+                    }
+                })
+                return {
+                    PRODUCTID: item.ID.toString(),
+                    QUANTITY: item.quantity.toString(),
+                    NOTE: item.NOTES
+                }
+            });
+
             let { statusCode, data, error } = await dataManager.setCart({
                 TABLEID: this.state.table,
-                JSON: Object.keys(items).map(x => {
-                    return {
-                        PRODUCTID: items[x].ID.toString(),
-                        QUANTITY: items[x].quantity.toString()
-                    }
-                }),
-                FROM_GUEST: fromGuest
+                JSON: items,
+                FROM_GUEST: fromGuest,
+                EXTRAS: extras
             });
             if (statusCode === 200) {
                 messageBox(messages.SEND_CART_SUCCESS);
@@ -296,9 +317,10 @@ class Index extends React.PureComponent<Props, State> {
                     <View style={[styles.bottomButton]}>
                         <TouchableOpacity onPress={() => this.sendQuestion()}>
                             {this.state.isAuthenticated ? (
-                                <>
-                                    <Text>Gönder</Text>
-                                </>
+                                <View transparent style={{ alignItems: 'center' }}>
+                                    <Send color={theme.colors.white} size={20} />
+                                    <Text style={{ fontSize: 12 }}>Gönder</Text>
+                                </View>
                             ) : (
                                     <>
                                         <Text>Üye Olarak</Text>
@@ -315,7 +337,8 @@ class Index extends React.PureComponent<Props, State> {
                     </View>
                     <View style={[styles.bottomButton]}>
                         <TouchableOpacity onPress={() => this.callPhone()}>
-                            <Text>Ara</Text>
+                            <Phone color={theme.colors.white} size={20} />
+                            <Text style={{ fontSize: 12 }}>Ara</Text>
                         </TouchableOpacity>
                     </View>
                 </>

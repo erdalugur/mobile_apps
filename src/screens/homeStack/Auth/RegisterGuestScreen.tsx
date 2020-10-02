@@ -6,7 +6,7 @@ import { StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import theme from 'theme'
 import { NavigationProps } from 'types'
-import { configurationManager, messageBox, userManager } from 'utils'
+import { configurationManager, messageBox, userManager, validationManager } from 'utils'
 
 
 interface State {
@@ -37,7 +37,7 @@ export default class extends React.PureComponent<Props, State>{
         let { FIRST_NAME, LAST_NAME, ADDRESS, PHONE, PASSWORD } = this.state, errors: { [key: string]: string } = {}
         FIRST_NAME ? null : errors['FIRST_NAME'] = 'Boş geçilemez'
         LAST_NAME ? null : errors['LAST_NAME'] = 'Boş geçilemez'
-        PHONE ? null : errors['PHONE'] = 'Boş geçilemez'
+        PHONE ? validationManager.checkPhone(PHONE) ? null : errors['PHONE'] = '11 hane giriniz' : errors['PHONE'] = 'Boş geçilemez'
         ADDRESS ? null : errors['ADDRESS'] = 'Boş geçilemez'
         PASSWORD ? null : errors['PASSWORD'] = 'Boş geçilemez'
         this.setState({ errors });

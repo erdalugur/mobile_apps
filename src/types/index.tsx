@@ -102,6 +102,12 @@ export interface SetCartRequest {
         QUANTITY: string
     }>
     FROM_GUEST: boolean
+    EXTRAS: Array<{
+        ID: number
+        QUANTITY: number
+        PRODUCTID: number
+        PRICE: number
+    }>
 }
 
 export interface AuthContextProps {

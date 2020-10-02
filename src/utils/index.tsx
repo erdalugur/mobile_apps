@@ -140,5 +140,30 @@ export const sizeManager = {
     }
 }
 
-
-
+export const validationManager = {
+    checkPhone: function (phone: string) {
+        let result = phone.match(/\d/g)
+        return result != null && result.length === 11
+    },
+    checkDay: function (value: string) {
+        let _ = parseInt(value)
+        return _ < 32
+    },
+    checkMonth: function (value: string) {
+        let _ = parseInt(value)
+        return _ < 13
+    },
+    checkDate: function (value: string) {
+        let dates = value.split('-');
+        return value.length == 10 &&
+            validationManager.checkDay(dates[0]) &&
+            validationManager.checkMonth(dates[1]) &&
+            validationManager.checkYear(value)
+    },
+    checkYear: function (fullDate: string) {
+        if (fullDate.length !== 10) return false
+        let now = new Date().getFullYear()
+        let _ = fullDate.split('-')[2]
+        return parseInt(_) < now
+    }
+}

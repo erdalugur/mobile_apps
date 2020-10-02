@@ -106,7 +106,7 @@ export const dataManager = {
                         { key: 'USERID', value: config?.DEFAULT_CLIENT_ID || user.ID },
                         { key: 'JSON', value: JSON.stringify(param.JSON) },
                         { key: 'FROM_GUEST', value: param.FROM_GUEST },
-
+                        { key: 'EXTRAS', value: JSON.stringify(param.EXTRAS) },
                     ]
                 })
             } catch (error) {
@@ -315,7 +315,7 @@ export const dataManager = {
             action: 'public'
         });
     },
-    sendAnswerAsync: async function (items: any[], FIRST_NAME: string = '', LAST_NAME: string = '') {
+    sendAnswerAsync: async function (items: any[], FIRST_NAME: string = '', LAST_NAME: string = '', PHONE: string) {
         let place = await configurationManager.getPlace();
         let user = await userManager.get();
         return await QueryableIO<IProc>({
@@ -326,6 +326,7 @@ export const dataManager = {
                 { key: 'USERID', value: user?.ID || 0 },
                 { key: 'FIRSTNAME', value: FIRST_NAME },
                 { key: 'LASTNAME', value: LAST_NAME },
+                { key: 'PHONE', value: PHONE },
             ],
             action: 'public'
         })

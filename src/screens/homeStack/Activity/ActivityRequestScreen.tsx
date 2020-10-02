@@ -1,8 +1,8 @@
 import React from 'react'
-import { Button, ContactRequestForm, Input, Layout, Text, View } from 'components'
+import { Button, ContactRequestForm, Input, Layout, Text, View, FormRow } from 'components'
 import { StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
 import theme from 'theme'
-import { messageBox } from 'utils'
+import { messageBox, validationManager } from 'utils'
 import { ContactRequestProps, NavigationProps } from 'types'
 import { dataManager } from 'api'
 
@@ -34,10 +34,10 @@ export class ActivityRequestScreen extends React.PureComponent<Props, State> {
 
     makeRequestAsync = async () => {
         let { FIRST_NAME, LAST_NAME, REQUEST_DATE, PAX, REQUEST_TIME, PHONE, NOTE } = this.state, error = {} as { [key: string]: string }
-        PHONE ? null : error['PHONE'] = 'Boş geçilemez'
+        PHONE ? validationManager.checkPhone(PHONE) ? null : error['PHONE'] = '11 hane giriniz' : error['PHONE'] = 'Boş geçilemez'
         FIRST_NAME ? null : error['FIRST_NAME'] = 'Boş geçilemez'
         LAST_NAME ? null : error['LAST_NAME'] = 'Boş geçilemez'
-        PAX ? null : error['pax'] = 'Boş geçilemez'
+        PAX ? null : error['PAX'] = 'Boş geçilemez'
         this.setState({ error })
         if (Object.keys(error).length > 0) {
             return
@@ -66,48 +66,39 @@ export class ActivityRequestScreen extends React.PureComponent<Props, State> {
         return (
             <Layout style={[styles.container]}>
                 <ScrollView>
-                    <View style={[styles.infoRow]}>
-                        <Text style={[styles.title]}>Ad</Text>
+                    <FormRow errorMessage={this.state.error['FIRST_NAME']} label="Ad">
                         <Input
                             placeholder="Ad"
                             value={this.state.FIRST_NAME}
                             onChangeText={FIRST_NAME => this.setState({ FIRST_NAME })} />
-                        {this.state.error['FIRST_NAME'] && <Text style={{ marginLeft: 5, color: 'red' }}>Boş Geçilemez</Text>}
-                    </View>
-                    <View style={[styles.infoRow]}>
-                        <Text style={[styles.title]}>Soyad</Text>
+                    </FormRow>
+                    <FormRow errorMessage={this.state.error['LAST_NAME']} label="Soyad">
                         <Input
                             placeholder="Soyad"
                             value={this.state.LAST_NAME}
                             onChangeText={LAST_NAME => this.setState({ LAST_NAME })} />
-                        {this.state.error['LAST_NAME'] && <Text style={{ marginLeft: 5, color: 'red' }}>Boş Geçilemez</Text>}
-                    </View>
-                    <View style={[styles.infoRow]}>
-                        <Text style={[styles.title]}>Telefon</Text>
+                    </FormRow>
+                    <FormRow errorMessage={this.state.error['PHONE']} label="Telefon">
                         <Input
                             placeholder="Telefon"
                             value={this.state.PHONE}
                             onChangeText={PHONE => this.setState({ PHONE })} />
-                        {this.state.error['PHONE'] && <Text style={{ marginLeft: 5, color: 'red' }}>Boş Geçilemez</Text>}
-                    </View>
-                    <View style={[styles.infoRow]}>
-                        <Text style={[styles.title]}>Kişi Sayısı</Text>
+                    </FormRow>
+                    <FormRow errorMessage={this.state.error['PAX']} label="Kişi Sayısı">
                         <Input
                             placeholder="Kişi Sayısı"
                             value={this.state.PAX}
                             keyboardType="number-pad"
                             onChangeText={PAX => this.setState({ PAX })} />
-                        {this.state.error['PAX'] && <Text style={{ marginLeft: 5, color: 'red' }}>Boş Geçilemez</Text>}
-                    </View>
-                    <View style={[styles.infoRow]}>
-                        <Text style={[styles.title]}>Ekstra Not</Text>
+                    </FormRow>
+                    <FormRow label="Ekstra Not">
                         <Input
                             placeholder="Ekstra Not"
                             value={this.state.NOTE}
                             multiline
                             numberOfLines={4}
                             onChangeText={NOTE => this.setState({ NOTE })} />
-                    </View>
+                    </FormRow>
                     <Button
                         loading={this.state.loading}
                         style={[styles.button]}

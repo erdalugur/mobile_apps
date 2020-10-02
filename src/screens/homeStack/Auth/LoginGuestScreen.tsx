@@ -7,7 +7,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler'
 import { debug } from 'react-native-reanimated'
 import theme from 'theme'
 import { NavigationProps } from 'types'
-import { configurationManager, messageBox, userManager } from 'utils'
+import { configurationManager, messageBox, userManager, validationManager } from 'utils'
 
 
 interface State {
@@ -31,7 +31,7 @@ export default class extends React.PureComponent<Props, State>{
     loginAsync = async () => {
         let { PASSWORD, PHONE } = this.state, errors: { [key: string]: string } = {}
         PASSWORD ? null : errors['PASSWORD'] = 'Boş geçilemez'
-        PHONE ? null : errors['PHONE'] = 'Boş geçilemez'
+        PHONE ? validationManager.checkPhone(PHONE) ? null : errors['PHONE'] = '11 hane giriniz' : errors['PHONE'] = 'Boş geçilemez'
         this.setState({ errors });
 
         if (Object.keys(errors).length > 0) {
