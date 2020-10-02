@@ -101,6 +101,7 @@ export interface SetCartRequest {
         PRODUCTID: string
         QUANTITY: string
     }>
+    FROM_GUEST: boolean
 }
 
 export interface AuthContextProps {

@@ -1,5 +1,6 @@
 import { dataManager } from 'api'
 import { Layout, View, Text, Input, Button } from 'components'
+import { screens } from 'navigation'
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
@@ -66,8 +67,11 @@ export default class extends React.PureComponent<Props, State>{
                     token: login.token
                 })
                 setTimeout(() => {
-                    if (this.props.route.params.action) {
+                    if (this.props.route.params && this.props.route.params.action) {
                         this.props.route.params.action();
+                        setTimeout(() => {
+                            this.props.navigation.navigate(screens.cart)
+                        }, 1000);
                     } else {
                         messageBox('işlem başarıyla gerçekleşti');
                         this.setState({ loading: true })

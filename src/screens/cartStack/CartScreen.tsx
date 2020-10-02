@@ -28,6 +28,7 @@ interface State {
     packageOrder: boolean
     enableQR: boolean
     displayList: number[]
+    isAuthenticated: boolean
 }
 class Index extends React.PureComponent<Props, State> {
 
@@ -36,7 +37,8 @@ class Index extends React.PureComponent<Props, State> {
         enableActions: false,
         packageOrder: false,
         enableQR: true,
-        displayList: []
+        displayList: [],
+        isAuthenticated: false
     }
 
     componentDidMount = async () => {
@@ -44,16 +46,18 @@ class Index extends React.PureComponent<Props, State> {
     }
 
     bootStrapAsync = async () => {
+        let isAuthenticated = await userManager.isAuthenticated();
         if (Platform.OS === 'web') {
             let place = await applicationManager.config.getPlace();
             let clientIP = await applicationManager.clientIP();
             this.setState({
                 enableActions: place !== null && place.LOCAL_IP === clientIP,
                 packageOrder: place !== null && place.PACKAGE_ORDER,
-                enableQR: place !== null && place.USE_GUEST_COMPLETE
+                enableQR: place !== null && place.USE_GUEST_COMPLETE,
+                isAuthenticated
             })
         } else {
-            this.setState({ enableActions: true })
+            this.setState({ enableActions: true, isAuthenticated })
         }
     }
 
@@ -181,19 +185,20 @@ class Index extends React.PureComponent<Props, State> {
         this.sendAsync()
     }
 
-    sendAsync = async () => {
+    sendAsync = async (fromGuest: boolean = false) => {
         let items = this.props.cart
         if (!this.checkCartItems()) {
             messageBox(messages.EMPTY_CART_MESSAGE)
         } else {
             let { statusCode, data, error } = await dataManager.setCart({
-                TABLEID: this.state.table || "0",
+                TABLEID: this.state.table,
                 JSON: Object.keys(items).map(x => {
                     return {
                         PRODUCTID: items[x].ID.toString(),
                         QUANTITY: items[x].quantity.toString()
                     }
-                })
+                }),
+                FROM_GUEST: fromGuest
             });
             if (statusCode === 200) {
                 messageBox(messages.SEND_CART_SUCCESS);
@@ -215,12 +220,6 @@ class Index extends React.PureComponent<Props, State> {
                     </ScrollView>
                 </View>
                 <View style={[styles.bottomButtonContainer]}>
-                    <View style={[styles.bottomTotalPrice]}>
-                        <Text style={{ marginLeft: 5, fontSize: 10 }}>Toplam Fiyat</Text>
-                        <Text style={{ fontSize: 20 }}>
-                            {this.totalPrice()}
-                        </Text>
-                    </View>
                     {this.renderActions()}
                 </View>
             </View>
@@ -251,10 +250,12 @@ class Index extends React.PureComponent<Props, State> {
 
     sendQuestion = async () => {
         if (await userManager.isAuthenticated()) {
-            this.sendAsync();
+            this.sendAsync(true);
         } else {
             confirmBox('Giriş yaparak devam etmek ister misiniz?', (result) => {
-                this.props.navigation.navigate(screens.loginGuest, { action: this.sendAsync })
+                if (result) {
+                    this.props.navigation.navigate(screens.loginGuest, { action: () => this.sendAsync(true) })
+                }
             })
         }
     }
@@ -262,33 +263,62 @@ class Index extends React.PureComponent<Props, State> {
     renderActions = () => {
         if (Platform.OS !== 'web') {
             return (
-                <View style={[styles.bottomButton]}>
-                    {this.state.enableQR &&
-                        <TouchableOpacity onPress={() => {
-                            this.props.navigation.navigate(screens.cartQR, { fromScreen: 'cart' })
-                        }}>
-                            <QRCode color={theme.colors.white} />
-                        </TouchableOpacity>
-                    }
-                    {this.props.routeScreen !== 'Home' &&
-                        <TouchableOpacity onPress={() => {
-                            this.props.navigation.navigate(screens.tables, { fromScreen: 'cart' })
-                        }}>
-                            <Table color={theme.colors.white} />
-                        </TouchableOpacity>
-                    }
-                </View>
+                <>
+                    <View style={[styles.bottomButton]}>
+                        {this.state.enableQR &&
+                            <TouchableOpacity onPress={() => {
+                                this.props.navigation.navigate(screens.cartQR, { fromScreen: 'cart' })
+                            }}>
+                                <QRCode color={theme.colors.white} />
+                            </TouchableOpacity>
+                        }
+                    </View>
+                    <View style={[styles.bottomTotalPrice]}>
+                        <Text style={{ marginLeft: 5, fontSize: 10 }}>Toplam Fiyat</Text>
+                        <Text style={{ fontSize: 20 }}>
+                            {this.totalPrice()}
+                        </Text>
+                    </View>
+                    <View style={[styles.bottomButton]}>
+                        {this.props.routeScreen !== 'Home' &&
+                            <TouchableOpacity onPress={() => {
+                                this.props.navigation.navigate(screens.tables, { fromScreen: 'cart' })
+                            }}>
+                                <Table color={theme.colors.white} />
+                            </TouchableOpacity>
+                        }
+                    </View>
+                </>
             )
         } else {
             return (
-                <View style={[styles.bottomButton]}>
-                    {this.state.packageOrder ? (
+                <>
+                    <View style={[styles.bottomButton]}>
                         <TouchableOpacity onPress={() => this.sendQuestion()}>
-                            <Text>Gönder</Text>
+                            {this.state.isAuthenticated ? (
+                                <>
+                                    <Text>Gönder</Text>
+                                </>
+                            ) : (
+                                    <>
+                                        <Text>Üye Olarak</Text>
+                                        <Text style={[styles.buttonSubText]}>Devam Et</Text>
+                                    </>
+                                )}
                         </TouchableOpacity>
-                    ) : null}
-                </View>
-
+                    </View>
+                    <View style={[styles.bottomTotalPrice]}>
+                        <Text style={{ marginLeft: 5, fontSize: 10 }}>Toplam Fiyat</Text>
+                        <Text style={{ fontSize: 20 }}>
+                            {this.totalPrice()}
+                        </Text>
+                    </View>
+                    <View style={[styles.bottomButton]}>
+                        <TouchableOpacity onPress={() => this.callPhone()}>
+                            <Text>Ara</Text>
+                        </TouchableOpacity>
+                    </View>
+                </>
             )
         }
     }
@@ -361,16 +391,17 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10,
         backgroundColor: theme.colors.card,
         flexDirection: 'row',
-        width: '50%'
+        width: '33%'
     },
     bottomTotalPrice: {
         backgroundColor: theme.colors.border,
         height: '100%',
         alignItems: 'center',
         justifyContent: 'center',
-        width: '50%',
+        width: '34%',
         paddingHorizontal: 10,
-        //textAlign: 'center'
+        marginTop: -10,
+        borderRadius: 5
     },
     extraTitle: { backgroundColor: theme.colors.border, paddingHorizontal: 5 },
     extraContainer: { marginBottom: 10, borderWidth: 1, borderColor: theme.colors.border },
@@ -378,5 +409,9 @@ const styles = StyleSheet.create({
         width: 25,
         justifyContent: 'center',
         alignItems: 'center'
+    },
+    buttonSubText: {
+        fontSize: 12,
+        textAlign: 'center'
     }
 });

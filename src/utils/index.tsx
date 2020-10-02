@@ -111,7 +111,7 @@ export function confirmBox(message: string, callback: (result: boolean) => void)
 export const applicationManager = {
     user: userManager,
     data: dataManager,
-    domain: () => __DEV__ ? 'http://hungryghost.queryableio.com' : window.location.origin,
+    domain: () => __DEV__ ? 'demo.yenibimenu.com' : window.location.host,
     cache: cacheService,
     clientIP: async () => Network.getIpAddressAsync(),
     config: configurationManager,

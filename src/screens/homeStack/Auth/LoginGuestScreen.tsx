@@ -50,8 +50,9 @@ export default class extends React.PureComponent<Props, State>{
                 STOREID: place?.ID || "0",
                 token: result.token
             })
+            this.props.route.params.action();
             setTimeout(() => {
-                this.props.route.params.action();
+                this.props.navigation.goBack();
             }, 1000);
         } else {
             this.setState({ loading: false });
@@ -89,7 +90,7 @@ export default class extends React.PureComponent<Props, State>{
                     </Button>
                 </View>
                 <View style={{ marginTop: 30, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
-                    <TouchableOpacity style={[styles.registerButton]}>
+                    <TouchableOpacity style={[styles.registerButton]} onPress={() => this.props.navigation.goBack()}>
                         <Text>
                             Geri Dön
                         </Text>
@@ -100,7 +101,7 @@ export default class extends React.PureComponent<Props, State>{
                         </Text>
                     </TouchableOpacity>
                 </View>
-            </Layout>
+            </Layout >
         )
     }
 }

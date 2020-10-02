@@ -104,7 +104,9 @@ export const dataManager = {
                         { key: 'TABLEID', value: param.TABLEID },
                         { key: 'STOREID', value: user.STOREID },
                         { key: 'USERID', value: config?.DEFAULT_CLIENT_ID || user.ID },
-                        { key: 'JSON', value: JSON.stringify(param.JSON) }
+                        { key: 'JSON', value: JSON.stringify(param.JSON) },
+                        { key: 'FROM_GUEST', value: param.FROM_GUEST },
+
                     ]
                 })
             } catch (error) {
