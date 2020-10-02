@@ -67,6 +67,7 @@ export class ActivityRequestScreen extends React.PureComponent<Props, State> {
             <Layout style={[styles.container]}>
                 <ScrollView>
                     <View style={[styles.infoRow]}>
+                        <Text style={[styles.title]}>Ad</Text>
                         <Input
                             placeholder="Ad"
                             value={this.state.FIRST_NAME}
@@ -74,6 +75,7 @@ export class ActivityRequestScreen extends React.PureComponent<Props, State> {
                         {this.state.error['FIRST_NAME'] && <Text style={{ marginLeft: 5, color: 'red' }}>Boş Geçilemez</Text>}
                     </View>
                     <View style={[styles.infoRow]}>
+                        <Text style={[styles.title]}>Soyad</Text>
                         <Input
                             placeholder="Soyad"
                             value={this.state.LAST_NAME}
@@ -81,6 +83,7 @@ export class ActivityRequestScreen extends React.PureComponent<Props, State> {
                         {this.state.error['LAST_NAME'] && <Text style={{ marginLeft: 5, color: 'red' }}>Boş Geçilemez</Text>}
                     </View>
                     <View style={[styles.infoRow]}>
+                        <Text style={[styles.title]}>Telefon</Text>
                         <Input
                             placeholder="Telefon"
                             value={this.state.PHONE}
@@ -88,6 +91,7 @@ export class ActivityRequestScreen extends React.PureComponent<Props, State> {
                         {this.state.error['PHONE'] && <Text style={{ marginLeft: 5, color: 'red' }}>Boş Geçilemez</Text>}
                     </View>
                     <View style={[styles.infoRow]}>
+                        <Text style={[styles.title]}>Kişi Sayısı</Text>
                         <Input
                             placeholder="Kişi Sayısı"
                             value={this.state.PAX}
@@ -96,6 +100,7 @@ export class ActivityRequestScreen extends React.PureComponent<Props, State> {
                         {this.state.error['PAX'] && <Text style={{ marginLeft: 5, color: 'red' }}>Boş Geçilemez</Text>}
                     </View>
                     <View style={[styles.infoRow]}>
+                        <Text style={[styles.title]}>Ekstra Not</Text>
                         <Input
                             placeholder="Ekstra Not"
                             value={this.state.NOTE}
@@ -120,11 +125,12 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: theme.colors.card,
-        height: height - 80
+        height: height - 80,
+        paddingHorizontal: 10
     },
     infoRow: { borderColor: theme.colors.border, borderBottomWidth: 1, marginTop: 10 },
     button: {
-        backgroundColor: theme.colors.background,
+        backgroundColor: theme.colors.primary,
         height: 50,
         width: '100%',
         alignItems: 'center',
@@ -133,5 +139,8 @@ const styles = StyleSheet.create({
     },
     text: {
         fontWeight: 'bold'
+    },
+    title: {
+        marginHorizontal: 10
     }
 })

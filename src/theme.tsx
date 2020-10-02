@@ -16,7 +16,7 @@ interface ITheme {
 const theme: ITheme = {
     dark: true,
     colors: {
-        primary: '#ef6c00', //DarkTheme.colors.primary,
+        primary: DarkTheme.colors.primary, //'#ebedf0',//'#ef6c00', //DarkTheme.colors.primary,
         background: DarkTheme.colors.card,
         border: DarkTheme.colors.border,
         card: DarkTheme.colors.background,

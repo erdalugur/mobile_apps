@@ -85,7 +85,9 @@ export default class extends React.PureComponent<Props, State>{
                             message={this.hasError('PASSWORD')}
                         />
                     </View>
-                    <Button loading={this.state.loading} onPress={this.loginAsync} style={[styles.button]}>
+                    <Button
+                        textStyle={{ fontWeight: 'bold' }}
+                        loading={this.state.loading} onPress={this.loginAsync} style={[styles.button]}>
                         Giriş Yap
                     </Button>
                 </View>

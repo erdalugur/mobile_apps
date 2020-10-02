@@ -140,7 +140,9 @@ export default class extends React.PureComponent<Props, State>{
                         />
 
                     </View>
-                    <Button onPress={this.loginAsync} style={[styles.button]}>
+                    <Button
+                        textStyle={{ fontWeight: 'bold' }}
+                        onPress={this.loginAsync} style={[styles.button]}>
                         Kayıt Ol
                     </Button>
                 </View>

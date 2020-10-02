@@ -1,10 +1,11 @@
 import React from 'react'
 import { Button, Input, Layout, Text, View } from 'components'
-import { StyleSheet, TouchableOpacity, ScrollView } from 'react-native'
+import { StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
 import theme from 'theme'
 import { messageBox } from 'utils'
 import { ContactRequestProps } from 'types'
 
+const { height } = Dimensions.get('window')
 interface State extends ContactRequestProps {
     error: { [key: string]: string }
 }
@@ -63,7 +64,7 @@ export class ContactRequestForm extends React.PureComponent<Props, State> {
 
     render() {
         return (
-            <React.Fragment>
+            <ScrollView style={{ height: height - 70 }}>
                 <View style={[styles.infoRow]}>
                     <Text style={[styles.label]}>Tarih</Text>
                     <Input
@@ -129,21 +130,15 @@ export class ContactRequestForm extends React.PureComponent<Props, State> {
                     onPress={this.makeRequestAsync}>
                     Gönder
                 </Button>
-            </React.Fragment>
+            </ScrollView>
         )
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: theme.colors.card
-        //alignItems: 'center',
-        //justifyContent: 'center'
-    },
     infoRow: { borderColor: theme.colors.border, borderBottomWidth: 1, marginTop: 10 },
     button: {
-        backgroundColor: theme.colors.background,
+        backgroundColor: theme.colors.primary,
         height: 50,
         width: '100%',
         alignItems: 'center',
