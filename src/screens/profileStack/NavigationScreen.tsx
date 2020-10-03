@@ -37,7 +37,7 @@ export function SettingNavigationScreen(props: Props) {
     return (
         <View style={styles.container}>
             <MenuItem
-                title="Rezervasyonlarım"
+                title="Taleplerim"
                 onPress={() => props.navigation.navigate(screens.myReservations)}
             />
             <MenuItem

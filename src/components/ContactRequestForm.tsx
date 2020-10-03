@@ -5,7 +5,7 @@ import theme from 'theme'
 import { ContactRequestProps } from 'types'
 import { FormRow } from './FormRow'
 import { validationManager } from 'utils'
-
+import { PhoneInput, DateInput } from './Input'
 const { height } = Dimensions.get('window')
 interface State extends ContactRequestProps {
     error: { [key: string]: string }
@@ -33,17 +33,20 @@ export class ContactRequestForm extends React.PureComponent<Props, State> {
 
     makeRequestAsync = async () => {
         let { FIRST_NAME, LAST_NAME, REQUEST_DATE, PAX, REQUEST_TIME, PHONE } = this.state, error = {} as { [key: string]: string }
-        PHONE ? validationManager.checkPhone(PHONE) ? null : error['PHONE'] = '11 Hane giriniz' : error['PHONE'] = 'Boş geçilemez'
+        PHONE ? validationManager.checkPhone(PHONE) ? null : error['PHONE'] = '10 Hane giriniz' : error['PHONE'] = 'Boş geçilemez'
         FIRST_NAME ? null : error['FIRST_NAME'] = 'Boş geçilemez'
         LAST_NAME ? null : error['LAST_NAME'] = 'Boş geçilemez'
         PAX ? null : error['PAX'] = 'Boş geçilemez'
-        REQUEST_DATE ? validationManager.checkDate(REQUEST_DATE) ? null : error['REQUEST_DATE'] = 'Geçersiz tarih' : error['REQUEST_DATE'] = 'Boş geçilemez'
+        REQUEST_DATE ? null : error['REQUEST_DATE'] = 'Boş geçilemez'
         REQUEST_TIME ? null : error['REQUEST_TIME'] = 'Boş geçilemez'
         this.setState({ error })
         if (Object.keys(error).length > 0) {
             return
         }
-        this.props.submit(this.state)
+        PHONE = `0${validationManager.makePhone(PHONE)}`
+        this.props.submit({
+            ...this.state, PHONE
+        })
     }
 
     componentDidUpdate = (prevProps: Props) => {
@@ -64,24 +67,6 @@ export class ContactRequestForm extends React.PureComponent<Props, State> {
     }
 
     onDateChange = (value: string) => {
-        // if (value.length > 10) return
-
-        // value.length === 2 ? value += '-' : null;
-        // value.length === 5 ? value += '-' : null;
-
-        // if (value.length === 10) {
-        //     let now = new Date().getFullYear()
-        //     let _ = value.split('-')[2]
-        //     if (parseInt(_) < now) {
-        //         this.setState((state: State) => {
-        //             state.error['REQUEST_DATE'] = 'Geçmiş tarih girilemez'
-        //             return {
-        //                 error: { ...state.error }
-        //             }
-        //         })
-        //         return
-        //     }
-        // }
         this.setState({ REQUEST_DATE: value })
     }
 
@@ -95,6 +80,12 @@ export class ContactRequestForm extends React.PureComponent<Props, State> {
                         placeholder="dd.mm.yyyy"
                         value={this.state.REQUEST_DATE}
                         onChangeText={REQUEST_DATE => this.onDateChange(REQUEST_DATE)} />
+
+                    <DateInput
+                        value={this.state.REQUEST_DATE}
+                        onChange={e => {
+                            debugger
+                        }} />
                 </FormRow>
                 <FormRow label="Saat" errorMessage={this.state.error['REQUEST_TIME']}>
                     <Input
@@ -115,12 +106,10 @@ export class ContactRequestForm extends React.PureComponent<Props, State> {
                         onChangeText={LAST_NAME => this.setState({ LAST_NAME })} />
                 </FormRow>
                 <FormRow label="Telefon" errorMessage={this.state.error['PHONE']}>
-                    <Input
-                        placeholder="Telefon"
-                        keyboardType="number-pad"
-                        maxLength={11}
+                    <PhoneInput
                         value={this.state.PHONE}
-                        onChangeText={PHONE => this.setState({ PHONE })} />
+                        onChange={e => this.setState({ PHONE: e.target.value })}
+                    />
                 </FormRow>
                 <FormRow label="Kişi Sayısı" errorMessage={this.state.error['PAX']}>
                     <Input

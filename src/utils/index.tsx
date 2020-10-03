@@ -142,8 +142,15 @@ export const sizeManager = {
 
 export const validationManager = {
     checkPhone: function (phone: string) {
-        let result = phone.match(/\d/g)
-        return result != null && result.length === 11
+        let result = validationManager.makePhone(phone).match(/\d/g)
+        return result != null && result.length === 10
+    },
+    makePhone: function (phone: string) {
+        try {
+            return phone.replace('(', '').replace(')', '').replace('-', '').replace(' ', '');
+        } catch (error) {
+            return "0"
+        }
     },
     checkDay: function (value: string) {
         let _ = parseInt(value)

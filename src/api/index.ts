@@ -372,6 +372,17 @@ export const dataManager = {
             ],
             action: 'public'
         })
+    },
+    loadMyRequest: async function () {
+        let user = await userManager.get();
+        return await QueryableIO<IProc>({
+            model: 'MPOS_GET_CONTACT_REQUEST',
+            parameters: [
+                { key: 'STOREID', value: user?.STOREID },
+                { key: 'USERID', value: user?.ID },
+            ],
+            action: 'public'
+        })
     }
 }
 
