@@ -38,27 +38,25 @@ export default class MyReservationScreen extends React.PureComponent<any, any> {
             this.setState({ loading: false })
         }
     }
-
-    renderItem = (x: ItemProps) => {
-
-        const checkStatus = (statu: 1 | 2 | 3) => {
-            switch (statu) {
-                case 1:
-                    return "işlemde"
-                case 2:
-                    return "Onay"
-                case 3:
-                    return "Ret"
-                default:
-                    return "işlemde"
-            }
+    checkStatus = (statu: 1 | 2 | 3) => {
+        switch (statu) {
+            case 1:
+                return "işlemde"
+            case 2:
+                return "Onay"
+            case 3:
+                return "Ret"
+            default:
+                return "işlemde"
         }
+    }
+    renderItem = (x: ItemProps) => {
         return (
             <View key={x.ID} style={[styles.itemContainer]}>
                 <Text style={{ width: '35%', textAlign: 'left' }}>{x.CONTACT_TYPE}</Text>
                 <Text style={{ width: '25%', textAlign: 'center' }}>{applicationManager.formatDate(x.CREATED_DATE)}</Text>
                 <Text style={{ width: '25%', textAlign: 'center' }}>{applicationManager.formatDate(x.REQUEST_DATE)}</Text>
-                <Text style={{ width: '15%', textAlign: 'right' }}>{checkStatus(x.STATUS)}</Text>
+                <Text style={{ width: '15%', textAlign: 'right' }}>{this.checkStatus(x.STATUS)}</Text>
             </View>
         )
     }

@@ -383,6 +383,17 @@ export const dataManager = {
             ],
             action: 'public'
         })
+    },
+    loadMyTransactions: async function () {
+        let user = await userManager.get();
+        return await QueryableIO<IProc>({
+            model: 'MPOS_GET_MYTRANSACTIONS',
+            parameters: [
+                { key: 'STOREID', value: user?.STOREID },
+                { key: 'USERID', value: user?.ID },
+            ],
+            action: 'public'
+        })
     }
 }
 
