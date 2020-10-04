@@ -11,7 +11,8 @@ import {
     AdditionScreen,
     CartQRScreen,
     CartResultScreen,
-    ProductNoteScreen, ProfileScreen
+    ProductNoteScreen,
+    ProfileScreen
 } from 'screens'
 
 import {
@@ -37,6 +38,7 @@ import MyReservationScreen from 'screens/profileStack/MyReservationScreen';
 import { HistoryScreen } from 'screens/profileStack/HistoryScreen';
 import LoginGuestScreen from './Auth/LoginGuestScreen';
 import RegisterGuestScreen from './Auth/RegisterGuestScreen';
+import { PersonalInfoScreen } from 'screens/profileStack/PersonalInfoScreen';
 
 export const HomeStack = createStackNavigator();
 
@@ -57,7 +59,7 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
 
     return (
         <HomeStack.Navigator
-            //initialRouteName={screens.loginGuest}
+            //initialRouteName={screens.profileNavigation}
             headerMode="screen"
             screenOptions={{
                 headerRight: ({ tintColor }: any) => (
@@ -284,6 +286,15 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
                 name={screens.navigationScreen}
                 component={NavigationScreen}
             />
+            <HomeStack.Screen
+                options={{
+                    title: '',
+                    headerRight: () => null
+                }}
+                name={screens.personalInfoScreen}
+                component={PersonalInfoScreen}
+            />
+
 
         </HomeStack.Navigator>
     )

@@ -46,7 +46,7 @@ export default class extends React.PureComponent<Props, State>{
             return
         }
         this.setState({ loading: true })
-
+        PHONE = validationManager.makePhone(PHONE)
         let result = await dataManager.registerGuest({
             ADDRESS,
             FIRST_NAME,

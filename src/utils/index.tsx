@@ -143,7 +143,7 @@ export const sizeManager = {
 export const validationManager = {
     checkPhone: function (phone: string) {
         let result = validationManager.makePhone(phone).match(/\d/g)
-        return result != null && result.length === 10
+        return result != null && result.length === 11
     },
     makePhone: function (phone: string) {
         try {

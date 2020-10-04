@@ -1,5 +1,5 @@
 import { dataManager } from 'api'
-import { Layout, View, Text, Input, Button } from 'components'
+import { Layout, View, Text, Input, Button, FormRow, PhoneInput } from 'components'
 import { screens } from 'navigation'
 import React from 'react'
 import { StyleSheet } from 'react-native'
@@ -39,6 +39,8 @@ export default class extends React.PureComponent<Props, State>{
         }
         this.setState({ loading: true });
 
+        PHONE = validationManager.makePhone(PHONE)
+
         let result = await dataManager.loginGuest(PHONE, PASSWORD);
         let place = await configurationManager.getPlace();
         if (result.data && result.token) {
@@ -50,10 +52,10 @@ export default class extends React.PureComponent<Props, State>{
                 STOREID: place?.ID || "0",
                 token: result.token
             })
-            this.props.route.params.action();
-            setTimeout(() => {
-                this.props.navigation.goBack();
-            }, 1000);
+            this.props.route.params && this.props.route.params.action && this.props.route.params.action();
+            // setTimeout(() => {
+            //     this.props.navigation.goBack();
+            // }, 1000);
         } else {
             this.setState({ loading: false });
             messageBox('Kullanıcı adı veya parola yanlış')
@@ -66,25 +68,24 @@ export default class extends React.PureComponent<Props, State>{
         return (
             <Layout style={{ justifyContent: 'center', flex: 1, paddingHorizontal: 20 }}>
                 <View style={[styles.formContainer]}>
-                    <View style={[styles.item]}>
-                        <Input
-                            keyboardType="number-pad"
+                    <FormRow
+                        errorMessage={this.hasError('PHONE')}
+                        label="Telefon"
+                    >
+                        <PhoneInput
                             value={this.state.PHONE}
-                            onChangeText={(PHONE) => this.setState({ PHONE })}
-                            placeholder="Telefon" />
-                        <ErrorMessage
-                            message={this.hasError('PHONE')}
+                            onChange={(e) => this.setState({ PHONE: e.target.value })}
                         />
-                    </View>
-                    <View style={[styles.item]}>
+                    </FormRow>
+                    <FormRow
+                        errorMessage={this.hasError('PASSWORD')}
+                        label="Parola"
+                    >
                         <Input
                             value={this.state.PASSWORD}
                             onChangeText={(PASSWORD) => this.setState({ PASSWORD })}
                             placeholder="Parola" />
-                        <ErrorMessage
-                            message={this.hasError('PASSWORD')}
-                        />
-                    </View>
+                    </FormRow>
                     <Button
                         textStyle={{ fontWeight: 'bold' }}
                         loading={this.state.loading} onPress={this.loginAsync} style={[styles.button]}>

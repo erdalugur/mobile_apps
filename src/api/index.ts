@@ -1,7 +1,7 @@
 import { IResponse, IProc, ILogin, IRegister } from './types'
 import config from 'config';
 import { messages, userManager, configurationManager, applicationManager } from 'utils';
-import { ContactRequestProps, FetchAllModel, RegisterGuestProps, SetCartRequest } from 'types';
+import { ContactRequestProps, FetchAllModel, RegisterGuestProps, SetCartRequest, UpdateUserDetailProps } from 'types';
 import { getInitialState } from 'myRedux/rootReducer';
 
 async function toJSON(e: any) {
@@ -402,6 +402,35 @@ export const dataManager = {
             parameters: [
                 { key: "STOREID", value: user?.STOREID },
                 { key: "USERID", value: user?.ID },
+            ],
+            action: 'public'
+        })
+    },
+    updateUserDetailAsync: async function (param: UpdateUserDetailProps) {
+        let user = await userManager.get();
+        return await QueryableIO<IProc>({
+            model: 'MPOS_UPDATE_USER',
+            parameters: [
+                { key: "STOREID", value: user?.STOREID },
+                { key: "USERID", value: user?.ID },
+                { key: "ADDRESS", value: param.ADDRESS },
+                { key: "EMAIL", value: param.EMAIL },
+                { key: "FIRST_NAME", value: param.FIRST_NAME },
+                { key: "LAST_NAME", value: param.LAST_NAME },
+                { key: "PHONE", value: param.PHONE },
+            ],
+            action: 'public'
+        })
+    },
+    updateUserNameAsync: async function (USERNAME: string, PASSWORD: string) {
+        let user = await userManager.get();
+        return await QueryableIO<IProc>({
+            model: 'MPOS_UPDATE_USERNAME',
+            parameters: [
+                { key: "STOREID", value: user?.STOREID },
+                { key: "USERID", value: user?.ID },
+                { key: "USERNAME", value: USERNAME },
+                { key: "PASSWORD", value: PASSWORD },
             ],
             action: 'public'
         })

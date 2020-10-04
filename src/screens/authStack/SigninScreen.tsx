@@ -70,7 +70,7 @@ function Index(props: Props) {
                 backgroundColor: 'transparent',
                 //borderRadius: 5
             }}>
-                <FormRow errorMessage={errors["storeId"]} style={{
+                <FormRow errorMessage={errors["storeId"]} rowStyle={{
                     marginBottom: 10,
                     marginTop: 10,
                     backgroundColor: '#fff',
@@ -86,7 +86,7 @@ function Index(props: Props) {
                         onChangeText={(storeId) => setStoreId(storeId)}
                         placeholder="Tesis No" />
                 </FormRow>
-                <FormRow errorMessage={errors["username"]} style={{
+                <FormRow errorMessage={errors["username"]} rowStyle={{
                     marginBottom: 10,
                     marginTop: 10,
                     backgroundColor: '#fff',
@@ -104,7 +104,7 @@ function Index(props: Props) {
                 </FormRow>
 
                 <FormRow errorMessage={errors["password"]}
-                    style={{
+                    rowStyle={{
                         marginBottom: 10,
                         marginTop: 10,
                         backgroundColor: '#fff',
@@ -122,14 +122,14 @@ function Index(props: Props) {
                         onChangeText={(password) => setPassword(password)}
                         placeholder="Parola" />
                 </FormRow>
-                <FormRow style={{ marginBottom: 10, marginTop: 10 }}>
+                <FormRow rowStyle={{ marginBottom: 10, marginTop: 10 }}>
                     <Button
                         loading={loading}
                         onPress={submit}
                         style={{ backgroundColor: theme.colors.border }}
                     >GİRİŞ YAP</Button>
                 </FormRow>
-                <FormRow style={{ borderWidth: 0, marginTop: 20, alignItems: 'flex-end' }}>
+                <FormRow rowStyle={{ borderWidth: 0, marginTop: 20, alignItems: 'flex-end' }}>
                     <Button size="small"
                         onPress={() => props.navigation.navigate(screens.loginQR)}>
                         QR İLE LOGİN

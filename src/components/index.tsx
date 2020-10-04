@@ -24,6 +24,9 @@ export { useAuthContext } from './useAuthContext'
 export { ContactRequestForm } from './ContactRequestForm'
 export { TicketOne } from './Ticket/TicketOne'
 export { TicketTwo } from './Ticket/TicketTwo'
+export { SignOutButton } from './Auth/SignOutButton'
+export { MenuItem } from './MenuItem'
+
 
 
 

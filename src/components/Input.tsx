@@ -52,8 +52,8 @@ export class PhoneInput extends React.PureComponent<MaskedProps, any>{
         return (
             <MaskedInput
                 {...this.props}
-                placeholder="(5xx) xxx xxxx"
-                mask={['(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+                placeholder="0(5xx) xxx xxxx"
+                mask={['0', '(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
             />
         )
     }

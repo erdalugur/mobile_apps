@@ -145,3 +145,11 @@ export interface RegisterGuestProps {
     ADDRESS: string
     PASSWORD: string
 }
+
+export interface UpdateUserDetailProps {
+    ADDRESS: string
+    PHONE: string
+    EMAIL: string
+    FIRST_NAME: string
+    LAST_NAME: string
+} 

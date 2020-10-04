@@ -1,11 +1,12 @@
-import { Layout, Text, View } from 'components'
+import { Layout, MenuItem } from 'components'
 import { Activity, Form, HeartBeat, Menu, Star, Survey, User } from 'icons'
 import { screens } from 'navigation'
 import React from 'react'
-import { TouchableOpacity, StyleSheet, ScrollView } from 'react-native'
+import { StyleSheet, ScrollView } from 'react-native'
 import theme from 'theme'
 import { NavigationProps, PlaceModel } from 'types'
-import { configurationManager } from 'utils'
+import { configurationManager, userManager } from 'utils'
+import { StackActions, NavigationAction } from '@react-navigation/native';
 
 interface Props extends NavigationProps<any, any> {
 
@@ -18,6 +19,7 @@ interface State {
     USE_SURVEY_MODULE: boolean,
     USE_ACTIVITY_MODULE: boolean,
     USE_RESERVATION_MODULE: boolean
+    isAuthenticated: boolean
 }
 export class NavigationScreen extends React.PureComponent<Props, any> {
     state: State = {
@@ -26,14 +28,22 @@ export class NavigationScreen extends React.PureComponent<Props, any> {
         USE_ORGANIZATION_MODULE: false,
         USE_SURVEY_MODULE: false,
         USE_ACTIVITY_MODULE: false,
-        USE_RESERVATION_MODULE: false
+        USE_RESERVATION_MODULE: false,
+        isAuthenticated: false
     }
     componentDidMount = async () => {
         let place = await configurationManager.getPlace();
         this.props.navigation.setOptions({
             title: place?.NAME
         })
-        this.setState({ ...place })
+        let isAuthenticated = await userManager.isAuthenticated();
+
+        this.setState({ ...place, isAuthenticated: isAuthenticated })
+    }
+
+    loginAction = () => {
+        const resetAction = StackActions.popToTop();
+        this.props.navigation.dispatch(resetAction);
     }
     render() {
         const {
@@ -42,64 +52,83 @@ export class NavigationScreen extends React.PureComponent<Props, any> {
             USE_ORGANIZATION_MODULE,
             USE_SURVEY_MODULE,
             USE_ACTIVITY_MODULE,
-            USE_RESERVATION_MODULE
+            USE_RESERVATION_MODULE,
+            isAuthenticated
         } = this.state
         return (
             <Layout style={{ flex: 1, height: '100%' }}>
                 <ScrollView>
-                    <View style={[styles.buttonItem]}>
-                        <TouchableOpacity style={[styles.button]} onPress={() => this.props.navigation.goBack()}>
-                            <Menu size={20} color={theme.colors.white} />
-                            <Text style={[styles.text]}>Menu</Text>
-                        </TouchableOpacity>
-                    </View>
+                    <MenuItem
+                        label="Menu"
+                        onPress={() => this.props.navigation.goBack()}
+                        iconComponent={{
+                            icon: <Menu size={20} color={theme.colors.white} />
+                        }}
+                    />
                     {USE_CAMPAIGN_MODULE && (
-                        <View style={[styles.buttonItem]}>
-                            <TouchableOpacity style={[styles.button]} onPress={() => this.props.navigation.navigate(screens.campaignScreen)}>
-                                <Star size={20} color={theme.colors.white} />
-                                <Text style={[styles.text]}>Kampanyalar</Text>
-                            </TouchableOpacity>
-                        </View>
+                        <MenuItem
+                            label="Kampanyalar"
+                            onPress={() => this.props.navigation.navigate(screens.campaignScreen)}
+                            iconComponent={{
+                                icon: <Star size={20} color={theme.colors.white} />
+                            }}
+                        />
                     )}
                     {USE_ACTIVITY_MODULE && (
-                        <View style={[styles.buttonItem]}>
-                            <TouchableOpacity style={[styles.button]} onPress={() => this.props.navigation.navigate(screens.activityScreen)}>
-                                <Activity size={20} color={theme.colors.white} />
-                                <Text style={[styles.text]}>Etkinlikler</Text>
-                            </TouchableOpacity>
-                        </View>
+                        <MenuItem
+                            label="Etkinlikler"
+                            onPress={() => this.props.navigation.navigate(screens.activityScreen)}
+                            iconComponent={{
+                                icon: <Activity size={20} color={theme.colors.white} />
+                            }}
+                        />
                     )}
                     {USE_ORGANIZATION_MODULE && (
-                        <View style={[styles.buttonItem]}>
-                            <TouchableOpacity style={[styles.button]} onPress={() => this.props.navigation.navigate(screens.organizatonScreen)}>
-                                <HeartBeat size={20} color={theme.colors.white} />
-                                <Text style={[styles.text]}>Organizasyonlar</Text>
-                            </TouchableOpacity>
-                        </View>
+                        <MenuItem
+                            label="Organizasyonlar"
+                            onPress={() => this.props.navigation.navigate(screens.organizatonScreen)}
+                            iconComponent={{
+                                icon: <HeartBeat size={20} color={theme.colors.white} />
+                            }}
+                        />
                     )}
                     {USE_RESERVATION_MODULE && (
-                        <View style={[styles.buttonItem]}>
-                            <TouchableOpacity style={[styles.button]} onPress={() => this.props.navigation.navigate(screens.reservationRequestScreen)}>
-                                <Form size={20} color={theme.colors.white} />
-                                <Text style={[styles.text]}>Rezervasyon Al</Text>
-                            </TouchableOpacity>
-                        </View>
+                        <MenuItem
+                            label="Rezervasyon Al"
+                            onPress={() => this.props.navigation.navigate(screens.reservationRequestScreen)}
+                            iconComponent={{
+                                icon: <Form size={20} color={theme.colors.white} />
+                            }}
+                        />
                     )}
                     {USE_SURVEY_MODULE && (
-                        <View style={[styles.buttonItem]}>
-                            <TouchableOpacity style={[styles.button]} onPress={() => this.props.navigation.navigate(screens.surveyScreen)}>
-                                <Survey size={20} color={theme.colors.white} />
-                                <Text style={[styles.text]}>Anket</Text>
-                            </TouchableOpacity>
-                        </View>
+                        <MenuItem
+                            label="Anket"
+                            onPress={() => this.props.navigation.navigate(screens.surveyScreen)}
+                            iconComponent={{
+                                icon: <Survey size={20} color={theme.colors.white} />
+                            }}
+                        />
                     )}
-                    {USE_GUEST_MODULE && (
-                        <View style={[styles.buttonItem]}>
-                            <TouchableOpacity style={[styles.button]} onPress={() => this.props.navigation.navigate(screens.profileNavigation)}>
-                                <User size={20} color={theme.colors.white} />
-                                <Text style={[styles.text]}>Hesabım</Text>
-                            </TouchableOpacity>
-                        </View>
+                    {USE_GUEST_MODULE && isAuthenticated && (
+                        <MenuItem
+                            label="Hesabım"
+                            onPress={() => this.props.navigation.navigate(screens.profileNavigation)}
+                            iconComponent={{
+                                icon: <User size={20} color={theme.colors.white} />
+                            }}
+                        />
+                    )}
+                    {USE_GUEST_MODULE && !isAuthenticated && (
+                        <MenuItem
+                            label="Giriş Yap"
+                            onPress={() => this.props.navigation.navigate(screens.loginGuest, {
+                                action: this.loginAction
+                            })}
+                            iconComponent={{
+                                icon: <User size={20} color={theme.colors.white} />
+                            }}
+                        />
                     )}
                 </ScrollView>
             </Layout>

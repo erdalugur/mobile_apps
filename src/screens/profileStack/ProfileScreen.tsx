@@ -1,11 +1,13 @@
 import React from 'react'
-import { Button, Input } from 'components'
+import { Button, Input, SignOutButton } from 'components'
 import { StyleSheet, ScrollView, Dimensions } from 'react-native'
 import theme from 'theme'
-import { ContactRequestProps } from 'types'
+import { ContactRequestProps, NavigationProps } from 'types'
 import { FormRow, PhoneInput, DateInput, Layout } from 'components'
-import { applicationManager, userManager, validationManager } from 'utils'
+import { applicationManager, messageBox, userManager, validationManager } from 'utils'
 import { dataManager } from 'api'
+import { StackActions } from '@react-navigation/native'
+import { screens } from 'navigation'
 const { height } = Dimensions.get('window')
 interface State {
     error: { [key: string]: string }
@@ -22,7 +24,7 @@ interface State {
     FORM: 1 | 2
 }
 
-interface Props {
+interface Props extends NavigationProps<any, any> {
 
 }
 export class ProfileScreen extends React.PureComponent<Props, State> {
@@ -48,102 +50,47 @@ export class ProfileScreen extends React.PureComponent<Props, State> {
 
     loadAsync = async () => {
         let user = await userManager.get();
-        let userDetail = await dataManager.loadUserAsync();
-        if (userDetail.statusCode === 200 && userDetail.data) {
-            this.setState({
-                ...userDetail.data[0],
-                USERNAME: user?.USERNAME,
-                PASSWORD: user?.PASSWORD,
-                loading: false
-            })
-        }
+        this.setState({
+            USERNAME: user?.USERNAME || "",
+            PASSWORD: user?.PASSWORD || "",
+            loading: false
+        })
     }
 
-    savePersonalChangesAsync = async () => {
-        let { FIRST_NAME, LAST_NAME, EMAIL, ADDRESS, PHONE, USERNAME, PASSWORD } = this.state, error = {} as { [key: string]: string }
-        PHONE ? validationManager.checkPhone(PHONE) ? null : error['PHONE'] = '10 Hane giriniz' : error['PHONE'] = 'Boş geçilemez'
-        FIRST_NAME ? null : error['FIRST_NAME'] = 'Boş geçilemez'
-        LAST_NAME ? null : error['LAST_NAME'] = 'Boş geçilemez'
-        this.setState({ error })
-        if (Object.keys(error).length > 0) {
-            return
-        }
-        PHONE = `0${validationManager.makePhone(PHONE)}`
-    }
 
-    renderPersonal = () => {
-        return (
-            <React.Fragment>
-                <FormRow label="Ad" errorMessage={this.state.error['FIRST_NAME']}>
-                    <Input
-                        editable={this.state.EDITING}
-                        placeholder="Ad"
-                        value={this.state.FIRST_NAME}
-                        onChangeText={FIRST_NAME => this.setState({ FIRST_NAME })} />
-                </FormRow>
-                <FormRow label="Soyad" errorMessage={this.state.error['LAST_NAME']}>
-                    <Input
-                        editable={this.state.EDITING}
-                        placeholder="Soyad"
-                        value={this.state.LAST_NAME}
-                        onChangeText={LAST_NAME => this.setState({ LAST_NAME })} />
-                </FormRow>
-                <FormRow label="Telefon" errorMessage={this.state.error['PHONE']}>
-                    <PhoneInput
-                        disabled={!this.state.EDITING}
-                        value={this.state.PHONE}
-                        onChange={e => this.setState({ PHONE: e.target.value })}
-                    />
-                </FormRow>
-                <FormRow label="Email" errorMessage={this.state.error['Email']}>
-                    <Input
-                        editable={this.state.EDITING}
-                        placeholder="Email"
-                        value={this.state.EMAIL}
-                        onChangeText={EMAIL => this.setState({ EMAIL })} />
-                </FormRow>
-                <FormRow label="Adres">
-                    <Input
-                        editable={this.state.EDITING}
-                        placeholder="Adres"
-                        value={this.state.ADDRESS}
-                        multiline
-                        numberOfLines={4}
-                        onChangeText={ADDRESS => this.setState({ ADDRESS })} />
-                </FormRow>
-                {this.state.EDITING ? (
-                    <>
-                        <Button
-                            loading={this.state.loading}
-                            style={[styles.button, { backgroundColor: theme.colors.primary }]}
-                            textStyle={[styles.text]}
-                            onPress={this.savePersonalChangesAsync}>
-                            Kaydet
-                            </Button>
-                        <Button
-                            loading={this.state.loading}
-                            style={[styles.button, { backgroundColor: theme.colors.border }]}
-                            textStyle={[styles.text]}
-                            onPress={() => this.setState({ EDITING: false, FORM: 1 })}>
-                            Vazgeç
-                        </Button>
-                    </>
-                ) : (
-                        <Button
-                            loading={this.state.loading}
-                            style={[styles.button]}
-                            textStyle={[styles.text]}
-                            onPress={() => this.setState({ EDITING: true })}>
-                            Düzenle
-                        </Button>
-                    )}
-
-            </React.Fragment>
-        )
-    }
 
     savePrivateChangesAsync = async () => {
+        let { USERNAME, PASSWORD } = this.state, error = {} as { [key: string]: string }
+        USERNAME ? null : error['USERNAME'] = 'Kullanıcı adı boş olamaz'
+        PASSWORD ? PASSWORD.length >= 5 ? null : error['PASSWORD'] = 'Parola en az 5 karekter olmalı' : error['PASSWORD'] = 'Parola boş olamaz'
+        this.setState({ error })
+        if (Object.keys(error).length > 0) return;
 
+        let user = await userManager.get();
+        if (user) {
+            this.setState({ loading: true })
+            let result = await dataManager.updateUserNameAsync(USERNAME, PASSWORD);
+            if (result.statusCode === 200) {
+                let msg = result.data && result.data[0]
+                if (msg && msg.errorMessage) {
+                    messageBox(msg.errorMessage)
+                    this.setState({ loading: false })
+                } else {
+                    await userManager.set({
+                        ID: user.ID as string,
+                        PASSWORD: PASSWORD,
+                        USERNAME: USERNAME,
+                        STOREID: user.STOREID,
+                        token: user.token
+                    })
+                    this.setState({ loading: false, EDITING: false })
+                    messageBox('işlem başarıyla gerçekleşti')
+                }
+            } else {
+                messageBox('işlem sırasında hata oluştu')
+                this.setState({ loading: false })
+            }
+        }
     }
 
     renderPrivate = () => {
@@ -194,7 +141,7 @@ export class ProfileScreen extends React.PureComponent<Props, State> {
                             loading={this.state.loading}
                             style={[styles.button, { backgroundColor: theme.colors.primary }]}
                             textStyle={[styles.text]}
-                            onPress={() => this.setState({ EDITING: true, FORM: 2 })}>
+                            onPress={() => this.props.navigation.navigate(screens.personalInfoScreen)}>
                             Kişisel Bilgileri Düzenle
                         </Button>
                     )}
@@ -202,17 +149,17 @@ export class ProfileScreen extends React.PureComponent<Props, State> {
         )
     }
 
+    signOutAction = () => {
+        const resetAction = StackActions.popToTop();
+        this.props.navigation.dispatch(resetAction);
+    }
+
     render() {
         return (
             <Layout style={{ flex: 1, paddingHorizontal: 10 }}>
                 <ScrollView style={{ height: height - 70 }}>
-                    <FormRow label="Üyelik Tarihi">
-                        <Input
-                            editable={false}
-                            value={applicationManager.formatDate(this.state.CREATED_DATE)}
-                        />
-                    </FormRow>
-                    {this.state.FORM === 1 ? this.renderPrivate() : this.renderPersonal()}
+                    {this.renderPrivate()}
+                    <SignOutButton style={[styles.button]} callback={this.signOutAction} />
                 </ScrollView>
             </Layout>
         )

@@ -64,7 +64,8 @@ export const screens = {
     myReservations: 'MyReservations',
     myHistory: 'MyHistory',
     loginGuest: 'LoginGuest',
-    registerGuest: 'RegisterGuest'
+    registerGuest: 'RegisterGuest',
+    personalInfoScreen: 'PersonalInfoScreen'
 }
 
 export const AppStack = createStackNavigator();
@@ -78,21 +79,21 @@ export default function ({ navigation }: any) {
                         ...prevState,
                         userToken: action.token,
                         isLoading: false,
-                        isWebApp: false
+                        isWebApp: Platform.OS === 'web'
                     };
                 case 'SIGN_IN':
                     return {
                         ...prevState,
                         isSignout: false,
                         userToken: action.token,
-                        isWebApp: false
+                        isWebApp: Platform.OS === 'web'
                     };
                 case 'SIGN_OUT':
                     return {
                         ...prevState,
                         isSignout: true,
                         userToken: null,
-                        isWebApp: false
+                        isWebApp: Platform.OS === 'web'
                     };
                 case 'MAKE_WEB':
                     return {
@@ -148,9 +149,11 @@ export default function ({ navigation }: any) {
                 await bootstrapAsync(user.token, '', user.STOREID);
                 dispatch({ type: 'SIGN_IN', token: user.token });
             },
-            signOut: async () => {
+            signOut: async (place: boolean = true) => {
                 await userManager.remove();
-                await configurationManager.removePlace();
+                if (place)
+                    await configurationManager.removePlace();
+
                 dispatch({ type: 'SIGN_OUT' })
             },
             signUp: async (user: UserModel) => {
