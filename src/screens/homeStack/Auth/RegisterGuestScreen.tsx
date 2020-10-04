@@ -1,5 +1,5 @@
 import { dataManager } from 'api'
-import { Layout, View, Text, Input, Button } from 'components'
+import { Layout, View, Text, Input, Button, FormRow, PhoneInput } from 'components'
 import { screens } from 'navigation'
 import React from 'react'
 import { StyleSheet } from 'react-native'
@@ -66,17 +66,15 @@ export default class extends React.PureComponent<Props, State>{
                     STOREID: place?.ID || "0",
                     token: login.token
                 })
-                setTimeout(() => {
-                    if (this.props.route.params && this.props.route.params.action) {
-                        this.props.route.params.action();
-                        setTimeout(() => {
-                            this.props.navigation.navigate(screens.cart)
-                        }, 1000);
-                    } else {
-                        messageBox('işlem başarıyla gerçekleşti');
-                        this.setState({ loading: true })
-                    }
-                }, 1000);
+                messageBox('işlem başarıyla gerçekleşti');
+                this.setState({ loading: false })
+                if (this.props.route.params && this.props.route.params.action) {
+                    this.props.route.params.action();
+                } else {
+                    setTimeout(() => {
+                        this.props.navigation.goBack();
+                    }, 1000);
+                }
             } else {
                 this.setState({ loading: false });
                 messageBox('Kullanıcı adı veya parola yanlış')
@@ -93,53 +91,36 @@ export default class extends React.PureComponent<Props, State>{
         return (
             <Layout style={{ justifyContent: 'center', flex: 1, paddingHorizontal: 20 }}>
                 <View style={[styles.formContainer]}>
-                    <View style={[styles.item]}>
+                    <FormRow errorMessage={this.hasError('FIRST_NAME')} label="Ad">
                         <Input
                             value={this.state.FIRST_NAME}
                             onChangeText={(FIRST_NAME) => this.setState({ FIRST_NAME })}
                             placeholder="Ad" />
-                        <ErrorMessage
-                            message={this.hasError('FIRST_NAME')}
-                        />
-                    </View>
-                    <View style={[styles.item]}>
+                    </FormRow>
+                    <FormRow errorMessage={this.hasError('LAST_NAME')} label="Soyad">
                         <Input
                             value={this.state.LAST_NAME}
                             onChangeText={(LAST_NAME) => this.setState({ LAST_NAME })}
                             placeholder="Soyad" />
-                        <ErrorMessage
-                            message={this.hasError('LAST_NAME')}
-                        />
-                    </View>
-                    <View style={[styles.item]}>
-                        <Input
-                            keyboardType="number-pad"
+                    </FormRow>
+                    <FormRow errorMessage={this.hasError('PHONE')} label="Telefon">
+                        <PhoneInput
                             value={this.state.PHONE}
-                            onChangeText={(PHONE) => this.setState({ PHONE })}
-                            placeholder="Telefon" />
-                        <ErrorMessage
-                            message={this.hasError('PHONE')}
+                            onChange={(e) => this.setState({ PHONE: e.target.value })}
                         />
-                    </View>
-                    <View style={[styles.item]}>
+                    </FormRow>
+                    <FormRow errorMessage={this.hasError('PASSWORD')} label="Parola">
                         <Input
                             value={this.state.PASSWORD}
                             onChangeText={(PASSWORD) => this.setState({ PASSWORD })}
                             placeholder="Parola" />
-                        <ErrorMessage
-                            message={this.hasError('PASSWORD')}
-                        />
-                    </View>
-                    <View style={[styles.item]}>
+                    </FormRow>
+                    <FormRow errorMessage={this.hasError('ADDRESS')} label="Adres">
                         <Input
                             value={this.state.ADDRESS}
                             onChangeText={(ADDRESS) => this.setState({ ADDRESS })}
                             multiline numberOfLines={3} placeholder="Adres" />
-                        <ErrorMessage
-                            message={this.hasError('ADDRESS')}
-                        />
-
-                    </View>
+                    </FormRow>
                     <Button
                         textStyle={{ fontWeight: 'bold' }}
                         onPress={this.loginAsync} style={[styles.button]}>
@@ -164,16 +145,6 @@ export default class extends React.PureComponent<Props, State>{
                 </View>
             </Layout>
         )
-    }
-}
-
-function ErrorMessage(props: { message: string }) {
-    if (props.message) {
-        return (
-            <Text style={[styles.errorMessage]}>{props.message}</Text>
-        )
-    } else {
-        return null
     }
 }
 

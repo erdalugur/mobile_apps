@@ -53,9 +53,6 @@ export default class extends React.PureComponent<Props, State>{
                 token: result.token
             })
             this.props.route.params && this.props.route.params.action && this.props.route.params.action();
-            // setTimeout(() => {
-            //     this.props.navigation.goBack();
-            // }, 1000);
         } else {
             this.setState({ loading: false });
             messageBox('Kullanıcı adı veya parola yanlış')
@@ -98,7 +95,7 @@ export default class extends React.PureComponent<Props, State>{
                             Geri Dön
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.registerButton]} onPress={() => this.props.navigation.navigate(screens.registerGuest)}>
+                    <TouchableOpacity style={[styles.registerButton]} onPress={() => this.props.navigation.navigate(screens.registerGuest, { action: this.props.route.params.action })}>
                         <Text>
                             Kayıt Ol
                         </Text>

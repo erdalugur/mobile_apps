@@ -1,5 +1,4 @@
 import React from 'react'
-import { Video } from 'expo-av';
 import { StyleSheet, TouchableOpacity, Platform } from 'react-native'
 import { View } from 'components'
 import { NavigationProps } from 'types';
@@ -32,37 +31,20 @@ export class VideoScreen extends React.PureComponent<Props, any>{
             </View>
         )
     }
+
+    renderVideo = () => {
+        if (Platform.OS === 'web') {
+            return <iframe frameBorder="0" src={this.props.route.params.uri} ></iframe>
+        } else {
+            return null
+        }
+    }
     render() {
         return (
             <View full>
                 {this.renderHeader()}
                 <View style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-                    <Video
-                        source={{ uri: this.props.route.params.uri }}
-                        rate={1.0}
-                        volume={1.0}
-                        isMuted={false}
-                        resizeMode="contain"
-                        shouldPlay
-                        isLooping
-                        ref={this.myRef}
-                        style={{ maxWidth: 400, maxHeight: 400 }}
-                    />
-                    {/* <View style={{ height: 300 }}>
-
-                        <WebView
-                            style={styles.WebViewContainer}
-                            javaScriptEnabled={true}
-                            domStorageEnabled={true}
-                            source={{ uri: this.props.route.params.uri }}
-                        />
-
-                    </View> */}
-                </View>
-                <View>
-                    <TouchableOpacity onPress={() => this.myRef.current.pauseAsync()}>
-                        <Play />
-                    </TouchableOpacity>
+                    {this.renderVideo()}
                 </View>
             </View>
         )

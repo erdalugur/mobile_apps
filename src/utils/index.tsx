@@ -3,7 +3,7 @@ import { UserModel, CacheResponse, DomainSettingModel, PlaceModel } from 'types'
 import { dataManager } from 'api'
 export { messages } from './messages'
 import * as Network from 'expo-network';
-import * as moment from 'moment'
+import moment from 'moment'
 export const cacheKeys = {
     user: "user",
     config: 'config',
@@ -117,6 +117,7 @@ export const applicationManager = {
     config: configurationManager,
     formatDate: (date: string, format: string = 'DD-MM-YYYY') => {
         return moment(date).format(format)
+        //return date
     }
 }
 
