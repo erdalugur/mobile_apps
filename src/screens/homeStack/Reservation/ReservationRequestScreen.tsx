@@ -21,7 +21,7 @@ export class ReservationRequestScreen extends React.PureComponent<any, State> {
     }
 
     makeRequestAsync = async (data: ContactRequestProps) => {
-        data.REQUEST_TYPE = 'RESERVATION'
+        data.REQUEST_TYPE = '1'
         this.setState({ loading: true });
         const result = await dataManager.makeRequest(data);
         if (result.statusCode === 200) {

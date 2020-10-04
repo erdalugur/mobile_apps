@@ -50,7 +50,7 @@ export class ActivityRequestScreen extends React.PureComponent<Props, State> {
             PAX,
             PHONE,
             REQUESTID: this.props.route.params.ID,
-            REQUEST_TYPE: '',
+            REQUEST_TYPE: '2',
             REQUEST_DATE: '',
             REQUEST_TIME: ''
         });

@@ -10,7 +10,7 @@ const { height } = Dimensions.get('window')
 interface ItemProps {
     REQUEST_TIME: string
     REQUEST_DATE: string
-    CONTACT_TYPE: string
+    CONTACT_TYPE: "1" | "2" | "3"
     CREATED_DATE: string
     PAX: number
     ID: string
@@ -50,10 +50,23 @@ export default class MyReservationScreen extends React.PureComponent<any, any> {
                 return "işlemde"
         }
     }
+
+    getRequestType = (statu: "1" | "2" | "3") => {
+        switch (statu) {
+            case "1":
+                return "Rezervasyon"
+            case "2":
+                return "Organizasyon"
+            case "3":
+                return "Etkinlik"
+            default:
+                return "Rezervasyon"
+        }
+    }
     renderItem = (x: ItemProps) => {
         return (
             <View key={x.ID} style={[styles.itemContainer]}>
-                <Text style={{ width: '35%', textAlign: 'left' }}>{x.CONTACT_TYPE}</Text>
+                <Text style={{ width: '35%', textAlign: 'left' }}>{this.getRequestType(x.CONTACT_TYPE)}</Text>
                 <Text style={{ width: '25%', textAlign: 'center' }}>{applicationManager.formatDate(x.CREATED_DATE)}</Text>
                 <Text style={{ width: '25%', textAlign: 'center' }}>{applicationManager.formatDate(x.REQUEST_DATE)}</Text>
                 <Text style={{ width: '15%', textAlign: 'right' }}>{this.checkStatus(x.STATUS)}</Text>

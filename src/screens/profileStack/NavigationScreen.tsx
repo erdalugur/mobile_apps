@@ -1,16 +1,17 @@
 import React from 'react';
-import { Platform, StyleSheet } from 'react-native';
-import { Text, View, MenuItem, Layout, Button } from 'components'
+import { Dimensions, Platform, StyleSheet } from 'react-native';
+import { Text, View, MenuItem, Layout, Button, MyCode } from 'components'
 import { TouchableOpacity } from 'react-native';
 import theme from 'theme';
 import { IAction, actionTypes } from 'myRedux/types';
 import { AuthContextProps, NavigationProps } from 'types';
 import { screens } from 'navigation';
 import { userManager } from 'utils';
+import { ScrollView } from 'react-native-gesture-handler';
 
 interface State {
     loading: boolean
-    isAuthenticated: boolean
+    userId: string
 }
 
 interface Props extends NavigationProps<{}, any>, AuthContextProps {
@@ -20,31 +21,31 @@ interface Props extends NavigationProps<{}, any>, AuthContextProps {
 export class SettingNavigationScreen extends React.PureComponent<Props, State> {
 
     state: State = {
-        isAuthenticated: false,
+        userId: '',
         loading: false
     }
 
     componentDidMount = async () => {
-        // let isAuthenticated = await userManager.isAuthenticated();
-        // this.setState({ isAuthenticated, loading: false })
+        let user = await userManager.get();
+        this.setState({ userId: user?.ID || '' })
     }
 
     renderMenuItem = () => {
         return (
-            <React.Fragment>
+            <ScrollView style={{ height: Dimensions.get('window').height - 80 }}>
                 <MenuItem
                     label="Taleplerim"
                     onPress={() => this.props.navigation.navigate(screens.myReservations)}
                 />
                 <MenuItem
-                    label="İşlem Geçmişi"
+                    label="Yıldızlı İşlemler"
                     onPress={() => this.props.navigation.navigate(screens.myHistory)}
                 />
                 <MenuItem
                     label="Hesap Ayarları"
                     onPress={() => this.props.navigation.navigate(screens.myProfile)}
                 />
-            </React.Fragment>
+            </ScrollView>
         )
     }
     render() {
@@ -52,6 +53,7 @@ export class SettingNavigationScreen extends React.PureComponent<Props, State> {
             <Layout
                 style={styles.container}
                 loading={this.state.loading}>
+                <MyCode code={this.state.userId} />
                 { this.renderMenuItem()}
             </Layout>
         );

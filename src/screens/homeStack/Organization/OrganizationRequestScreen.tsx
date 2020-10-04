@@ -25,7 +25,7 @@ export class OrganizationRequestScreen extends React.PureComponent<Props, State>
     }
 
     makeRequestAsync = async (data: ContactRequestProps) => {
-        data.REQUEST_TYPE = ''
+        data.REQUEST_TYPE = '2'
         data.REQUESTID = this.props.route.params.ID
         this.setState({ loading: true });
         const result = await dataManager.makeRequest(data);
