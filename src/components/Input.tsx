@@ -1,5 +1,5 @@
 import React from 'react'
-import { TextInput, TextInputProps, StyleSheet } from 'react-native'
+import { TextInput, TextInputProps, StyleSheet, Platform } from 'react-native'
 import theme from 'theme';
 import InputMasked, { MaskedInputProps } from 'react-text-mask'
 import { Datepicker } from '@ui-kitten/components'
@@ -48,14 +48,29 @@ export class MaskedInput extends React.PureComponent<MaskedProps, any>{
 }
 
 export class PhoneInput extends React.PureComponent<MaskedProps, any>{
+
+    onChange = (value: string) => {
+        let callback = this.props.onChange as any
+        callback({ target: { value } })
+    }
     render() {
-        return (
-            <MaskedInput
-                {...this.props}
-                placeholder="0(5xx) xxx xxxx"
-                mask={['0', '(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
-            />
-        )
+        if (Platform.OS === 'web') {
+            return (
+                <MaskedInput
+                    {...this.props}
+                    placeholder="0(5xx) xxx xxxx"
+                    mask={['0', '(', /[1-9]/, /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+                />
+            )
+        } else {
+            return (
+                <Input
+
+                    placeholder="0(5xx) xxx xxxx"
+                    onChangeText={value => this.onChange(value)}
+                />
+            )
+        }
     }
 }
 export class DateInput extends React.PureComponent<MaskedProps, any>{

@@ -1,8 +1,6 @@
 import React from 'react';
 import { Dimensions, Platform, StyleSheet } from 'react-native';
 import { Text, View, MenuItem, Layout, Button, MyCode } from 'components'
-import { TouchableOpacity } from 'react-native';
-import theme from 'theme';
 import { IAction, actionTypes } from 'myRedux/types';
 import { AuthContextProps, NavigationProps } from 'types';
 import { screens } from 'navigation';
@@ -33,14 +31,17 @@ export class SettingNavigationScreen extends React.PureComponent<Props, State> {
     renderMenuItem = () => {
         return (
             <ScrollView style={{ height: Dimensions.get('window').height - 80 }}>
-                <MenuItem
-                    label="Taleplerim"
-                    onPress={() => this.props.navigation.navigate(screens.myReservations)}
-                />
-                <MenuItem
-                    label="Yıldızlı İşlemler"
-                    onPress={() => this.props.navigation.navigate(screens.myHistory)}
-                />
+                { Platform.OS === 'web' && (
+                    <React.Fragment>
+                        <MenuItem
+                            label="Taleplerim"
+                            onPress={() => this.props.navigation.navigate(screens.myReservations)}
+                        />
+                        <MenuItem
+                            label="Yıldızlı İşlemler"
+                            onPress={() => this.props.navigation.navigate(screens.myHistory)}
+                        />
+                    </React.Fragment>)}
                 <MenuItem
                     label="Hesap Ayarları"
                     onPress={() => this.props.navigation.navigate(screens.myProfile)}
@@ -53,7 +54,7 @@ export class SettingNavigationScreen extends React.PureComponent<Props, State> {
             <Layout
                 style={styles.container}
                 loading={this.state.loading}>
-                <MyCode code={this.state.userId} />
+                { Platform.OS === 'web' && <MyCode code={this.state.userId} />}
                 { this.renderMenuItem()}
             </Layout>
         );

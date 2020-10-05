@@ -1,5 +1,5 @@
 
-import { DarkTheme } from '@react-navigation/native';
+import { DarkTheme, DefaultTheme } from '@react-navigation/native';
 
 interface ITheme {
     dark: boolean
@@ -24,5 +24,21 @@ const theme: ITheme = {
         white: 'white'
     }
 };
+
+const light: ITheme = {
+    dark: false,
+    colors: {
+        primary: DefaultTheme.colors.primary,
+        background: DefaultTheme.colors.card,
+        border: DefaultTheme.colors.border,
+        card: DefaultTheme.colors.background,
+        text: DefaultTheme.colors.text,
+        white: 'white'
+    }
+};
+
+export function getTheme(color: 'dark' | 'ligth') {
+    return color === 'dark' ? theme : light
+}
 
 export default theme

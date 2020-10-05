@@ -22,6 +22,8 @@ import {
 } from 'screens'
 import { dataManager } from 'api';
 import { Platform } from 'react-native';
+import { ProfileStackScreen } from 'screens/profileStack';
+
 
 export const AuthContext = React.createContext<any>(null);
 
@@ -165,7 +167,6 @@ export default function ({ navigation }: any) {
         }),
         []
     );
-
     return (
         <AuthContext.Provider value={authContext}>
             <Provider store={store}>
@@ -177,7 +178,7 @@ export default function ({ navigation }: any) {
                             gestureDirection: "horizontal",
                             headerShown: false
                         }}
-                        headerMode="none"
+                    // headerMode="screen"
 
                     >
                         {state.isLoading ? (
@@ -227,7 +228,7 @@ export default function ({ navigation }: any) {
                                                 name={screens.search} />
 
                                             <AppStack.Screen
-                                                component={SettingNavigationScreen}
+                                                component={ProfileStackScreen}
                                                 name={screens.settings} />
                                             <AppStack.Screen
                                                 component={ProfileScreen}
@@ -243,7 +244,6 @@ export default function ({ navigation }: any) {
                                             <AppStack.Screen
                                                 component={CachierStackScreen}
                                                 name={screens.cashier} />
-
                                         </>
                                     )}
                     </AppStack.Navigator>
