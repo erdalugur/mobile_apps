@@ -52,11 +52,11 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
         ...options
     })
 
-    const DrawerMenu = () => (
+    const DrawerMenu = () => Platform.OS === 'web' ? (
         <TouchableOpacity style={{ marginHorizontal: 5 }} onPress={() => navigation.navigate(screens.navigationScreen)}>
             <MoreOption color={theme.colors.white} size={25} />
         </TouchableOpacity>
-    )
+    ) : null
 
     return (
         <HomeStack.Navigator

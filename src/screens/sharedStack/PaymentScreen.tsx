@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, FlatList, TouchableOpacity } from 'react-native';
-import { Text, View, Input, Button } from 'components'
+import { Text, View, Input, Button, Layout } from 'components'
 import { NavigationProps } from 'types';
 import theme from 'theme';
 import { messageBox, messages } from 'utils';
@@ -144,36 +144,24 @@ class Index extends React.PureComponent<Props, State>{
     render() {
         const operation = this.props.route.params.operation
         return (
-            <View style={styles.container}>
-                <View style={{
-
-                    flex: 1
-                }}>
+            <Layout style={styles.container}>
+                <View style={{ flex: 1 }}>
                     {this.renderItems()}
-
-
                 </View>
-                <View style={{
-                    bottom: 0,
-                    width: '100%',
-
-                    position: 'absolute',
-                    height: 60
-                }}>
-                    <TouchableOpacity
-                        onPress={() => {
-                            operation === 'addPayment' ? this.addPayment() : this.closeSession();
-                        }}
-                        style={{
-                            height: 70,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            backgroundColor: theme.colors.border
-                        }}><Text style={{
-                            fontSize: 16
-                        }}>Tamamla</Text></TouchableOpacity>
-                </View>
-            </View>
+                { this.state.selectedPayment !== '' && (
+                    <View style={{
+                        bottom: 0,
+                        width: '100%',
+                        position: 'absolute',
+                        height: 60
+                    }}>
+                        <Button
+                            textStyle={{ fontWeight: 'bold' }}
+                            onPress={() => operation === 'addPayment' ? this.addPayment() : this.closeSession()}
+                        >Tamamla</Button>
+                    </View>
+                )}
+            </Layout>
         );
     }
 }

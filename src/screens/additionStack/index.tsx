@@ -12,6 +12,7 @@ import {
 import theme from 'theme';
 import { HeaderBack } from 'icons'
 import { screens } from 'navigation'
+import { TableOptionScreen } from 'screens/sharedStack/TableOptionScreen';
 
 
 export const AdditionStack = createStackNavigator();
@@ -61,7 +62,13 @@ export const AdditionStackScreen = ({ route, navigation }: { route: any, navigat
                 component={ReadQRTableScreen}
                 name={screens.tableQR}
             />
-
+            <AdditionStack.Screen
+                options={{
+                    title: 'Opsiyonlar'
+                }}
+                component={TableOptionScreen}
+                name={screens.tableOptionScreen}
+            />
         </AdditionStack.Navigator>
     )
 }

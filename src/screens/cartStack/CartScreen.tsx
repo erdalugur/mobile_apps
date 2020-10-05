@@ -301,13 +301,13 @@ class Index extends React.PureComponent<Props, State> {
                         </Text>
                     </View>
                     <View style={[styles.bottomButton]}>
-                        {this.props.routeScreen !== 'Home' &&
-                            <TouchableOpacity onPress={() => {
-                                this.props.navigation.navigate(screens.tables, { fromScreen: 'cart' })
-                            }}>
-                                <Table color={theme.colors.white} />
-                            </TouchableOpacity>
-                        }
+                        <TouchableOpacity onPress={() => {
+                            this.props.routeScreen !== 'Home' ?
+                                this.props.navigation.navigate(screens.tables, { fromScreen: 'cart' }) :
+                                messageBox('Bu işlemi yapmaya yetkiniz yok, Lütfen masanın barkodunu okutun')
+                        }}>
+                            <Table color={theme.colors.white} />
+                        </TouchableOpacity>
                     </View>
                 </>
             )

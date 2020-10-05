@@ -68,7 +68,8 @@ export const screens = {
     loginGuest: 'LoginGuest',
     registerGuest: 'RegisterGuest',
     personalInfoScreen: 'PersonalInfoScreen',
-    myCodeScreen: 'MyCodeScreen'
+    myCodeScreen: 'MyCodeScreen',
+    tableOptionScreen: 'TableOptionScreen'
 }
 
 export const AppStack = createStackNavigator();

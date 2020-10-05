@@ -11,6 +11,7 @@ import {
 import theme from 'theme';
 import { HeaderBack } from 'icons'
 import { screens } from 'navigation'
+import { TableOptionScreen } from 'screens/sharedStack/TableOptionScreen';
 
 
 
@@ -67,6 +68,14 @@ export const CachierStackScreen = () => (
             }}
             name={screens.cartResult}
             component={CartResultScreen}
+        />
+        <CachierStack.Screen
+            options={{
+                title: 'Opsiyonlar',
+                gestureEnabled: false
+            }}
+            name={screens.tableOptionScreen}
+            component={TableOptionScreen}
         />
     </CachierStack.Navigator>
 )

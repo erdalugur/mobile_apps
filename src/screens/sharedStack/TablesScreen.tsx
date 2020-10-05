@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, FlatList, RefreshControl, TouchableOpacity, Dimensions, SafeAreaView } from 'react-native';
-import { Text, View } from 'components'
+import { Button, Text, View } from 'components'
 import { dataManager } from 'api';
 import theme from 'theme';
 import { messageBox, messages } from 'utils';
@@ -47,7 +47,11 @@ class Index extends React.PureComponent<Props, State>{
                 marginRight: 20,
                 backgroundColor: theme.colors.card
             }}>
-                <MoreOption onPress={() => messageBox('Modal açılacak')} color={theme.colors.text} />
+                <MoreOption onPress={() =>
+                    this.state.selected !== '' ?
+                        this.props.navigation.navigate(screens.tableOptionScreen, { item: this.state.selected }) :
+                        messageBox('Lütfen önce masa seçiniz')
+                } color={theme.colors.text} />
             </View>,
             headerLeft: () => <View style={{
                 marginLeft: 20
@@ -130,7 +134,9 @@ class Index extends React.PureComponent<Props, State>{
                         PRODUCTID: x,
                         QUANTITY: items[x].quantity.toString()
                     }
-                })
+                }),
+                EXTRAS: [],
+                FROM_GUEST: false
             });
             if (statusCode === 200) {
                 messageBox(messages.SEND_CART_SUCCESS);
@@ -144,11 +150,15 @@ class Index extends React.PureComponent<Props, State>{
     renderSendButton = () => {
         let { routeScreen = "", cart, navigation } = this.props
         let fromCart = routeScreen === 'Search'
-        return fromCart && Object.keys(cart).length > 0 && <TouchableOpacity
-            onPress={this.sendOrder}
-            activeOpacity={0.8} style={[styles.sendOrder]}>
-            <Text>{messages.SEND_CART}</Text>
-        </TouchableOpacity>
+        return fromCart && Object.keys(cart).length > 0 && (
+            <Button
+                onPress={this.sendOrder}
+                activeOpacity={0.8}
+                textStyle={{ fontWeight: 'bold' }}
+            >
+                {messages.SEND_CART}
+            </Button>
+        )
     }
 
     render() {
