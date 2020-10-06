@@ -136,6 +136,7 @@ export interface TicketItemProps {
     NAME: string
     IMAGE_URL: string
     DESCRIPTION: string
+    PRICE: number
 }
 
 export interface RegisterGuestProps {

@@ -10,8 +10,9 @@ interface Props {
     component?: "p" | "h1" | "h2" | "h3" | "h4" | "h5" | "h6"
     style?: StyleProp<TextStyle>
     center?: boolean
+    numberOfLines?: number | undefined
 }
-export function Text({ color, children, component = "p", style, center }: Props) {
+export function Text({ color, children, component = "p", style, center, numberOfLines }: Props) {
     let fontSize: number = 20;
     let _color = color || colors.text
     switch (component) {
@@ -38,7 +39,7 @@ export function Text({ color, children, component = "p", style, center }: Props)
             break;
     }
     return (
-        <TextBase style={[{
+        <TextBase numberOfLines={numberOfLines} style={[{
             color: _color,
             fontSize
         }, style, center ? { textAlign: 'center' } : {}]}>

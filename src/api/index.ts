@@ -434,6 +434,19 @@ export const dataManager = {
             ],
             action: 'public'
         })
+    },
+    updateWaitingAsync: async function (status: number, items: any[]) {
+        let user = await userManager.get();
+        return await QueryableIO<IProc>({
+            model: 'MPOS_UPDATE_WAITING',
+            parameters: [
+                { key: "STOREID", value: user?.STOREID },
+                { key: "USERID", value: user?.ID },
+                { key: "STATUS", value: status },
+                { key: "ITEMS", value: JSON.stringify(items) },
+            ],
+            action: 'public'
+        })
     }
 }
 

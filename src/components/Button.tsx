@@ -51,7 +51,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: theme.colors.border,
         paddingHorizontal: 10,
-        borderRadius: 2
     },
     full: {
         width: '100%',
