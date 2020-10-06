@@ -27,6 +27,7 @@ export { TicketTwo } from './Ticket/TicketTwo'
 export { SignOutButton } from './Auth/SignOutButton'
 export { MenuItem } from './MenuItem'
 export { MyCode } from './MyCode'
+export { StarComponent } from './StarComponent'
 
 
 

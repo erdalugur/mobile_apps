@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Image, Dimensions, ImageBackground, ActivityIndicator, Modal, Platform, ScrollView, TouchableOpacity } from 'react-native';
-import { View, Text, Html, CartButton, AddToCartHeart, AddToCart, ProductExtra, Layout } from 'components'
+import { View, Text, Html, CartButton, AddToCartHeart, AddToCart, ProductExtra, Layout, StarComponent } from 'components'
 import { NavigationProps, Product, ProductTreeModel, CartItem, IExtra } from 'types';
 import theme from 'theme';
 import { } from 'react-native-gesture-handler';
@@ -13,6 +13,7 @@ import { dataManager } from 'api';
 import { AppState } from 'myRedux';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { constands } from 'constands';
+import { sharedStyles } from 'shared/style';
 
 interface Props extends NavigationProps<{
     item: Product
@@ -207,12 +208,15 @@ class Index extends React.PureComponent<Props, any> {
                         }}>
                             {this.renderHeader()}
                             <Image source={{ uri: x.PREVIEW }} style={[styles.image]} />
+                            {/* <View style={[styles.playContainer]}>
+                                <TouchableOpacity style={[styles.play]}
+                                    onPress={() => x.VIDEO_URL && this.props.navigation.navigate(screens.videoScreen, { uri: x.VIDEO_URL })}>
+                                    <Play color={theme.colors.white} size={25} />
+                                </TouchableOpacity>
+                            </View> */}
                             <View style={[styles.imageBottomContainer]} transparent>
-                                <View style={[styles.imageBottom, { opacity: x.VIDEO_URL ? 1 : 0 }]}>
-                                    <TouchableOpacity
-                                        onPress={() => x.VIDEO_URL && this.props.navigation.navigate(screens.videoScreen, { uri: x.VIDEO_URL })}>
-                                        <Play color={theme.colors.white} size={25} />
-                                    </TouchableOpacity>
+                                <View style={[styles.starBottom, { maxWidth: '50%' }]}>
+                                    <StarComponent textStyle={{ display: 'none' }} value={x.STAR} />
                                 </View>
                                 <View style={[!this.checkCartItem() ? styles.imageBottom : styles.imageBottom2]}>
                                     {this.checkCartItem() ? <AddToCart style={{ borderWidth: 0, width: 100 }} item={this.state.item as Product} /> :
@@ -300,7 +304,6 @@ const mapState = (state: AppState) => ({
 export default connect(mapState)(Index)
 
 
-const bgColor = '#00000057'
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -320,7 +323,7 @@ const styles = StyleSheet.create({
     heartAdd: {
         bottom: 20,
         right: 10,
-        backgroundColor: bgColor,//'#12121226',
+        backgroundColor: theme.colors.shadowColor,
         width: 45,
         height: 40,
         borderRadius: 10,
@@ -336,14 +339,40 @@ const styles = StyleSheet.create({
         bottom: 20,
         flexDirection: 'row'
     },
+    starBottom: {
+        backgroundColor: theme.colors.shadowColor,
+        marginHorizontal: 10,
+        borderRadius: 10,
+        height: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
     imageBottom: {
-        backgroundColor: bgColor,//'#12121226',
+        backgroundColor: theme.colors.shadowColor,
         marginHorizontal: 10,
         borderRadius: 10,
         width: 45,
         height: 40,
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    playContainer: {
+        justifyContent: 'center',
+        width: '100%',
+        margin: 0,
+        height: '100%',
+        borderRadius: 0,
+        backgroundColor: 'transparent',
+        zIndex: 9,
+        flex: 1,
+        alignItems: 'center'
+    },
+    play: {
+        backgroundColor: theme.colors.shadowColor,
+        marginHorizontal: 10,
+        borderRadius: 10,
+
+
     },
     imageBottom2: {
         marginHorizontal: 10,
@@ -353,7 +382,7 @@ const styles = StyleSheet.create({
     },
     headerButton: {
         width: 45, borderRadius: 10,
-        backgroundColor: bgColor,//'#12121226',
+        backgroundColor: theme.colors.shadowColor,
         alignItems: 'center', height: 45,
         justifyContent: 'center'
     },
@@ -386,7 +415,7 @@ const styles = StyleSheet.create({
         width: 120,
         borderRadius: 10,
         margin: 5,
-        backgroundColor: '#12121247',//'#12121226',
+        backgroundColor: theme.colors.shadowColor,
         overflow: 'hidden',
     },
     recommendedItemTextContainer: {
@@ -395,7 +424,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         height: '100%',
-        backgroundColor: '#12121226',
+        backgroundColor: theme.colors.shadowColor,
         //paddingBottom: 10
         //opacity: .6
     },

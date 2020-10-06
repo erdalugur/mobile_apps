@@ -10,6 +10,7 @@ interface ITheme {
         card: string,
         text: string,
         white: string
+        shadowColor: string
     }
 }
 
@@ -21,7 +22,8 @@ const theme: ITheme = {
         border: DarkTheme.colors.border,
         card: DarkTheme.colors.background,
         text: DarkTheme.colors.text,
-        white: 'white'
+        white: 'white',
+        shadowColor: '#00000057'
     }
 };
 
@@ -33,7 +35,8 @@ const light: ITheme = {
         border: DefaultTheme.colors.border,
         card: DefaultTheme.colors.background,
         text: DefaultTheme.colors.text,
-        white: 'white'
+        white: 'white',
+        shadowColor: '#00000057'
     }
 };
 

@@ -25,6 +25,7 @@ export interface Product {
     NOTES: string
     PRIORITY: number
     VIDEO_URL: string
+    STAR: number
 }
 
 export interface IExtra {

@@ -7,7 +7,10 @@ export const sharedStyles = StyleSheet.create({
         bottom: 0,
         width: '100%',
         position: 'absolute',
-        height: 60,
+        height: 50,
         flexDirection: 'row',
+    },
+    shadowBlack: {
+        color: '#00000057'
     }
 })

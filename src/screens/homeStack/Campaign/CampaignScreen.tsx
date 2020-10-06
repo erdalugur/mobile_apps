@@ -1,12 +1,11 @@
 import { dataManager } from 'api';
-import { Html, Layout, Text, View } from 'components'
+import { Html, Layout, Text, View, StarComponent } from 'components'
 import { Star } from 'icons';
 import React from 'react'
 import { ScrollView, ImageBackground, Dimensions, StyleSheet } from 'react-native';
 import theme from 'theme';
 import { applicationManager } from 'utils';
 import { DiscoutnComponent } from './DiscountComponent';
-import { StarComponent } from './StarComponent';
 
 const { width, height } = Dimensions.get('screen')
 

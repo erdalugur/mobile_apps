@@ -370,7 +370,7 @@ const styles = StyleSheet.create({
     bottomButton: {
         //height: 50,
         alignItems: 'center',
-        justifyContent: 'space-around',
+        justifyContent: 'center',
         paddingHorizontal: 10,
         backgroundColor: theme.colors.card,
         //flexDirection: 'row',
