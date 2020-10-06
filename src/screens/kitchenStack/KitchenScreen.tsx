@@ -1,11 +1,13 @@
 import React from 'react'
-import { View, Text, Button, Layout } from 'components'
+import { View, Text, Button, Layout, ProductExtra } from 'components'
 import { NavigationProps } from 'types'
 import { dataManager } from 'api'
 import { ScrollView, RefreshControl, StyleSheet, Dimensions, TouchableOpacity } from 'react-native'
 import theme from 'theme'
 import { sharedStyles } from 'shared/style'
 import { messageBox } from 'utils'
+import { Pencil } from 'icons'
+import { screens } from 'navigation'
 
 interface Props extends NavigationProps<any, any> {
 
@@ -17,6 +19,10 @@ interface WaitingProps {
     PRODUCT_NAME: string
     QUANTITY: number
     TABLEID: number
+    EXTRAS: Array<any>
+    PRODUCTID: string
+    NOTES: string
+    STATUS: 1 | 2 | 3
 }
 interface State {
     loading: boolean
@@ -24,6 +30,7 @@ interface State {
     error: string
     filter: 'web' | 'mobile'
     selectedItems: string[]
+    displayList: string[]
 }
 
 export default class extends React.PureComponent<Props, State>{
@@ -32,7 +39,8 @@ export default class extends React.PureComponent<Props, State>{
         items: [],
         error: '',
         filter: 'mobile',
-        selectedItems: []
+        selectedItems: [],
+        displayList: []
     }
 
     timer: any
@@ -40,7 +48,7 @@ export default class extends React.PureComponent<Props, State>{
     componentDidMount = async () => {
         this.setState({ loading: true })
         this.loadAsync()
-        this.timer = setInterval(() => this.loadAsync(), 5000)
+        //this.timer = setInterval(() => this.loadAsync(), 5000)
     }
 
     componentWillUnmount = () => {
@@ -50,7 +58,11 @@ export default class extends React.PureComponent<Props, State>{
     loadAsync = async () => {
         let { data, error, statusCode } = await dataManager.loadWaiting();
         if (statusCode === 200 && Array.isArray(data)) {
-            this.setState({ items: data, loading: false })
+            let _data_ = data.map(x => {
+                x.EXTRAS = JSON.parse(x.EXTRAS)
+                return x
+            })
+            this.setState({ items: _data_, loading: false, selectedItems: [] })
         } else {
             this.setState({ loading: false, error: error })
         }
@@ -77,19 +89,94 @@ export default class extends React.PureComponent<Props, State>{
                     borderLeftWidth: this.state.selectedItems.indexOf(x.ID) > -1 ? 4 : 0,
                     borderLeftColor: this.state.selectedItems.indexOf(x.ID) > -1 ? theme.colors.text : theme.colors.card
                 }]}>
-                <View style={{ width: '50%' }}>
-                    <Text style={{ fontSize: 16 }}>{x.PRODUCT_NAME}</Text>
+                <View transparent style={[styles.button]}>
+                    <View style={{ width: '50%' }}>
+                        <Text style={{ fontSize: 16 }}>{x.PRODUCT_NAME}</Text>
+                    </View>
+                    <View style={{
+                        flexDirection: 'row',
+                        width: '50%',
+                        justifyContent: 'space-between'
+                    }}>
+                        <Text style={{ fontSize: 16 }}>{`${x.STATUS === 2 ? 'Onaylandı' : 'Bekliyor'}`}</Text>
+                        {this.state.filter === 'mobile' && <Text style={{ fontSize: 16 }}>{x.TABLEID.toString()}</Text>}
+                    </View>
                 </View>
-                <View style={{
-                    flexDirection: 'row',
-                    width: '50%',
-                    justifyContent: 'space-between'
-                }}>
-                    <Text style={{ fontSize: 16 }}>{`${x.PREPARED ? 'Hazırlandı' : 'Bekliyor'}`}</Text>
-                    {this.state.filter === 'mobile' && <Text style={{ fontSize: 16 }}>{x.TABLEID.toString()}</Text>}
-                </View>
+                <TouchableOpacity style={[styles.others]}
+                    onPress={() => {
+                        this.setState((state: State) => {
+                            let index = state.displayList.indexOf(x.ID)
+                            if (index > -1)
+                                state.displayList.splice(index, 1)
+                            else
+                                state.displayList.push(x.ID)
+
+                            return {
+                                displayList: [...state.displayList]
+                            }
+                        })
+                    }}
+                >
+                    <Text>{`Diğer Bilgileri ${this.state.displayList.indexOf(x.ID) > -1 ? 'Gizle' : 'Göster'}`}</Text>
+
+
+                </TouchableOpacity>
+                {this.state.displayList.indexOf(x.ID) > -1 && (
+                    <View style={{ padding: 10 }}>
+                        {this.renderExtras(x)}
+                        {this.renderNote(x)}
+                    </View>
+                )}
             </TouchableOpacity>
         ))
+    }
+
+
+    renderNote = (item: WaitingProps) => {
+        return (
+            <View style={[styles.extraContainer]}>
+                <Text style={[styles.extraTitle]}>Notlar</Text>
+                <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                }}>
+                    <Text style={{ paddingHorizontal: 5 }}>{item.NOTES}</Text>
+                    <TouchableOpacity style={{}} onPress={() => this.props.navigation.navigate(screens.noteScreen, {
+                        // onNoteChange: (note: string) => {
+                        //     this.props.dispatch({ type: actionTypes.SET_NOTE, payload: { key: key, note: note } })
+                        // },
+                        // note: item.NOTES
+                    })}>
+                        <Pencil color={theme.colors.white} size={20} />
+                    </TouchableOpacity>
+                </View>
+
+            </View>
+        )
+    }
+
+    renderExtras = (item: WaitingProps) => {
+        if (item.EXTRAS.length > 0) {
+            return (
+                <View style={[styles.extraContainer]}>
+                    <Text style={[styles.extraTitle]}>Esktralar</Text>
+                    {item.EXTRAS.map((e, i) => (
+                        <ProductExtra
+                            screen="adisyon"
+                            extra={e}
+                            productKey={item.PRODUCTID}
+                            handleExtra={ee => {
+                                console.log("ee", ee);
+
+                            }}
+                            key={i}
+                        />
+                    ))}
+                </View>
+            )
+        } else {
+            null
+        }
     }
 
     sendStatusAsync = async (status: 2 | 3) => {
@@ -191,12 +278,27 @@ const styles = StyleSheet.create({
         //backgroundColor: theme.colors.card
     },
     itemContainer: {
-        height: 50,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
+
         borderBottomWidth: 1,
         borderColor: theme.colors.border,
-        paddingHorizontal: 10
+        //
+    },
+    button: {
+        height: 50,
+        flexDirection: 'row',
+        paddingHorizontal: 10,
+        alignItems: 'center',
+    },
+    others: { backgroundColor: theme.colors.border, height: 30, justifyContent: 'center', alignItems: 'center' },
+    extraTitle: { backgroundColor: theme.colors.border, paddingHorizontal: 5 },
+    extraContainer: { marginBottom: 10, borderWidth: 1, borderColor: theme.colors.border },
+    extraButton: {
+        width: 25,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    buttonSubText: {
+        fontSize: 12,
+        textAlign: 'center'
     }
 })

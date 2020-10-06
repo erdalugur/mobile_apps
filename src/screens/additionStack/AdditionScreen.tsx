@@ -9,7 +9,7 @@ import { screens } from 'navigation';
 import { MoreOption, Pencil } from 'icons';
 
 const { height } = Dimensions.get('screen')
-interface AdditionItem {
+export interface AdditionItem {
     DISCOUNT_PERCENT: string,
     ID: string,
     LAST_PRICE: number,
