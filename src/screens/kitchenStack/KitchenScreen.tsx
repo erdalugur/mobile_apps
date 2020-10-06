@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, Text, Button, Layout, ProductExtra } from 'components'
-import { NavigationProps } from 'types'
+import { NavigationProps, TransactionStatusType } from 'types'
 import { dataManager } from 'api'
 import { ScrollView, RefreshControl, StyleSheet, Dimensions, TouchableOpacity } from 'react-native'
 import theme from 'theme'
@@ -22,7 +22,7 @@ interface WaitingProps {
     EXTRAS: Array<any>
     PRODUCTID: string
     NOTES: string
-    STATUS: 1 | 2 | 3
+    STATUS: TransactionStatusType
 }
 interface State {
     loading: boolean

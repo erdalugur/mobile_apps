@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, ScrollView, Picker, TouchableOpacity, SafeAreaView, Dimensions } from 'react-native';
 import { Text, View, Button, ProductExtra } from 'components'
-import { NavigationProps, TransactionExtra } from 'types';
+import { NavigationProps, TransactionExtra, TransactionStatusText } from 'types';
 import theme from 'theme';
 import { dataManager } from 'api';
 import { messageBox, messages } from 'utils';
@@ -20,6 +20,7 @@ export interface AdditionItem {
     PRODUCTID: string
     NOTES: string
     EXTRAS: TransactionExtra[]
+    STATUS: number
 }
 
 interface Props extends NavigationProps<{
@@ -63,7 +64,7 @@ export default class extends React.PureComponent<Props, State> {
                     <MoreOption onPress={() =>
                         this.props.navigation.navigate(screens.tableOptionScreen, {
                             item: this.state.table,
-                            items: this.state.selectedItems
+                            items: this.state.selectedItems.length > 0 ? this.state.selectedItems : this.state.items.map(x => x.ID)
                         })
                     } color={theme.colors.text} />
                 </View>
@@ -212,8 +213,9 @@ export default class extends React.PureComponent<Props, State> {
                                         return { selectedItems: [...state.selectedItems] }
                                     })
                                 }}>
-                                <View style={{ width: '50%', flexDirection: 'row' }}>
+                                <View style={{ width: '50%', justifyContent: 'space-around' }}>
                                     <Text>{x.PRODUCT_NAME}</Text>
+                                    <Text style={{ fontSize: 12, marginTop: 5 }}>{`Durum: ${TransactionStatusText[x.STATUS]}`}</Text>
                                 </View>
                                 <View style={{ width: '50%', justifyContent: 'space-between', flexDirection: 'row' }}>
                                     <View style={{ width: '45%' }}>

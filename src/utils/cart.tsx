@@ -24,7 +24,8 @@ export function makeCartJsonBeforeSend(items: {
         })
         return {
             PRODUCTID: x,
-            QUANTITY: item.quantity.toString()
+            QUANTITY: item.quantity.toString(),
+            NOTE: item.NOTES
         }
     })
     return { cart, extras };

@@ -9,16 +9,17 @@ import {
     PaymentScreen,
     AdditionScreen,
     CartQRScreen,
-    CartResultScreen
+    CartResultScreen, ProductNoteScreen
 } from 'screens'
 
 import {
-    CartOptions
+    CartOptions, ProductNoteOptions
 } from 'navigation/options'
 import { CartButton } from 'components'
 import theme from 'theme';
 import { HeaderBack } from 'icons'
 import { screens } from 'navigation'
+import { TableOptionScreen } from 'screens/sharedStack/TableOptionScreen';
 
 export const SearchStack = createStackNavigator();
 
@@ -65,13 +66,15 @@ export const SearchStackScreen = ({ navigation, route }: any) => {
                 component={CartQRScreen} />
             <SearchStack.Screen
                 options={{
-                    title: 'Masalar'
+                    title: 'Masalar',
+                    headerRight: () => null
                 }}
                 name={screens.tables}
                 component={TablesScreen} />
             <SearchStack.Screen
                 options={{
-                    title: 'Adisyon'
+                    title: 'Adisyon',
+                    headerRight: () => null
                 }}
                 component={AdditionScreen}
                 name={screens.addition}
@@ -91,6 +94,20 @@ export const SearchStackScreen = ({ navigation, route }: any) => {
                 }}
                 name={screens.cartResult}
                 component={CartResultScreen} />
+            <SearchStack.Screen
+                options={ProductNoteOptions}
+                name={screens.noteScreen}
+                component={ProductNoteScreen}
+            />
+            <SearchStack.Screen
+                options={{
+                    title: 'Opsiyonlar',
+                    gestureEnabled: false,
+                    headerRight: () => null
+                }}
+                name={screens.tableOptionScreen}
+                component={TableOptionScreen}
+            />
         </SearchStack.Navigator>
     )
 }
