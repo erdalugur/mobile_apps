@@ -8,6 +8,7 @@ import { messages } from 'utils';
 import { Plus, Minus, Plus2, Minus2 } from 'icons';
 import { connect } from 'react-redux';
 import { AppState } from 'myRedux';
+import { screens } from 'navigation';
 
 interface Props {
     productKey: string
@@ -18,11 +19,13 @@ interface Props {
     }
     style?: ViewStyle
     handleExtra?: (extra: IExtra) => void
+    screen?: 'adisyon' | 'default'
 }
 function Index(props: Props) {
+    let screen = props.screen || 'default';
     let item = props.cart[props.productKey]
     let getExtra = () => {
-        if (item) {
+        if (item && screen === 'default') {
             return { ...item.EXTRAS[parseInt(props.extra.ID.toString())] }
         } else {
             return { ...props.extra }
@@ -60,28 +63,32 @@ function Index(props: Props) {
             <View style={{
                 flexDirection: 'row',
                 alignItems: 'center',
-                justifyContent: 'space-between',
+                justifyContent: screen === 'default' ? 'space-between' : 'center',
                 borderRadius: 5, backgroundColor: theme.colors.border,
                 width: '20%',
                 maxWidth: 100
             }}>
-                <TouchableOpacity style={[styles.extraButton]} onPress={() => {
-                    if (e.QUANTITY > 0) {
-                        e.QUANTITY -= 1
+                {screen === 'default' && (
+                    <TouchableOpacity style={[styles.extraButton]} onPress={() => {
+                        if (e.QUANTITY > 0) {
+                            e.QUANTITY -= 1
+                            e.TOTAL_PRICE = e.QUANTITY * e.PRICE
+                            handleExtra(e)
+                        }
+                    }}>
+                        <Minus2 size={25} color={theme.colors.white} />
+                    </TouchableOpacity>
+                )}
+                <Text style={{ width: 20, textAlign: 'center' }}>{(e.QUANTITY || 0).toString()}</Text>
+                {screen === 'default' && (
+                    <TouchableOpacity style={[styles.extraButton]} onPress={() => {
+                        e.QUANTITY += 1
                         e.TOTAL_PRICE = e.QUANTITY * e.PRICE
                         handleExtra(e)
-                    }
-                }}>
-                    <Minus2 size={25} color={theme.colors.white} />
-                </TouchableOpacity>
-                <Text style={{ width: 20, textAlign: 'center' }}>{(e.QUANTITY || 0).toString()}</Text>
-                <TouchableOpacity style={[styles.extraButton]} onPress={() => {
-                    e.QUANTITY += 1
-                    e.TOTAL_PRICE = e.QUANTITY * e.PRICE
-                    handleExtra(e)
-                }}>
-                    <Plus2 size={20} color={theme.colors.white} />
-                </TouchableOpacity>
+                    }}>
+                        <Plus2 size={20} color={theme.colors.white} />
+                    </TouchableOpacity>
+                )}
             </View>
         </View>
     )

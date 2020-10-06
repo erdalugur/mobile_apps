@@ -12,6 +12,7 @@ import { messageBox, messages, applicationManager, confirmBox, userManager } fro
 import { dataManager } from 'api';
 import { constands } from 'constands';
 import { sharedStyles } from 'shared/style';
+import { makeCartJsonBeforeSend } from 'utils/cart';
 
 type screenOptions = 'Home' | 'Search' | 'Cashier' | 'Kitchen'
 
@@ -190,35 +191,10 @@ class Index extends React.PureComponent<Props, State> {
         if (!this.checkCartItems()) {
             messageBox(messages.EMPTY_CART_MESSAGE)
         } else {
-            let extras = [] as {
-                ID: number
-                QUANTITY: number
-                PRODUCTID: number
-                PRICE: number
-            }[]
-            let items = Object.keys(this.props.cart).map(x => {
-                let item = this.props.cart[x]
-                Object.keys(item.EXTRAS).forEach(e => {
-                    let ex = item.EXTRAS[e]
-                    if (ex.QUANTITY > 0) {
-                        extras.push({
-                            ID: ex.ID,
-                            PRICE: ex.PRICE,
-                            PRODUCTID: item.ID,
-                            QUANTITY: ex.QUANTITY
-                        })
-                    }
-                })
-                return {
-                    PRODUCTID: item.ID.toString(),
-                    QUANTITY: item.quantity.toString(),
-                    NOTE: item.NOTES
-                }
-            });
-
+            let { cart, extras } = makeCartJsonBeforeSend(this.props.cart)
             let { statusCode, data, error } = await dataManager.setCart({
                 TABLEID: this.state.table,
-                JSON: items,
+                JSON: cart,
                 FROM_GUEST: fromGuest,
                 EXTRAS: extras
             });
@@ -397,7 +373,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         paddingHorizontal: 10,
         backgroundColor: theme.colors.card,
-        flexDirection: 'row',
+        //flexDirection: 'row',
         width: '33%'
     },
     bottomTotalPrice: {

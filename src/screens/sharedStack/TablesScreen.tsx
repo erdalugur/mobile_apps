@@ -11,6 +11,7 @@ import { connect } from 'react-redux';
 import { AppState } from 'myRedux';
 import { SingleMultiType, actionTypes, IAction } from 'myRedux/types';
 import { sharedStyles } from 'shared/style';
+import { makeCartJsonBeforeSend } from 'utils/cart';
 const { height } = Dimensions.get('screen')
 type screenOptions = 'Home' | 'Search' | 'Cashier' | 'Kitchen'
 interface Props extends NavigationProps<any, any> {
@@ -111,15 +112,11 @@ class Index extends React.PureComponent<Props, State>{
         if (Object.keys(items).length === 0) {
             messageBox(messages.EMPTY_CART_MESSAGE)
         } else {
+            let { cart, extras } = makeCartJsonBeforeSend(items)
             let { statusCode, data, error } = await dataManager.setCart({
                 TABLEID: this.state.selected,
-                JSON: Object.keys(items).map(x => {
-                    return {
-                        PRODUCTID: x,
-                        QUANTITY: items[x].quantity.toString()
-                    }
-                }),
-                EXTRAS: [],
+                JSON: cart,
+                EXTRAS: extras,
                 FROM_GUEST: false
             });
             if (statusCode === 200) {
@@ -134,7 +131,7 @@ class Index extends React.PureComponent<Props, State>{
     renderSendButton = () => {
         let { routeScreen = "", cart, navigation } = this.props
         let fromCart = routeScreen === 'Search'
-        return fromCart && Object.keys(cart).length > 0 && (
+        return true && Object.keys(cart).length > 0 && (
             <Button
                 className="primary"
                 onPress={this.sendOrder}

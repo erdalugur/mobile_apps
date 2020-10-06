@@ -152,4 +152,8 @@ export interface UpdateUserDetailProps {
     EMAIL: string
     FIRST_NAME: string
     LAST_NAME: string
-} 
+}
+
+export interface TransactionExtra extends IExtra {
+    TRANSACTIONID: number
+}
