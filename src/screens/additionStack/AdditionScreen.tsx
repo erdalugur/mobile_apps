@@ -6,6 +6,7 @@ import theme from 'theme';
 import { dataManager } from 'api';
 import { messageBox, messages } from 'utils';
 import { screens } from 'navigation';
+import { MoreOption } from 'icons';
 
 const { height } = Dimensions.get('screen')
 interface AdditionItem {
@@ -49,6 +50,21 @@ export default class extends React.PureComponent<Props, State> {
     }
 
     setup = () => {
+        this.props.navigation.setOptions({
+            headerRight: () => (
+                <View style={{
+                    marginRight: 20,
+                    backgroundColor: theme.colors.card
+                }}>
+                    <MoreOption onPress={() =>
+                        this.props.navigation.navigate(screens.tableOptionScreen, {
+                            item: this.state.table,
+                            items: this.state.selectedItems
+                        })
+                    } color={theme.colors.text} />
+                </View>
+            )
+        })
         this.setState({
             table: this.props.route.params.table,
             items: this.props.route.params.items
@@ -110,18 +126,15 @@ export default class extends React.PureComponent<Props, State> {
                     <View style={{ width: '50%', paddingRight: 1 }}>
                         <Button
                             onPress={this.addPayment}
-                            style={{
-                                backgroundColor: theme.colors.border
-                            }}>
+                            className="default"
+                            bold>
                             Ödeme Al
                         </Button>
                     </View>
                     <View style={{ width: '50%', paddingLeft: 1, }}>
                         <Button
                             onPress={this.close}
-                            style={{
-                                backgroundColor: theme.colors.border
-                            }}>
+                            className="default" bold>
                             Kapat
                         </Button>
                     </View>

@@ -18,7 +18,8 @@ module.exports = function (api) {
             types: "./src/types",
             icons: "./src/icons",
             utils: "./src/utils",
-            constands: "./src/constands"
+            constands: "./src/constands",
+            shared: './src/shared'
           }
         }
       ]

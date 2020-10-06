@@ -5,6 +5,7 @@ import { NavigationProps } from 'types'
 
 interface Props extends NavigationProps<{
     item: string
+    items: Array<string>
 }, any> {
 
 }
@@ -16,6 +17,10 @@ export class TableOptionScreen extends React.PureComponent<Props, any>{
                     <Button style={[styles.button]} textStyle={[styles.text]}>Birleşim</Button>
                     <Button style={[styles.button]} textStyle={[styles.text]}>Transfer</Button>
                     <Button style={[styles.button]} textStyle={[styles.text]}>Zayi</Button>
+                    <Button style={[styles.button]} textStyle={[styles.text]}>İndirim</Button>
+                    <Button style={[styles.button]} textStyle={[styles.text]}>Marş</Button>
+                    <Button style={[styles.button]} textStyle={[styles.text]}>İptal</Button>
+                    <Button style={[styles.button]} textStyle={[styles.text]}>İkram</Button>
                 </ScrollView>
             </Layout>
         )

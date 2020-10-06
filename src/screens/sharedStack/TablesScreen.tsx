@@ -10,6 +10,7 @@ import { QRCode, MoreOption } from 'icons';
 import { connect } from 'react-redux';
 import { AppState } from 'myRedux';
 import { SingleMultiType, actionTypes, IAction } from 'myRedux/types';
+import { sharedStyles } from 'shared/style';
 const { height } = Dimensions.get('screen')
 type screenOptions = 'Home' | 'Search' | 'Cashier' | 'Kitchen'
 interface Props extends NavigationProps<any, any> {
@@ -42,23 +43,6 @@ class Index extends React.PureComponent<Props, State>{
 
     componentDidMount = async () => {
         this.loadAsync();
-        this.props.navigation.setOptions({
-            headerRight: () => <View style={{
-                marginRight: 20,
-                backgroundColor: theme.colors.card
-            }}>
-                <MoreOption onPress={() =>
-                    this.state.selected !== '' ?
-                        this.props.navigation.navigate(screens.tableOptionScreen, { item: this.state.selected }) :
-                        messageBox('Lütfen önce masa seçiniz')
-                } color={theme.colors.text} />
-            </View>,
-            headerLeft: () => <View style={{
-                marginLeft: 20
-            }}>
-                <QRCode onPress={() => this.props.navigation.navigate(screens.tableQR, { fromScreen: '' })} color={theme.colors.text} />
-            </View>
-        })
     }
 
     loadAsync = async () => {
@@ -152,9 +136,11 @@ class Index extends React.PureComponent<Props, State>{
         let fromCart = routeScreen === 'Search'
         return fromCart && Object.keys(cart).length > 0 && (
             <Button
+                className="primary"
                 onPress={this.sendOrder}
                 activeOpacity={0.8}
-                textStyle={{ fontWeight: 'bold' }}
+                bold
+                style={[sharedStyles.bottomContainer]}
             >
                 {messages.SEND_CART}
             </Button>
@@ -181,7 +167,7 @@ class Index extends React.PureComponent<Props, State>{
                         }}
                         style={[styles.action]}
                     >
-                        <Text>Dolu</Text>
+                        <Text style={[styles.filterText]}>Dolu</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
@@ -191,13 +177,13 @@ class Index extends React.PureComponent<Props, State>{
                         }}
                         style={[styles.action]}
                     >
-                        <Text>Boş</Text>
+                        <Text style={[styles.filterText]}>Boş</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={this.showAddition}
                         style={[styles.action]}
                     >
-                        <Text>Hesabı Göster</Text>
+                        <Text style={[styles.filterText]}>Hesabı Göster</Text>
                     </TouchableOpacity>
                 </View>
                 <FlatList
@@ -255,5 +241,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: theme.colors.border
+    },
+    filterText: {
+        fontWeight: 'bold'
     }
 });

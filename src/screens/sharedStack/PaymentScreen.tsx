@@ -6,6 +6,7 @@ import theme from 'theme';
 import { messageBox, messages } from 'utils';
 import { SelectedItem } from '../additionStack/AdditionScreen'
 import { dataManager } from 'api';
+import { sharedStyles } from 'shared/style';
 
 interface Props extends NavigationProps<{
     table: string
@@ -124,14 +125,13 @@ class Index extends React.PureComponent<Props, State>{
                                         return { selectedPayment: item.ID === state.selectedPayment ? '' : item.ID }
                                     })
                                 }}
+                                bold
                                 textColor={isSelected ? theme.colors.card : theme.colors.text}
                                 style={{
-                                    width: '100%',
                                     marginBottom: 5,
-                                    opacity: 0.8,
                                     backgroundColor: isSelected ? theme.colors.text : theme.colors.border,
                                     padding: 10,
-
+                                    height: 50
                                 }}>{item.NAME}</Button>
                         </View>
                     )
@@ -149,17 +149,12 @@ class Index extends React.PureComponent<Props, State>{
                     {this.renderItems()}
                 </View>
                 { this.state.selectedPayment !== '' && (
-                    <View style={{
-                        bottom: 0,
-                        width: '100%',
-                        position: 'absolute',
-                        height: 60
-                    }}>
-                        <Button
-                            textStyle={{ fontWeight: 'bold' }}
-                            onPress={() => operation === 'addPayment' ? this.addPayment() : this.closeSession()}
-                        >Tamamla</Button>
-                    </View>
+                    <Button
+                        style={[sharedStyles.bottomContainer]}
+                        className="primary"
+                        textStyle={{ fontWeight: 'bold' }}
+                        onPress={() => operation === 'addPayment' ? this.addPayment() : this.closeSession()}
+                    >Tamamla</Button>
                 )}
             </Layout>
         );

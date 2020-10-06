@@ -43,7 +43,7 @@ export const AdditionStackScreen = ({ route, navigation }: { route: any, navigat
             />
             <AdditionStack.Screen
                 options={{
-                    title: 'Adisyon'
+                    title: 'Adisyon',
                 }}
                 component={AdditionScreen}
                 name={screens.addition}

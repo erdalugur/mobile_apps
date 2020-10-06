@@ -16,23 +16,27 @@ interface ButtonProps {
     spinnerColor?: string
     spinnerSize?: number
     textStyle?: StyleProp<TextStyle>
+    className?: 'primary' | 'default'
+    bold?: boolean
 }
 
 export function Button(props: ButtonProps) {
+    const style = props.className === 'default' ? styles.default : styles.full
+
     return (
         <TouchableOpacity
             disabled={props.loading}
             activeOpacity={props.activeOpacity || 0.9}
             onPress={props.onPress}
             {...props.nativeProps}
-            style={[styles[props.size || "full"], props.style]}>
+            style={[styles[props.size || "full"], style, props.style]}>
             {props.loading ? (
                 <ActivityIndicator
                     color={props.spinnerColor || theme.colors.white}
                     size={props.spinnerSize || 30} />
             ) : (
                     <Text
-                        style={[props.textStyle]}
+                        style={[props.textStyle, props.bold ? { fontWeight: 'bold' } : {}]}
                         color={props.textColor}>{props.children}</Text>
                 )}
         </TouchableOpacity>
@@ -41,6 +45,14 @@ export function Button(props: ButtonProps) {
 
 
 const styles = StyleSheet.create({
+    default: {
+        height: '100%',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: theme.colors.border,
+        paddingHorizontal: 10,
+        borderRadius: 2
+    },
     full: {
         width: '100%',
         padding: 12,

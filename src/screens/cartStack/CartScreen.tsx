@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Image, TouchableOpacity, Dimensions, ScrollView, SafeAreaView, Platform, Linking } from 'react-native';
 import { CartItem, NavigationProps, IExtra } from 'types';
-import { View, Text, ProductExtra } from 'components'
+import { View, Text, ProductExtra, Layout } from 'components'
 import { connect } from 'react-redux';
 import { AppState } from 'myRedux';
 import theme from 'theme';
@@ -11,6 +11,7 @@ import { screens } from 'navigation';
 import { messageBox, messages, applicationManager, confirmBox, userManager } from 'utils';
 import { dataManager } from 'api';
 import { constands } from 'constands';
+import { sharedStyles } from 'shared/style';
 
 type screenOptions = 'Home' | 'Search' | 'Cashier' | 'Kitchen'
 
@@ -233,14 +234,12 @@ class Index extends React.PureComponent<Props, State> {
     renderCart = () => {
         return (
             <View style={{ flex: 1 }}>
-                <View style={{
+                <ScrollView style={{
                     maxHeight: height - 110
                 }}>
-                    <ScrollView>
-                        {this.RenderItems()}
-                    </ScrollView>
-                </View>
-                <View style={[styles.bottomButtonContainer]}>
+                    {this.RenderItems()}
+                </ScrollView>
+                <View style={[sharedStyles.bottomContainer, { backgroundColor: theme.colors.card, }]}>
                     {this.renderActions()}
                 </View>
             </View>
@@ -314,33 +313,29 @@ class Index extends React.PureComponent<Props, State> {
         } else {
             return (
                 <>
-                    <View style={[styles.bottomButton]}>
-                        <TouchableOpacity onPress={() => this.sendQuestion()}>
-                            {this.state.isAuthenticated ? (
-                                <View transparent style={{ alignItems: 'center' }}>
-                                    <Send color={theme.colors.white} size={20} />
-                                    <Text style={{ fontSize: 12 }}>Gönder</Text>
-                                </View>
-                            ) : (
-                                    <>
-                                        <Text>Üye Olarak</Text>
-                                        <Text style={[styles.buttonSubText]}>Devam Et</Text>
-                                    </>
-                                )}
-                        </TouchableOpacity>
-                    </View>
+                    <TouchableOpacity style={[styles.bottomButton]} onPress={() => this.sendQuestion()}>
+                        {this.state.isAuthenticated ? (
+                            <View transparent style={{ alignItems: 'center' }}>
+                                <Send color={theme.colors.white} size={20} />
+                                <Text style={{ fontSize: 12 }}>Gönder</Text>
+                            </View>
+                        ) : (
+                                <>
+                                    <Text>Üye Olarak</Text>
+                                    <Text style={[styles.buttonSubText]}>Devam Et</Text>
+                                </>
+                            )}
+                    </TouchableOpacity>
                     <View style={[styles.bottomTotalPrice]}>
                         <Text style={{ marginLeft: 5, fontSize: 10 }}>Toplam Fiyat</Text>
                         <Text style={{ fontSize: 20 }}>
                             {this.totalPrice()}
                         </Text>
                     </View>
-                    <View style={[styles.bottomButton]}>
-                        <TouchableOpacity onPress={() => this.callPhone()}>
-                            <Phone color={theme.colors.white} size={20} />
-                            <Text style={{ fontSize: 12 }}>Ara</Text>
-                        </TouchableOpacity>
-                    </View>
+                    <TouchableOpacity style={[styles.bottomButton]} onPress={() => this.callPhone()}>
+                        <Phone color={theme.colors.white} size={20} />
+                        <Text style={{ fontSize: 12 }}>Ara</Text>
+                    </TouchableOpacity>
                 </>
             )
         }
@@ -348,9 +343,9 @@ class Index extends React.PureComponent<Props, State> {
 
     render() {
         return (
-            <SafeAreaView style={{ flex: 1 }}>
+            <Layout style={{ flex: 1 }}>
                 {this.checkCartItems() ? this.renderCart() : this.renderEmpty()}
-            </SafeAreaView>
+            </Layout>
         );
     }
 }
@@ -396,19 +391,8 @@ const styles = StyleSheet.create({
         height: 120,
         marginBottom: 5,
     },
-    bottomButtonContainer: {
-        backgroundColor: theme.colors.card,
-        position: 'absolute',
-        bottom: 0,
-        left: 0,
-        right: 0,
-        height: 50,
-        width: '100%',
-        flexDirection: 'row',
-        justifyContent: 'space-between'
-    },
     bottomButton: {
-        height: '100%',
+        //height: 50,
         alignItems: 'center',
         justifyContent: 'space-around',
         paddingHorizontal: 10,
@@ -418,7 +402,7 @@ const styles = StyleSheet.create({
     },
     bottomTotalPrice: {
         backgroundColor: theme.colors.border,
-        height: '100%',
+        height: 50,
         alignItems: 'center',
         justifyContent: 'center',
         width: '34%',
