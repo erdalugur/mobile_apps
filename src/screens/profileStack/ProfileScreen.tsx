@@ -150,8 +150,9 @@ export class ProfileScreen extends React.PureComponent<Props, State> {
     }
 
     signOutAction = () => {
-        const resetAction = StackActions.popToTop();
-        this.props.navigation.dispatch(resetAction);
+        this.props.navigation.dispatch(
+            StackActions.replace(screens.home)
+        );
     }
 
     render() {

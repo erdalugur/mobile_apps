@@ -1,10 +1,11 @@
-import { AsyncStorage, Alert, Platform, Dimensions } from 'react-native'
+import { Alert, Platform, Dimensions } from 'react-native'
 import { UserModel, CacheResponse, DomainSettingModel, PlaceModel, TransactionStatusText, TransactionStatus, TransactionStatusType } from 'types'
 import { dataManager } from 'api'
 export { messages } from './messages'
 import * as Network from 'expo-network';
 import moment from 'moment'
 import { constands } from 'constands';
+import AsyncStorage from '@react-native-community/async-storage'
 export const cacheKeys = {
     user: "user",
     config: 'config',

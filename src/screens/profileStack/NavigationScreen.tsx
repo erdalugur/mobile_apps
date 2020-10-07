@@ -31,7 +31,7 @@ export class SettingNavigationScreen extends React.PureComponent<Props, State> {
 
     renderMenuItem = () => {
         return (
-            <ScrollView style={{ height: Dimensions.get('window').height - 80 }}>
+            <ScrollView>
                 { Platform.OS === 'web' && (
                     <React.Fragment>
                         <MenuItem

@@ -1,7 +1,6 @@
 import React from 'react';
 import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer';
-import { Platform, TouchableOpacity } from 'react-native'
 import {
     HomeScreen,
     CartScreen,
@@ -23,7 +22,7 @@ import {
 } from '../../navigation/options'
 import { CartButton, DrawerIcon, View } from 'components'
 import theme from 'theme';
-import { Close, HeaderBack, MoreOption, Survey } from 'icons'
+import { Activity, Close, HeaderBack, HeartBeat, Menu, Form, Star, Survey, User } from 'icons'
 import { screens } from 'navigation'
 import LoginGuestScreen from './Auth/LoginGuestScreen';
 import RegisterGuestScreen from './Auth/RegisterGuestScreen';
@@ -163,157 +162,146 @@ interface DrawerState {
     USE_ACTIVITY_MODULE: boolean,
     USE_RESERVATION_MODULE: boolean
     isAuthenticated: boolean
+    navigation: any
+    loginAction: () => void
 }
-class CustomDrawerContent extends React.PureComponent<any, any>{
-    state: DrawerState = {
+const Drawer = createDrawerNavigator();
+
+export class DrawerApp extends React.PureComponent<any, any>{
+    state: any = {
         USE_GUEST_MODULE: false,
         USE_CAMPAIGN_MODULE: false,
         USE_ORGANIZATION_MODULE: false,
         USE_SURVEY_MODULE: false,
         USE_ACTIVITY_MODULE: false,
         USE_RESERVATION_MODULE: false,
-        isAuthenticated: false
+        isAuthenticated: false,
     }
     componentDidMount = async () => {
         let place = await configurationManager.getPlace();
-        this.props.navigation.setOptions({
-            title: place?.NAME
-        })
         let isAuthenticated = await userManager.isAuthenticated();
 
         this.setState({ ...place, isAuthenticated: isAuthenticated })
     }
 
     loginAction = () => {
-        const resetAction = StackActions.popToTop();
-        this.props.navigation.dispatch(resetAction);
+        this.props.navigation.dispatch(
+            StackActions.replace(screens.home)
+        )
     }
 
     render() {
-        console.log(this.props)
-        const {
-            USE_GUEST_MODULE,
-            USE_CAMPAIGN_MODULE,
-            USE_ORGANIZATION_MODULE,
-            USE_SURVEY_MODULE,
-            USE_ACTIVITY_MODULE,
-            USE_RESERVATION_MODULE,
-            isAuthenticated
-        } = this.state
-        return (
-            <DrawerContentScrollView {...this.props}>
-                <DrawerItemList {...this.props as any} />
-                <DrawerItem
-                    label="Menu"
-                    onPress={() => this.props.navigation.navigate(screens.home)}
 
-                />
-                {USE_CAMPAIGN_MODULE && (
-                    <DrawerItem
-                        label="Kampanyalar"
-                        onPress={() => this.props.navigation.navigate(screens.campaignScreen)}
-                    />
-                )}
-                {USE_ACTIVITY_MODULE && (
-                    <DrawerItem
-                        label="Etkinlikler"
-                        onPress={() => this.props.navigation.navigate(screens.activityScreen)}
-                    />
-                )}
-                {USE_ORGANIZATION_MODULE && (
-                    <DrawerItem
-                        label="Organizasyonlar"
-                        onPress={() => this.props.navigation.navigate(screens.organizatonScreen)}
-                    />
-                )}
-                {USE_RESERVATION_MODULE && (
-                    <DrawerItem
-                        label="Rezervasyon Al"
-                        onPress={() => this.props.navigation.navigate(screens.reservationRequestScreen)}
-                    />
-                )}
-                {USE_SURVEY_MODULE && (
-                    <DrawerItem
-                        label="Anket"
-                        onPress={() => this.props.navigation.navigate(screens.surveyScreen)}
-                    />
-                )}
-                {USE_GUEST_MODULE && isAuthenticated && (
-                    <DrawerItem
-                        label="Hesabım"
-                        onPress={() => this.props.navigation.navigate(screens.profileNavigation)}
-                    />
-                )}
-                {USE_GUEST_MODULE && !isAuthenticated && (
-                    <DrawerItem
-                        label="Giriş Yap"
-                        onPress={() => this.props.navigation.navigate(screens.loginGuest, {
-                            action: this.loginAction
-                        })}
-                    />
-                )}
-            </DrawerContentScrollView>
+        return (
+            <DrawerContent {...Object.assign({}, this.state, this.props.navigation, { loginAction: this.loginAction })} />
         );
     }
 }
 
 
-const Drawer = createDrawerNavigator();
 
-export const DrawerApp = () => (
-    <Drawer.Navigator
-        drawerType="front"
-        gestureHandlerProps={{
-            enabled: false
-        }}
-        drawerContentOptions={{
+export const DrawerContent = (props: DrawerState) => {
+    const {
+        USE_GUEST_MODULE,
+        USE_CAMPAIGN_MODULE,
+        USE_ORGANIZATION_MODULE,
+        USE_SURVEY_MODULE,
+        USE_ACTIVITY_MODULE,
+        USE_RESERVATION_MODULE,
+        isAuthenticated
+    } = props
 
-        }}
-    >
-        <Drawer.Screen name={screens.home} component={HomeTabs} />
-        <Drawer.Screen
-            options={{
-                title: 'Kampanyalar',
+    const loginAction = () => {
+        const resetAction = StackActions.popToTop();
+        props.navigation.dispatch(resetAction);
+    }
+    return (
+        <Drawer.Navigator
+            drawerType="front"
+            gestureHandlerProps={{
+                enabled: false
+            }}
+            drawerContentOptions={{
 
             }}
-            name={screens.campaignScreen}
-            component={CampaignStackScreen}
-        />
-        <Drawer.Screen
-            options={{
-                title: 'Etkinlikler',
-                drawerLabel: 'Etkinlikler'
-            }}
-            name={screens.activityScreen}
-            component={ActivityStackScreen}
-        />
-        <Drawer.Screen
-            options={{
-                title: 'Organizasyonlar',
-            }}
-            name={screens.organizatonScreen}
-            component={OrganizationStackScreen}
-        />
-        <Drawer.Screen
-            options={{
-                title: 'Rezervasyon Al',
-            }}
-            name={screens.reservationRequestScreen}
-            component={ReservationStackScreen}
-        />
-        <Drawer.Screen
-            options={{
-                title: 'Anket',
-            }}
-            name={screens.surveyScreen}
-            component={SurveyStackScreen}
-        />
-        <Drawer.Screen
-            options={{
-                title: 'Hesabım'
-            }}
-            name={screens.profileNavigation}
-            component={ProfileStackScreen}
-        />
-    </Drawer.Navigator>
-)
+        >
+            <Drawer.Screen options={{
+                drawerLabel: 'Menü',
+                drawerIcon: ({ }) => <Menu size={20} color={theme.colors.white} />
+            }} name={screens.home} component={HomeTabs} />
+            {USE_CAMPAIGN_MODULE && (
+                <Drawer.Screen
+                    options={{
+                        title: 'Kampanyalar',
+                        drawerIcon: ({ }) => <Star size={20} color={theme.colors.white} />
+                    }}
+                    name={screens.campaignScreen}
+                    component={CampaignStackScreen}
+                />
+            )}
+            {USE_ACTIVITY_MODULE && (
+                <Drawer.Screen
+                    options={{
+                        title: 'Etkinlikler',
+                        drawerLabel: 'Etkinlikler',
+                        drawerIcon: ({ }) => <Activity size={20} color={theme.colors.white} />
+                    }}
+                    name={screens.activityScreen}
+                    component={ActivityStackScreen}
+                />)}
+            {USE_ORGANIZATION_MODULE && (
+                <Drawer.Screen
+                    options={{
+                        title: 'Organizasyonlar',
+                        drawerIcon: ({ }) => <HeartBeat size={20} color={theme.colors.white} />
+                    }}
+                    name={screens.organizatonScreen}
+                    component={OrganizationStackScreen}
+                />
+            )}
+            {USE_RESERVATION_MODULE && (
+                <Drawer.Screen
+                    options={{
+                        title: 'Rezervasyon Al',
+                        drawerIcon: ({ }) => <Form size={20} color={theme.colors.white} />
+                    }}
+                    name={screens.reservationRequestScreen}
+                    component={ReservationStackScreen}
+                />
+            )}
+            {USE_SURVEY_MODULE && (
+                <Drawer.Screen
+                    options={{
+                        title: 'Anket',
+                        drawerIcon: ({ }) => <Survey size={20} color={theme.colors.white} />
+                    }}
+                    name={screens.surveyScreen}
+                    component={SurveyStackScreen}
+                />
+            )}
+            {USE_GUEST_MODULE && isAuthenticated && (
+                <Drawer.Screen
+                    options={{
+                        title: 'Hesabım',
+                        drawerIcon: ({ }) => <User size={20} color={theme.colors.white} />
+                    }}
+                    name={screens.profileNavigation}
+                    component={ProfileStackScreen}
+                />
+            )}
+            {USE_GUEST_MODULE && !isAuthenticated && (
+                <Drawer.Screen
+                    name={screens.loginGuest}
+                    component={LoginGuestScreen}
+                    initialParams={{
+                        action: props.loginAction
+                    }}
+                    options={{
+                        title: 'Giriş Yap',
+                        drawerIcon: ({ }) => <User size={20} color={theme.colors.white} />
+                    }}
+                />
+            )}
+        </Drawer.Navigator>
+    )
+}

@@ -19,6 +19,7 @@ interface State {
 
 interface Props extends NavigationProps<{
     action: Function
+    screen: string
 }, any> { }
 export default class extends React.PureComponent<Props, State>{
     state: State = {
