@@ -1,5 +1,5 @@
 import React from 'react';
-import { RefreshControl, ScrollView, StyleSheet, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { RefreshControl, ScrollView, StyleSheet, TouchableOpacity, ActivityIndicator, Dimensions } from 'react-native'
 import { View, Slider, Text, Layout } from 'components'
 import { NavigationProps, FetchAllModel, ProductTreeModel } from 'types'
 import { connect } from 'react-redux';
@@ -21,6 +21,8 @@ interface State {
     recordNotFound: boolean
 }
 
+
+let { height } = Dimensions.get('window')
 
 class Home extends React.PureComponent<Props, State> {
     state: State = { loading: false, recordNotFound: false };

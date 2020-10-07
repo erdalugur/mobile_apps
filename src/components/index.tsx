@@ -29,6 +29,8 @@ export { MenuItem } from './MenuItem'
 export { MyCode } from './MyCode'
 export { StarComponent } from './StarComponent'
 export { BonusCircle } from './BonusCircle'
+export { DrawerIcon } from './DrawerIcon'
+
 
 
 

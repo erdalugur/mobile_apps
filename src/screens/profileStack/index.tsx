@@ -10,9 +10,10 @@ import { SettingNavigationScreen } from './NavigationScreen';
 import { PersonalInfoScreen } from './PersonalInfoScreen';
 import MyOrderScreen from './MyOrderScreen';
 import { MyCodeScreen } from './MyCodeScreen';
+import { DrawerIcon } from 'components';
 export const Stack = createStackNavigator();
 
-export const ProfileStackScreen = ({ navigation, route }: any) => {
+export const ProfileStackScreen = (props: any) => {
     return (
         <Stack.Navigator
             headerMode="screen"
@@ -24,6 +25,7 @@ export const ProfileStackScreen = ({ navigation, route }: any) => {
             <Stack.Screen
                 options={{
                     title: 'Hesabım',
+                    headerLeft: () => <DrawerIcon {...props} />,
                 }}
                 name={screens.profileNavigation}
                 component={SettingNavigationScreen}
@@ -63,6 +65,14 @@ export const ProfileStackScreen = ({ navigation, route }: any) => {
                 name={screens.myCodeScreen}
                 component={MyCodeScreen}
             />
+            <Stack.Screen
+                options={{
+                    title: '',
+                }}
+                name={screens.myReservations}
+                component={MyReservationScreen}
+            />
+
         </Stack.Navigator>
     )
 }

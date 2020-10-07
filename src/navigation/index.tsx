@@ -23,7 +23,7 @@ import {
 import { dataManager } from 'api';
 import { Platform } from 'react-native';
 import { ProfileStackScreen } from 'screens/profileStack';
-
+import { DrawerApp } from 'screens/homeStack';
 
 export const AuthContext = React.createContext<any>(null);
 
@@ -72,6 +72,8 @@ export const screens = {
     tableOptionScreen: 'TableOptionScreen',
     myOrder: 'MyOrderScreen'
 }
+
+
 
 export const AppStack = createStackNavigator();
 
@@ -189,7 +191,7 @@ export default function ({ navigation }: any) {
                         ) : state.isWebApp ? (
                             <AppStack.Screen
                                 name={screens.home}
-                                component={HomeTabs} />)
+                                component={DrawerApp} />)
                                 : state.userToken == null ? (
                                     // No token found, user isn't signed in
                                     <AppStack.Screen
@@ -210,7 +212,7 @@ export default function ({ navigation }: any) {
 
                                             <AppStack.Screen
                                                 name={screens.home}
-                                                component={HomeTabs} />
+                                                component={DrawerApp} />
 
                                             <AppStack.Screen
                                                 name={screens.cart}
