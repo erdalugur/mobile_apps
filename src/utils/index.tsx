@@ -1,9 +1,10 @@
 import { AsyncStorage, Alert, Platform, Dimensions } from 'react-native'
-import { UserModel, CacheResponse, DomainSettingModel, PlaceModel } from 'types'
+import { UserModel, CacheResponse, DomainSettingModel, PlaceModel, TransactionStatusText, TransactionStatus, TransactionStatusType } from 'types'
 import { dataManager } from 'api'
 export { messages } from './messages'
 import * as Network from 'expo-network';
 import moment from 'moment'
+import { constands } from 'constands';
 export const cacheKeys = {
     user: "user",
     config: 'config',
@@ -118,7 +119,11 @@ export const applicationManager = {
     formatDate: (date: string, format: string = 'DD-MM-YYYY') => {
         return moment(date).format(format)
         //return date
-    }
+    },
+    formatPrice: (price: number | string) => {
+        return `${parseFloat(price.toString()).toFixed(2)} ${constands.try}`
+    },
+    transactionStatusText: (status: number) => TransactionStatusText[status]
 }
 
 interface IphoneSize { height: number, width: number }

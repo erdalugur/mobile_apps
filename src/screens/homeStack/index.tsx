@@ -40,6 +40,7 @@ import LoginGuestScreen from './Auth/LoginGuestScreen';
 import RegisterGuestScreen from './Auth/RegisterGuestScreen';
 import { PersonalInfoScreen } from 'screens/profileStack/PersonalInfoScreen';
 import { MyCodeScreen } from 'screens/profileStack/MyCodeScreen';
+import MyOrderScreen from 'screens/profileStack/MyOrderScreen';
 
 export const HomeStack = createStackNavigator();
 
@@ -303,7 +304,14 @@ export const HomeStackScreen = ({ navigation, route }: any) => {
                 name={screens.myCodeScreen}
                 component={MyCodeScreen}
             />
-
+            <HomeStack.Screen
+                options={{
+                    title: 'Siparişlerim',
+                    headerRight: () => null
+                }}
+                name={screens.myOrder}
+                component={MyOrderScreen}
+            />
 
         </HomeStack.Navigator>
     )

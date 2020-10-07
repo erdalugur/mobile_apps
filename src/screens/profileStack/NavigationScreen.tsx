@@ -41,6 +41,10 @@ export class SettingNavigationScreen extends React.PureComponent<Props, State> {
                             label="Yıldızlı İşlemler"
                             onPress={() => this.props.navigation.navigate(screens.myHistory)}
                         />
+                        <MenuItem
+                            label="Siparişlerim"
+                            onPress={() => this.props.navigation.navigate(screens.myOrder)}
+                        />
                     </React.Fragment>)}
                 <MenuItem
                     label="Hesap Ayarları"

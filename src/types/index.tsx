@@ -84,6 +84,7 @@ export interface PlaceModel {
     USE_SURVEY_MODULE: boolean,
     USE_ACTIVITY_MODULE: boolean,
     USE_RESERVATION_MODULE: boolean
+    MIN_PRICE_FOR_PACKAGE_ORDER: number
 }
 
 export interface DomainSettingModel extends PlaceModel { }
@@ -160,15 +161,15 @@ export interface TransactionExtra extends IExtra {
     TRANSACTIONID: number
 }
 export type TransactionStatusType = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8
-export const TransactionStatus = {
-    start: 1,
-    confirm: 2,
-    ok: 3,
-    deliver: 4,
-    close: 5,
-    cancel: 6,
-    lost: 7,
-    gift: 8
+export const TransactionStatus: { [key: string]: number } = {
+    'start': 1,
+    'confirm': 2,
+    'ok': 3,
+    'deliver': 4,
+    'close': 5,
+    'cancel': 6,
+    'lost': 7,
+    'gift': 8
 }
 export const TransactionStatusText: { [key: number]: string } = {
     1: "Sipariş",

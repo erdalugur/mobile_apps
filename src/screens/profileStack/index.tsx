@@ -8,6 +8,7 @@ import MyReservationScreen from 'screens/profileStack/MyReservationScreen';
 import { screens } from 'navigation';
 import { SettingNavigationScreen } from './NavigationScreen';
 import { PersonalInfoScreen } from './PersonalInfoScreen';
+import MyOrderScreen from './MyOrderScreen';
 export const Stack = createStackNavigator();
 
 export const ProfileStackScreen = ({ navigation, route }: any) => {
@@ -46,6 +47,13 @@ export const ProfileStackScreen = ({ navigation, route }: any) => {
                 }}
                 name={screens.personalInfoScreen}
                 component={PersonalInfoScreen}
+            />
+            <Stack.Screen
+                options={{
+                    title: '',
+                }}
+                name={screens.myOrder}
+                component={MyOrderScreen}
             />
         </Stack.Navigator>
     )

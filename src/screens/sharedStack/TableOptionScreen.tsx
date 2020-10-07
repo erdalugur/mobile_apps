@@ -24,12 +24,9 @@ export class TableOptionScreen extends React.PureComponent<Props, any>{
         if (result.statusCode === 200) {
 
             messageBox('işlem başarıyla gerçekleşti');
-            if (status === 3) {
-                this.setState({ loading: true })
-                setTimeout(() => {
-                    this.props.navigation.goBack();
-                }, 1000);
-            }
+            setTimeout(() => {
+                this.props.navigation.goBack();
+            }, 1000);
         }
     }
     render() {

@@ -8,7 +8,7 @@ import theme from 'theme';
 import { SingleMultiType, IAction, actionTypes } from 'myRedux/types';
 import { Plus, Minus, QRCode, Table, EmojiNeutral, Phone, Pencil, Plus2, Minus2, Send } from 'icons';
 import { screens } from 'navigation';
-import { messageBox, messages, applicationManager, confirmBox, userManager } from 'utils';
+import { messageBox, messages, applicationManager, confirmBox, userManager, configurationManager } from 'utils';
 import { dataManager } from 'api';
 import { constands } from 'constands';
 import { sharedStyles } from 'shared/style';
@@ -63,12 +63,16 @@ class Index extends React.PureComponent<Props, State> {
         }
     }
 
-    totalPrice = (): string => {
+    _totalPrice = () => {
         let items = this.props.cart, price = 0;
         Object.keys(items).forEach(key => {
             price = price + items[key].totalPrice
         })
-        return `${price.toFixed(2)} ₺`
+        return price;
+    }
+
+    totalPrice = (): string => {
+        return `${this._totalPrice().toFixed(2)} ₺`
     }
     handleExtra = (key: string, extra: IExtra) => {
         if (extra.QUANTITY < 0) return;
@@ -191,6 +195,14 @@ class Index extends React.PureComponent<Props, State> {
         if (!this.checkCartItems()) {
             messageBox(messages.EMPTY_CART_MESSAGE)
         } else {
+            let place = await configurationManager.getPlace();
+            if (place !== null && Platform.OS === 'web') {
+                let result = this._totalPrice() >= place.MIN_PRICE_FOR_PACKAGE_ORDER
+                if (!result) {
+                    messageBox(`Paket servisi için min tutar ${place.MIN_PRICE_FOR_PACKAGE_ORDER.toFixed(2)} ${constands.try} olmalıdır.`);
+                    return
+                }
+            }
             let { cart, extras } = makeCartJsonBeforeSend(this.props.cart)
             let { statusCode, data, error } = await dataManager.setCart({
                 TABLEID: this.state.table,
