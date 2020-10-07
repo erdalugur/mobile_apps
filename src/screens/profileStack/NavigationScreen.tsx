@@ -1,11 +1,12 @@
 import React from 'react';
-import { Dimensions, Platform, StyleSheet } from 'react-native';
-import { Text, View, MenuItem, Layout, Button, MyCode } from 'components'
+import { Dimensions, Platform, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
+import { Text, View, MenuItem, Layout, Button, MyCode, BonusCircle } from 'components'
 import { IAction, actionTypes } from 'myRedux/types';
 import { AuthContextProps, NavigationProps } from 'types';
 import { screens } from 'navigation';
 import { userManager } from 'utils';
-import { ScrollView } from 'react-native-gesture-handler';
+import { ArrowRight, QRCode } from 'icons';
+import theme from 'theme';
 
 interface State {
     loading: boolean
@@ -53,12 +54,34 @@ export class SettingNavigationScreen extends React.PureComponent<Props, State> {
             </ScrollView>
         )
     }
+
+    renderBonus = () => {
+        if (Platform.OS === 'web') {
+            return (
+                <View style={{ flexDirection: 'row' }}>
+                    <View style={{ padding: 20, justifyContent: 'center', alignItems: 'center', width: '50%' }}>
+                        <BonusCircle bonus={14} limit={100} />
+                    </View>
+                    <View style={{ padding: 20, justifyContent: 'flex-end', width: '50%' }}>
+                        <TouchableOpacity style={[styles.button]} onPress={() => this.props.navigation.navigate(screens.myCodeScreen)}>
+                            <Text style={{ marginRight: 5 }}>Benim Barkodum</Text>
+                            <View style={{ marginTop: 4 }}>
+                                <ArrowRight size={15} />
+                            </View>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            )
+        } else {
+            return null
+        }
+    }
     render() {
         return (
             <Layout
                 style={styles.container}
                 loading={this.state.loading}>
-                { Platform.OS === 'web' && <MyCode code={this.state.userId} />}
+                { this.renderBonus()}
                 { this.renderMenuItem()}
             </Layout>
         );
@@ -68,5 +91,6 @@ export class SettingNavigationScreen extends React.PureComponent<Props, State> {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-    }
+    },
+    button: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: theme.colors.border, height: 35, borderRadius: 5 }
 });

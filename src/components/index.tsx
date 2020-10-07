@@ -28,6 +28,7 @@ export { SignOutButton } from './Auth/SignOutButton'
 export { MenuItem } from './MenuItem'
 export { MyCode } from './MyCode'
 export { StarComponent } from './StarComponent'
+export { BonusCircle } from './BonusCircle'
 
 
 

@@ -59,7 +59,7 @@ export function Person(props: IconProps) {
     return <MaterialIcons name="person" onPress={props.onPress} size={props.size || 30} color={props.color} />
 }
 export function QRCode(props: IconProps) {
-    return <AntDesign name="qrcode" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <AntDesign name="qrcode" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 export function Table(props: IconProps) {
     return <AntDesign name="table" onPress={props.onPress} size={props.size || 30} color={props.color} />
@@ -145,4 +145,7 @@ export function HeartBeat(props: IconProps) {
 }
 export function Send(props: IconProps) {
     return <Ionicons name="ios-send" onPress={props.onPress} size={props.size || 30} color={props.color} />
+}
+export function ArrowRight(props: IconProps) {
+    return <Ionicons name="ios-arrow-forward" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }

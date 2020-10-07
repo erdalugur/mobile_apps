@@ -9,6 +9,7 @@ import { screens } from 'navigation';
 import { SettingNavigationScreen } from './NavigationScreen';
 import { PersonalInfoScreen } from './PersonalInfoScreen';
 import MyOrderScreen from './MyOrderScreen';
+import { MyCodeScreen } from './MyCodeScreen';
 export const Stack = createStackNavigator();
 
 export const ProfileStackScreen = ({ navigation, route }: any) => {
@@ -54,6 +55,13 @@ export const ProfileStackScreen = ({ navigation, route }: any) => {
                 }}
                 name={screens.myOrder}
                 component={MyOrderScreen}
+            />
+            <Stack.Screen
+                options={{
+                    title: '',
+                }}
+                name={screens.myCodeScreen}
+                component={MyCodeScreen}
             />
         </Stack.Navigator>
     )
