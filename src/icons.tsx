@@ -26,126 +26,129 @@ export function HeaderBack(props: IconProps) {
 }
 
 export function Plus(props: IconProps) {
-    return <AntDesign name="plussquareo" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <AntDesign name="plussquareo" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 export function Minus(props: IconProps) {
-    return <AntDesign name="minussquareo" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <AntDesign name="minussquareo" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 
 export function Search(props: IconProps) {
-    return <FontAwesome name="search" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <FontAwesome name="search" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 export function Cheff(props: IconProps) {
-    return <MaterialCommunityIcons name="chef-hat" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <MaterialCommunityIcons name="chef-hat" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 export function Setting(props: IconProps) {
-    return <Feather name="settings" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <Feather name="settings" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 export function Menu(props: IconProps) {
-    return <MaterialCommunityIcons name="food-fork-drink" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <MaterialCommunityIcons name="food-fork-drink" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 
 export function Bowtie(props: IconProps) {
-    return <Ionicons name="ios-bowtie" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <Ionicons name="ios-bowtie" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 export function Money(props: IconProps) {
-    return <FontAwesome5 name="money-bill-wave" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <FontAwesome5 name="money-bill-wave" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 
 export function ReportFile(props: IconProps) {
-    return <FontAwesome name="file-word-o" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <FontAwesome name="file-word-o" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 export function Person(props: IconProps) {
-    return <MaterialIcons name="person" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <MaterialIcons name="person" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 export function QRCode(props: IconProps) {
     return <AntDesign name="qrcode" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 export function Table(props: IconProps) {
-    return <AntDesign name="table" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <AntDesign name="table" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 
 export function EmojiNeutral(props: IconProps) {
-    return <Entypo name="emoji-neutral" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <Entypo name="emoji-neutral" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 
 export function MoreOption(props: IconProps) {
-    return <Feather name="more-vertical" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <Feather name="more-vertical" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 export function Phone(props: IconProps) {
-    return <AntDesign name="phone" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <AntDesign name="phone" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 export function CartIcon(props: IconProps) {
-    return <AntDesign name="shoppingcart" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <AntDesign name="shoppingcart" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 export function Heart(props: IconProps) {
-    return <AntDesign name="hearto" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <AntDesign name="hearto" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 export function HeartFull(props: IconProps) {
-    return <AntDesign name="heart" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <AntDesign name="heart" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 export function Heat(props: IconProps) {
-    return <FontAwesome5 name="temperature-high" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <FontAwesome5 name="temperature-high" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 export function Fire(props: IconProps) {
-    return <FontAwesome5 name="fire-alt" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <FontAwesome5 name="fire-alt" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 export function Time(props: IconProps) {
-    return <Ionicons name="ios-timer" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <Ionicons name="ios-timer" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 export function Pencil(props: IconProps) {
-    return <FontAwesome name="pencil" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <FontAwesome name="pencil" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 export function Check(props: IconProps) {
-    return <AntDesign name="checksquareo" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <AntDesign name="checksquareo" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 
 export function UnCheck(props: IconProps) {
-    return <MaterialCommunityIcons name="checkbox-blank-outline" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <MaterialCommunityIcons name="checkbox-blank-outline" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 
 export function Play(props: IconProps) {
-    return <AntDesign name="playcircleo" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <AntDesign name="playcircleo" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 
 export function Plus2(props: IconProps) {
-    return <AntDesign name="plus" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <AntDesign name="plus" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 
 export function Minus2(props: IconProps) {
-    return <AntDesign name="minus" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <AntDesign name="minus" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 export function Survey(props: IconProps) {
-    return <MaterialIcons name="question-answer" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <MaterialIcons name="question-answer" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 
 export function Close(props: IconProps) {
-    return <AntDesign name="close" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <AntDesign name="close" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 
 export function Star(props: IconProps) {
-    return <AntDesign name="star" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <AntDesign name="star" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 
 export function User(props: IconProps) {
-    return <AntDesign name="user" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <AntDesign name="user" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 export function Activity(props: IconProps) {
-    return <Feather name="activity" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <Feather name="activity" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 export function Email(props: IconProps) {
-    return <AntDesign name="mail" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <AntDesign name="mail" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 export function Form(props: IconProps) {
-    return <AntDesign name="form" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <AntDesign name="form" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 
 export function HeartBeat(props: IconProps) {
-    return <FontAwesome name="heartbeat" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <FontAwesome name="heartbeat" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 export function Send(props: IconProps) {
-    return <Ionicons name="ios-send" onPress={props.onPress} size={props.size || 30} color={props.color} />
+    return <Ionicons name="ios-send" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
 export function ArrowRight(props: IconProps) {
     return <Ionicons name="ios-arrow-forward" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
+}
+export function MotorCycle(props: IconProps) {
+    return <FontAwesome name="motorcycle" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }

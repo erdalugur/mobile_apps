@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { TouchableOpacity, FlatList, StatusBar, StyleSheet } from 'react-native'
 import theme from 'theme'
 import { NavigationProps } from 'types'
-import { Cheff, Setting, Menu, Bowtie, Money, ReportFile } from 'icons'
+import { Cheff, Setting, Menu, Bowtie, Money, ReportFile, MotorCycle } from 'icons'
 import { IAction, actionTypes } from 'myRedux/types'
 import { configurationManager } from 'utils'
 
@@ -23,10 +23,12 @@ interface MenuItem {
 }
 
 let items: MenuItem[] = [
-    { NAME: 'MİSAFİR', PATH: 'Home', ICON: <Menu color={theme.colors.text} size={40} /> },
+    //{ NAME: 'MİSAFİR', PATH: 'Home', ICON: <Menu color={theme.colors.text} size={40} /> },
     { NAME: 'GARSON', PATH: 'Search', ICON: <Bowtie color={theme.colors.text} size={45} /> },
     { NAME: 'KASİYER', PATH: 'Cashier', ICON: <Money color={theme.colors.text} size={40} /> },
     { NAME: 'MUTFAK', PATH: 'Kitchen', ICON: <Cheff color={theme.colors.text} size={40} /> },
+    { NAME: 'PAKET SERVİS', PATH: 'PackageOrderScreen', ICON: <MotorCycle color={theme.colors.text} size={40} /> },
+
     { NAME: 'RAPORLAR', PATH: 'Reports', ICON: <ReportFile color={theme.colors.text} size={40} /> },
     { NAME: 'AYARLAR', PATH: 'Settings', ICON: <Setting color={theme.colors.text} size={40} /> },
 ]
@@ -50,7 +52,7 @@ class Index extends React.PureComponent<Props, State> {
                     this.props.dispatch({ type: actionTypes.SET_SCREEN, payload: x.PATH })
                     this.props.navigation.navigate(x.PATH)
                 }}
-                style={[styles.menuItem]}>
+                style={[styles.menuItem, index === -1 ? styles.guest : {}]}>
                 <View style={[styles.button]}>
                     {x.ICON}
                     <Text
@@ -81,6 +83,7 @@ class Index extends React.PureComponent<Props, State> {
                     {this.renderTitle()}
                 </View>
                 <View style={{ flex: 2 }}>
+                    {this.renderItem({ NAME: 'MİSAFİR', PATH: 'Home', ICON: <Menu color={theme.colors.text} size={40} /> }, -1)}
                     <FlatList
                         style={{ width: '100%', height: '100%' }}
                         initialNumToRender={2}
@@ -112,5 +115,10 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         opacity: 0.9,
         paddingVertical: 10
+    },
+    guest: {
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%'
     }
 })

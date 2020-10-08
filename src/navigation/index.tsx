@@ -24,6 +24,7 @@ import { dataManager } from 'api';
 import { Platform } from 'react-native';
 import { ProfileStackScreen } from 'screens/profileStack';
 import { DrawerApp } from 'screens/homeStack';
+import { PackageStackScreen } from 'screens/PackageOrder';
 
 export const AuthContext = React.createContext<any>(null);
 
@@ -70,7 +71,8 @@ export const screens = {
     personalInfoScreen: 'PersonalInfoScreen',
     myCodeScreen: 'MyCodeScreen',
     tableOptionScreen: 'TableOptionScreen',
-    myOrder: 'MyOrderScreen'
+    myOrder: 'MyOrderScreen',
+    packageOrderScreen: 'PackageOrderScreen'
 }
 
 
@@ -86,21 +88,21 @@ export default function ({ navigation }: any) {
                         ...prevState,
                         userToken: action.token,
                         isLoading: false,
-                        isWebApp: Platform.OS === 'web'
+                        isWebApp: false,//Platform.OS === 'web'
                     };
                 case 'SIGN_IN':
                     return {
                         ...prevState,
                         isSignout: false,
                         userToken: action.token,
-                        isWebApp: Platform.OS === 'web'
+                        isWebApp: false//Platform.OS === 'web'
                     };
                 case 'SIGN_OUT':
                     return {
                         ...prevState,
                         isSignout: true,
                         userToken: null,
-                        isWebApp: Platform.OS === 'web'
+                        isWebApp: false//Platform.OS === 'web'
                     };
                 case 'MAKE_WEB':
                     return {
@@ -123,21 +125,22 @@ export default function ({ navigation }: any) {
         let user = await userManager.get();
         let domain = Platform.OS === 'web' && applicationManager.domain() || "";
         return {
-            storeId: user?.STOREID || "0",
+            storeId: user?.STOREID || "1",
             domain: domain,
-            token: user?.token
+            token: user?.token || ""
         }
     }
 
     const bootstrapAsync = async (token: string | undefined, domain: string, storeId: string) => {
         const { data, statusCode, error } = await dataManager.loadPlace({ domain, storeId })
+        console.log(data)
         if (statusCode === 200 && data) {
             configurationManager.setPlace(data[0])
-            if (Platform.OS === 'web') {
-                dispatch({ type: 'MAKE_WEB' });
-            } else {
-                dispatch({ type: 'RESTORE_TOKEN', token: token });
-            }
+            // if (Platform.OS === 'web') {
+            //     dispatch({ type: 'MAKE_WEB' });
+            // } else {
+            dispatch({ type: 'RESTORE_TOKEN', token: token });
+            // }
         } else {
             configurationManager.removePlace();
         }
@@ -145,6 +148,7 @@ export default function ({ navigation }: any) {
 
     React.useEffect(() => {
         applicationParams().then(({ token, domain, storeId }) => {
+            console.log(token)
             bootstrapAsync(token, domain, storeId);
         })
     }, []);
@@ -248,6 +252,9 @@ export default function ({ navigation }: any) {
                                             <AppStack.Screen
                                                 component={CachierStackScreen}
                                                 name={screens.cashier} />
+                                            <AppStack.Screen
+                                                component={PackageStackScreen}
+                                                name={screens.packageOrderScreen} />
                                         </>
                                     )}
                     </AppStack.Navigator>

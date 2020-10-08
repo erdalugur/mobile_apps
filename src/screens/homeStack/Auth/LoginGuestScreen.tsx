@@ -91,7 +91,7 @@ export default class extends React.PureComponent<Props, State>{
                     </Button>
                 </View>
                 <View style={{ marginTop: 30, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
-                    <TouchableOpacity style={[styles.registerButton]} onPress={() => this.props.navigation.goBack()}>
+                    <TouchableOpacity style={[styles.registerButton]} onPress={() => this.props.navigation.navigate(screens.home)}>
                         <Text>
                             Geri Dön
                         </Text>

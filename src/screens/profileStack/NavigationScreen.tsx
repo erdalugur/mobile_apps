@@ -65,7 +65,7 @@ export class SettingNavigationScreen extends React.PureComponent<Props, State> {
                     <View style={{ padding: 20, justifyContent: 'flex-end', width: '50%' }}>
                         <TouchableOpacity style={[styles.button]} onPress={() => this.props.navigation.navigate(screens.myCodeScreen)}>
                             <Text style={{ marginRight: 5 }}>Benim Barkodum</Text>
-                            <View style={{ marginTop: 4 }}>
+                            <View transparent style={{ marginTop: 4 }}>
                                 <ArrowRight size={15} />
                             </View>
                         </TouchableOpacity>
@@ -92,5 +92,10 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
     },
-    button: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', borderWidth: 2, borderColor: theme.colors.border, height: 35, borderRadius: 5 }
+    button: {
+        flexDirection: 'row', alignItems: 'center', justifyContent: 'center',
+        //borderWidth: 2,
+        backgroundColor: theme.colors.border,
+        height: 35, borderRadius: 5
+    }
 });

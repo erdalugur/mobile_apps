@@ -1,5 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import { DrawerIcon } from "components";
+import { HeaderBack } from "icons";
 import { screens } from "navigation";
 import React from 'react'
 import { ActivityRequestScreen } from "./ActivityRequestScreen";
@@ -10,10 +11,13 @@ const Stack = createStackNavigator();
 export const ActivityStackScreen = (props: any) => {
     return (
         <Stack.Navigator screenOptions={{
-            headerLeft: () => <DrawerIcon {...props} />,
+            headerBackImage: ({ tintColor }: any) => <HeaderBack />,
             title: 'Aktiviteler'
         }}>
             <Stack.Screen
+                options={{
+                    headerLeft: () => <DrawerIcon {...props} />,
+                }}
                 component={ActivityScreen} name={screens.activityScreen} />
             <Stack.Screen
                 component={ActivityRequestScreen} name={screens.activityRequestScreen} />

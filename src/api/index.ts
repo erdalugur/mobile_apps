@@ -204,6 +204,21 @@ export const dataManager = {
             return await errorPromise(messages.PLEASE_LOGIN_FIRST)
         }
     },
+    loadPackageOrder: async function () {
+        let user = await userManager.get();
+        if (user) {
+            return await QueryableIO<IProc>({
+                action: 'public',
+                model: 'MPOS_PACKAGE_ORDER',
+                parameters: [
+                    { key: 'USERID', value: user.ID },
+                    { key: 'STOREID', value: user.STOREID }
+                ]
+            })
+        } else {
+            return await errorPromise(messages.PLEASE_LOGIN_FIRST)
+        }
+    },
     closeAddition: async function (table: string, paymentType: string, sessionId: number, items: { PRODUCTID: number, PRICE: number }[]) {
         let place = await configurationManager.getPlace();
         let user = await userManager.get();
