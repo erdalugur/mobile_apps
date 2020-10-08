@@ -136,11 +136,11 @@ export default function ({ navigation }: any) {
         console.log(data)
         if (statusCode === 200 && data) {
             configurationManager.setPlace(data[0])
-            // if (Platform.OS === 'web') {
-            //     dispatch({ type: 'MAKE_WEB' });
-            // } else {
-            dispatch({ type: 'RESTORE_TOKEN', token: token });
-            // }
+            if (Platform.OS === 'web') {
+                dispatch({ type: 'MAKE_WEB' });
+            } else {
+                dispatch({ type: 'RESTORE_TOKEN', token: token });
+            }
         } else {
             configurationManager.removePlace();
         }

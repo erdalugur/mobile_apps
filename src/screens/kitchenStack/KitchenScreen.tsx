@@ -242,20 +242,16 @@ export default class extends React.PureComponent<Props, State>{
                     {this.renderItems()}
                 </ScrollView>
                 <View transparent style={[sharedStyles.bottomContainer]}>
-                    <View transparent style={{ width: '50%' }}>
-                        <Button
-                            onPress={() => this.sendStatusAsync(2)}
-                            className="default"
-                            style={{ borderRadius: 0, height: sharedStyles.bottomContainer.height }}
-                            bold>Onay</Button>
-                    </View>
-                    <View transparent style={{ width: '50%' }}>
-                        <Button
-                            onPress={() => this.sendStatusAsync(3)}
-                            className="primary"
-                            style={{ borderRadius: 0, height: sharedStyles.bottomContainer.height }}
-                            bold>Hazır</Button>
-                    </View>
+                    <Button
+                        onPress={() => this.sendStatusAsync(2)}
+                        className="default"
+                        style={{ borderRadius: 0, height: sharedStyles.bottomContainer.height, width: '50%' }}
+                        bold>Onay</Button>
+                    <Button
+                        onPress={() => this.sendStatusAsync(3)}
+                        className="primary"
+                        style={{ borderRadius: 0, height: sharedStyles.bottomContainer.height, width: '50%' }}
+                        bold>Hazır</Button>
                 </View>
             </Layout>
         )
