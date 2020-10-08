@@ -53,7 +53,7 @@ export const ProfileStackScreen = (props: any) => {
             />
             <Stack.Screen
                 options={{
-                    title: '',
+                    title: 'Bekleyen Siparişlerim',
                 }}
                 name={screens.myOrder}
                 component={MyOrderScreen}

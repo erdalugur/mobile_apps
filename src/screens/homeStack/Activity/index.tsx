@@ -12,7 +12,8 @@ export const ActivityStackScreen = (props: any) => {
     return (
         <Stack.Navigator screenOptions={{
             headerBackImage: ({ tintColor }: any) => <HeaderBack />,
-            title: 'Aktiviteler'
+            title: 'Aktiviteler',
+            headerBackTitleVisible: false,
         }}>
             <Stack.Screen
                 options={{

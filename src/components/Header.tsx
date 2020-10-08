@@ -5,7 +5,7 @@ import { Text } from './Text'
 import { Button } from './Button';
 import { NavigationProps } from 'types';
 const { width, height } = Dimensions.get("screen")
-interface HeaderProps extends NavigationProps {
+interface HeaderProps extends NavigationProps<any, any> {
     title: string | undefined
 }
 

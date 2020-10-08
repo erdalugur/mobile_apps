@@ -10,7 +10,8 @@ export const ReservationStackScreen = (props: any) => {
     return (
         <Stack.Navigator screenOptions={{
             headerLeft: () => <DrawerIcon {...props} />,
-            title: 'Rezervasyon Al'
+            title: 'Rezervasyon Al',
+            headerBackTitleVisible: false,
         }}>
             <Stack.Screen
                 component={ReservationRequestScreen} name={screens.organizatonScreen} />

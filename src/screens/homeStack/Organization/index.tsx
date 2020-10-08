@@ -13,6 +13,7 @@ export const OrganizationStackScreen = (props: any) => {
         <Stack.Navigator screenOptions={{
             headerBackImage: ({ tintColor }: any) => <HeaderBack />,
             title: 'Organizasyonlar',
+            headerBackTitleVisible: false,
         }}>
             <Stack.Screen
                 options={{

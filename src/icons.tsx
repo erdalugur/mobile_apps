@@ -21,7 +21,7 @@ export function Back({ color = theme.colors.text, size = 30, onPress }: IconProp
 
 export function HeaderBack(props: IconProps) {
     return <View
-        style={{}}>
+        style={{ marginLeft: 10 }}>
         <Back size={40} /></View>
 }
 

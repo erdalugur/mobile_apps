@@ -137,7 +137,7 @@ class Index extends React.PureComponent<Props, State>{
                 onPress={this.sendOrder}
                 activeOpacity={0.8}
                 bold
-                style={[sharedStyles.bottomContainer]}
+                style={[sharedStyles.bottomContainer, { borderRadius: 0 }]}
             >
                 {messages.SEND_CART}
             </Button>

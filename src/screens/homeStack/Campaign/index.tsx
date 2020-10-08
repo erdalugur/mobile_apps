@@ -10,7 +10,8 @@ export const CampaignStackScreen = (props: any) => {
     return (
         <CampaignStack.Navigator screenOptions={{
             headerLeft: () => <DrawerIcon {...props} />,
-            title: 'Kampanyalar'
+            title: 'Kampanyalar',
+            headerBackTitleVisible: false,
         }}>
             <CampaignStack.Screen
                 component={CampaignScreen} name={screens.campaignScreen} />

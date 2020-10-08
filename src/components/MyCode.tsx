@@ -18,7 +18,7 @@ export function MyCode(props: Props) {
         <View style={{
             margin: 20,
         }}>
-            <Text style={{ fontWeight: 'bold', marginVertical: 10, color: theme.colors.text }}>Eğer puanlarınızı kullanmak isterseniz barkodu okutunuz</Text>
+            <Text style={{ fontWeight: 'bold', marginVertical: 10, color: theme.colors.text }}>Puanlarınızı kullanmak için barkodu okutunuz</Text>
             <View style={{
                 justifyContent: 'center',
                 alignItems: 'center',

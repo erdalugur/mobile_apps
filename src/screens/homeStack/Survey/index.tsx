@@ -10,7 +10,8 @@ export const SurveyStackScreen = (props: any) => {
     return (
         <Stack.Navigator screenOptions={{
             headerLeft: () => <DrawerIcon {...props} />,
-            title: 'Anket'
+            title: 'Anket',
+            headerBackTitleVisible: false,
         }}>
             <Stack.Screen
                 component={SurveyScreen} name={screens.organizatonScreen} />
