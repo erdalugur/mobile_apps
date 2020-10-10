@@ -14,7 +14,7 @@ export const SurveyStackScreen = (props: any) => {
             headerBackTitleVisible: false,
         }}>
             <Stack.Screen
-                component={SurveyScreen} name={screens.organizatonScreen} />
+                component={SurveyScreen} name={screens.surveyScreen} />
         </Stack.Navigator>
     )
 }

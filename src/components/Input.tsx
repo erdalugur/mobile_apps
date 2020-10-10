@@ -1,8 +1,10 @@
 import React from 'react'
-import { TextInput, TextInputProps, StyleSheet, Platform } from 'react-native'
+import { TextInput, TextInputProps, StyleSheet, Platform, View } from 'react-native'
 import theme from 'theme';
 import InputMasked, { MaskedInputProps } from 'react-text-mask'
 import { Datepicker } from '@ui-kitten/components'
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { EyeOff, EyeOn } from 'icons';
 interface Props extends TextInputProps {
 
 }
@@ -82,6 +84,33 @@ export class DateInput extends React.PureComponent<MaskedProps, any>{
                 placeholder="DD-MM-YYYY"
                 type="date"
             />
+        )
+    }
+}
+
+interface PasswordState {
+    visible: boolean
+}
+
+export class PasswordInput extends React.PureComponent<Props, PasswordState>{
+    state: PasswordState = {
+        visible: false
+    }
+    render() {
+        return (
+            <View style={{ flexDirection: 'row' }}>
+                <Input
+                    {...this.props}
+                    secureTextEntry={this.state.visible}
+                    style={[this.props.style, { width: '100%' }]} />
+                <View style={{ width: 40, position: 'absolute', right: 10, justifyContent: 'center', alignItems: 'center' }}>
+                    <TouchableOpacity
+                        style={[]}
+                        onPress={() => this.setState((state: PasswordState) => ({ visible: !state.visible }))}>
+                        {this.state.visible ? <EyeOn size={25} /> : <EyeOff size={25} />}
+                    </TouchableOpacity>
+                </View>
+            </View>
         )
     }
 }

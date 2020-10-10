@@ -1,16 +1,21 @@
 import React from 'react'
-import { Button, FormRow, Input, Layout, Text, View } from 'components'
+import { Button, FormRow, Input, Layout, PhoneInput, Text, View } from 'components'
 import { StyleSheet, ScrollView, Dimensions } from 'react-native'
 import { dataManager } from 'api'
 import { Emoji } from './Emoji'
 import theme from 'theme'
 import { TouchableOpacity } from 'react-native-gesture-handler'
-import { configurationManager, messageBox, userManager } from 'utils'
+import { applicationManager, configurationManager, messageBox, userManager, validationManager } from 'utils'
 import { constands } from 'constands'
 import { debug } from 'react-native-reanimated'
+import { connect } from 'react-redux'
+import { actionTypes, IAction } from 'myRedux/types'
+import { NavigationProps } from 'types'
+import { StackActions } from '@react-navigation/native'
+import { screens } from 'navigation'
 const { height } = Dimensions.get('window')
-interface Props {
-
+interface Props extends NavigationProps<any, any> {
+    dispatch: (param: IAction<any>) => void
 }
 
 interface ItemProps {
@@ -36,7 +41,7 @@ const components = {
     'emoji': Emoji
 }
 
-export class SurveyScreen extends React.PureComponent<Props, State> {
+class Index extends React.PureComponent<Props, State> {
 
     state: State = {
         loading: false,
@@ -114,11 +119,12 @@ export class SurveyScreen extends React.PureComponent<Props, State> {
             }
         });
         this.setState({ loading: true })
+        let phone = validationManager.makePhone(this.state.phone)
         const result = await dataManager.sendAnswerAsync(
             items,
             this.state.firstName,
             this.state.lastName,
-            this.state.phone)
+            phone)
         if (result.statusCode === 200 && result.data) {
             let __data__ = result.data[0] as { ID: string, token: string, NEW_RECORD: boolean, PASSWORD: string, STOREID: string }
             if (__data__.NEW_RECORD && user === null) {
@@ -127,9 +133,13 @@ export class SurveyScreen extends React.PureComponent<Props, State> {
                     PASSWORD: __data__.PASSWORD,
                     STOREID: __data__.STOREID,
                     token: __data__.token,
-                    USERNAME: ''
+                    USERNAME: phone
                 })
-            } else { }
+                this.props.dispatch({ type: actionTypes.SIGN_IN, payload: { token: __data__.token } })
+                this.props.navigation.dispatch(StackActions.replace(screens.homeTabs, { value: true }))
+            } else {
+
+            }
 
             messageBox('Anketimize katıldığınız için teşekkür ederiz. :)')
             this.setState({ loading: false, canSend: false, firstName: '', lastName: '', step: '2' })
@@ -159,11 +169,10 @@ export class SurveyScreen extends React.PureComponent<Props, State> {
                         onChangeText={lastName => this.setState({ lastName })} />
                 </FormRow>
                 <FormRow label="Telefon" errorMessage={this.state.error['phone']}>
-                    <Input
-                        keyboardType="number-pad"
+                    <PhoneInput
                         placeholder="Telefon"
                         value={this.state.phone}
-                        onChangeText={phone => this.setState({ phone })} />
+                        onChange={e => this.setState({ phone: e.target.value })} />
                 </FormRow>
                 {this.state.step === '1' && (
                     <Button textStyle={{ fontWeight: 'bold' }} style={{
@@ -201,6 +210,8 @@ export class SurveyScreen extends React.PureComponent<Props, State> {
         )
     }
 }
+
+export const SurveyScreen = connect()(Index)
 
 const styles = StyleSheet.create({
     container: {

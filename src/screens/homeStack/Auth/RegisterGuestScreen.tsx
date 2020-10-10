@@ -1,6 +1,6 @@
 import { CommonActions, StackActions } from '@react-navigation/native'
 import { dataManager } from 'api'
-import { Layout, View, Text, Input, Button, FormRow, PhoneInput } from 'components'
+import { Layout, View, Text, Input, Button, FormRow, PhoneInput, PasswordInput } from 'components'
 import { actionTypes, IAction } from 'myRedux/types'
 import { screens } from 'navigation'
 import React from 'react'
@@ -131,7 +131,7 @@ class Index extends React.PureComponent<Props, State>{
                         />
                     </FormRow>
                     <FormRow errorMessage={this.hasError('PASSWORD')} label="Parola">
-                        <Input
+                        <PasswordInput
                             value={this.state.PASSWORD}
                             onChangeText={(PASSWORD) => this.setState({ PASSWORD })}
                             placeholder="Parola" />

@@ -1,6 +1,6 @@
 import { CommonActions, StackActions } from '@react-navigation/native'
 import { dataManager } from 'api'
-import { Layout, View, Text, Input, Button, FormRow, PhoneInput } from 'components'
+import { Layout, View, Text, Input, Button, FormRow, PhoneInput, PasswordInput } from 'components'
 import { actionTypes, IAction } from 'myRedux/types'
 import { screens } from 'navigation'
 import React from 'react'
@@ -18,6 +18,8 @@ interface State {
     PHONE: string
     errors: { [key: string]: string }
     loading: boolean
+    STOREID: string
+    TITLE: string
 }
 
 interface Props extends NavigationProps<{
@@ -31,11 +33,16 @@ class Index extends React.PureComponent<Props, State>{
         PASSWORD: '',
         PHONE: '',
         errors: {},
-        loading: false
+        loading: false,
+        STOREID: '',
+        TITLE: ''
     }
 
-    componentDidMount() {
-        console.log(this.props)
+    componentDidMount = async () => {
+        let place = await configurationManager.getPlace();
+        if (place !== null) {
+            this.setState({ STOREID: place?.ID || "", TITLE: place?.NAME || "" })
+        }
     }
 
     _resetAction = (token: string) => {
@@ -56,14 +63,13 @@ class Index extends React.PureComponent<Props, State>{
         PHONE = validationManager.makePhone(PHONE)
 
         let result = await dataManager.loginGuest(PHONE, PASSWORD);
-        let place = await configurationManager.getPlace();
         if (result.data && result.token) {
             let user = result.data[0];
             await userManager.set({
                 ID: user.ID as string,
                 PASSWORD: PASSWORD,
                 USERNAME: PHONE,
-                STOREID: place?.ID || "0",
+                STOREID: this.state.STOREID || "0",
                 token: result.token
             })
             this.props.dispatch({ type: actionTypes.SIGN_IN, payload: { token: result.token } })
@@ -103,7 +109,7 @@ class Index extends React.PureComponent<Props, State>{
                         errorMessage={this.hasError('PASSWORD')}
                         label="Parola"
                     >
-                        <Input
+                        <PasswordInput
                             value={this.state.PASSWORD}
                             onChangeText={(PASSWORD) => this.setState({ PASSWORD })}
                             placeholder="Parola" />

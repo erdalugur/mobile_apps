@@ -152,3 +152,9 @@ export function ArrowRight(props: IconProps) {
 export function MotorCycle(props: IconProps) {
     return <FontAwesome name="motorcycle" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
 }
+export function EyeOn(props: IconProps) {
+    return <Ionicons name="ios-eye" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
+}
+export function EyeOff(props: IconProps) {
+    return <Ionicons name="ios-eye-off" onPress={props.onPress} size={props.size || 30} color={props.color || theme.colors.text} />
+}

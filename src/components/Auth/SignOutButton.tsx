@@ -11,13 +11,17 @@ interface Props {
     callback?: Function
 }
 export function SignOutButton(props: Props) {
+    const [loading, setLoading] = React.useState(false)
     const { signOut } = React.useContext(AuthContext)
     let label = props.label || "Çıkış Yap"
     return (
-        <Button onPress={() => {
+        <Button loading={loading} onPress={() => {
+            setLoading(true)
             signOut(false)
             if (props.callback)
                 props.callback()
+
+            setLoading(false)
         }} style={[props.style]}>
             {label}
         </Button>
