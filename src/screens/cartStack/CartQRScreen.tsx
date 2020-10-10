@@ -6,11 +6,10 @@ import { connect } from 'react-redux';
 import { AppState } from 'myRedux';
 import { CartItem } from 'types';
 import { BarcodeScanner } from 'components';
+import { makeCartJsonBeforeSend } from 'utils/cart';
 
 interface Props {
-    cart: SingleMultiType<any, {
-        [key: string]: CartItem;
-    }>
+    cart: { [key: string]: CartItem }
     dispatch: (param: IAction<number | any>) => void
 }
 
@@ -39,19 +38,18 @@ class Index extends React.Component<Props, State> {
             messageBox('Lütfen bir masa seçin')
             return;
         }
-        let { items } = this.props.cart
+        let items = this.props.cart
         if (!this.checkCartItems()) {
             messageBox(messages.EMPTY_CART_MESSAGE)
         } else {
+            let { cart, extras } = makeCartJsonBeforeSend(this.props.cart)
+
             let { statusCode, data, error } = await dataManager.setCart({
-                TABLEID: this.state.table,
-                JSON: Object.keys(items).map(x => {
-                    return {
-                        PRODUCTID: items[x].ID.toString(),
-                        QUANTITY: items[x].quantity.toString()
-                    }
-                })
-            });
+                EXTRAS: extras,
+                JSON: cart,
+                FROM_GUEST: false,
+                TABLEID: this.state.table
+            })
             if (statusCode === 200) {
                 messageBox(messages.SEND_CART_SUCCESS);
                 this.props.dispatch({ type: actionTypes.REMOVE_CART, payload: {} })

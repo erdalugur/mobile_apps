@@ -6,7 +6,7 @@ import { StyleSheet, ScrollView } from 'react-native'
 import theme from 'theme'
 import { NavigationProps, PlaceModel } from 'types'
 import { configurationManager, userManager } from 'utils'
-import { StackActions, NavigationAction } from '@react-navigation/native';
+import { StackActions } from '@react-navigation/native';
 
 interface Props extends NavigationProps<any, any> {
 

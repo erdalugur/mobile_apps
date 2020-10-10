@@ -1,6 +1,7 @@
 import { IAction, IState, actionTypes } from './types'
 import { ADD_TO_CART, INCREMENT, DECREMENT, SET_NOTE, HANDLE_EXTRA } from './cart'
 import { ProductTreeModel } from 'types';
+import { Platform } from 'react-native';
 export const InitialState: IState = getInitialState({});
 
 export default function (state: IState = InitialState, action: IAction<any>): IState {
@@ -18,7 +19,6 @@ export default function (state: IState = InitialState, action: IAction<any>): IS
         case actionTypes.REMOVE_CART:
             return { ...state, cart: {} };
         case actionTypes.SET_SCREEN:
-            console.log(action.payload)
             return { ...state, screen: action.payload }
         case actionTypes.SET_NOTE:
             return SET_NOTE(state, action.payload)
@@ -59,7 +59,7 @@ export function getInitialState(__data__: any): IState {
     return {
         sliderItems: __data__.SLIDER_ITEMS || [],
         screen: '',
-        token: __data__.token || "",
+        token: null,
         campaign: {
             item: null,
             items: []

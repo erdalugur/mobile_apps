@@ -260,11 +260,7 @@ class Index extends React.PureComponent<Props, State> {
         if (await userManager.isAuthenticated()) {
             this.sendAsync(true);
         } else {
-            confirmBox('Giriş yaparak devam etmek ister misiniz?', (result) => {
-                if (result) {
-                    this.props.navigation.navigate(screens.loginGuest, { action: () => this.sendAsync(true) })
-                }
-            })
+            this.props.navigation.navigate(screens.loginGuest, { action: () => this.sendAsync(true), screen: 'cart' })
         }
     }
 

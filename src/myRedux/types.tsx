@@ -12,7 +12,7 @@ export interface SingleMultiType<Single, Multi> {
 }
 export interface IState {
     screen: string
-    token: string
+    token: string | null
     category: SingleMultiType<any, Array<any>>
     product: SingleMultiType<any, Array<any>>
     campaign: SingleMultiType<any, Array<any>>
@@ -30,5 +30,9 @@ export const actionTypes = {
     DECREMENT: 'DECREMENT',
     SET_SCREEN: 'SET_SCREEN',
     SET_NOTE: 'SET_NOTE',
-    HANDLE_EXTRA: 'HANDLE_EXTRA'
+    HANDLE_EXTRA: 'HANDLE_EXTRA',
+    RESTORE_TOKEN: 'RESTORE_TOKEN',
+    SIGN_IN: 'SIGN_IN',
+    SIGN_OUT: 'SIGN_OUT',
+    MAKE_WEB: 'MAKE_WEB'
 }

@@ -16,7 +16,7 @@ export const HomeTabs = ({ navigation, route }: { navigation: any, route: any })
             screenOptions={({ route, navigation }) => ({
                 tabBarIcon: ({ color, size }) => {
                     let iconName: string = "";
-                    if (route.name === screens.home)
+                    if (route.name === screens.homeTabs)
                         return <Menu color={color} size={size} />
 
                     else if (route.name === screens.search)
@@ -34,9 +34,8 @@ export const HomeTabs = ({ navigation, route }: { navigation: any, route: any })
                     title: "Menü",
 
                 }}
-
                 component={HomeStackScreen}
-                name={screens.home} />
+                name={screens.homeTabs} />
 
             <Tab.Screen
                 options={{

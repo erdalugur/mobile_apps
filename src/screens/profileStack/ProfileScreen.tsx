@@ -151,7 +151,7 @@ export class ProfileScreen extends React.PureComponent<Props, State> {
 
     signOutAction = () => {
         this.props.navigation.dispatch(
-            StackActions.replace(screens.home)
+            StackActions.replace(screens.homeTabs)
         );
     }
 

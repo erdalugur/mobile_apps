@@ -1,10 +1,13 @@
+import { CommonActions, StackActions } from '@react-navigation/native'
 import { dataManager } from 'api'
 import { Layout, View, Text, Input, Button, FormRow, PhoneInput } from 'components'
+import { actionTypes, IAction } from 'myRedux/types'
 import { screens } from 'navigation'
 import React from 'react'
 import { StyleSheet } from 'react-native'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import { debug } from 'react-native-reanimated'
+import { connect } from 'react-redux'
 import theme from 'theme'
 import { NavigationProps } from 'types'
 import { configurationManager, messageBox, userManager, validationManager } from 'utils'
@@ -20,13 +23,23 @@ interface State {
 interface Props extends NavigationProps<{
     action: Function
     screen: string
-}, any> { }
-export default class extends React.PureComponent<Props, State>{
+}, any> {
+    dispatch: (param: IAction<any>) => void
+}
+class Index extends React.PureComponent<Props, State>{
     state: State = {
         PASSWORD: '',
         PHONE: '',
         errors: {},
         loading: false
+    }
+
+    componentDidMount() {
+        console.log(this.props)
+    }
+
+    _resetAction = (token: string) => {
+        this.props.navigation.dispatch(StackActions.replace(screens.homeTabs, { value: true }))
     }
 
     loginAsync = async () => {
@@ -53,7 +66,13 @@ export default class extends React.PureComponent<Props, State>{
                 STOREID: place?.ID || "0",
                 token: result.token
             })
-            this.props.route.params && this.props.route.params.action && this.props.route.params.action();
+            this.props.dispatch({ type: actionTypes.SIGN_IN, payload: { token: result.token } })
+            this._resetAction(result.token);
+
+            if (this.props.route.params) {
+                this.props.route.params.action && this.props.route.params.action();
+            }
+            this.setState({ loading: false })
         } else {
             this.setState({ loading: false });
             messageBox('Kullanıcı adı veya parola yanlış')
@@ -61,6 +80,11 @@ export default class extends React.PureComponent<Props, State>{
     }
 
     hasError = (key: string) => this.state.errors[key]
+
+    goBack = () => {
+        let isCartScreen = this.props.route.params && this.props.route.params.screen === 'cart'
+        isCartScreen ? this.props.navigation.goBack() : this.props.navigation.navigate(screens.homeTabs)
+    }
 
     render() {
         return (
@@ -91,12 +115,14 @@ export default class extends React.PureComponent<Props, State>{
                     </Button>
                 </View>
                 <View style={{ marginTop: 30, flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 10 }}>
-                    <TouchableOpacity style={[styles.registerButton]} onPress={() => this.props.navigation.navigate(screens.home)}>
+                    <TouchableOpacity style={[styles.registerButton]} onPress={this.goBack}>
                         <Text>
                             Geri Dön
                         </Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={[styles.registerButton]} onPress={() => this.props.navigation.navigate(screens.registerGuest, { action: this.props.route.params.action })}>
+                    <TouchableOpacity style={[styles.registerButton]} onPress={() => this.props.navigation.navigate(screens.registerGuest, {
+                        action: this.props.route.params ? this.props.route.params.action : () => console.log('loginGuest')
+                    })}>
                         <Text>
                             Kayıt Ol
                         </Text>
@@ -106,16 +132,8 @@ export default class extends React.PureComponent<Props, State>{
         )
     }
 }
+export default connect()(Index)
 
-function ErrorMessage(props: { message: string }) {
-    if (props.message) {
-        return (
-            <Text style={[styles.errorMessage]}>{props.message}</Text>
-        )
-    } else {
-        return null
-    }
-}
 
 const styles = StyleSheet.create({
     formContainer: {

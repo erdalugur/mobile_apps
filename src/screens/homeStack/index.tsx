@@ -35,6 +35,7 @@ import { OrganizationStackScreen } from './Organization';
 import { ReservationStackScreen } from './Reservation';
 import { SurveyStackScreen } from './Survey';
 import { ProfileStackScreen } from 'screens/profileStack';
+import { AuthStackScreen } from './Auth/AuthStackScreen';
 
 export const HomeStack = createStackNavigator();
 
@@ -46,7 +47,11 @@ export const HomeStackScreen = (props: any) => {
     props.navigation.setOptions({
         ...options
     })
-
+    const loginAction = () => {
+        props.navigation.dispatch(
+            StackActions.replace(screens.home)
+        )
+    }
     return (
         <HomeStack.Navigator
             headerMode="screen"
@@ -186,7 +191,7 @@ export class DrawerApp extends React.PureComponent<any, any>{
 
     loginAction = () => {
         this.props.navigation.dispatch(
-            StackActions.replace(screens.home)
+            StackActions.replace(screens.homeTabs)
         )
     }
 
@@ -197,8 +202,6 @@ export class DrawerApp extends React.PureComponent<any, any>{
         );
     }
 }
-
-
 
 export const DrawerContent = (props: DrawerState) => {
     const {
@@ -211,10 +214,6 @@ export const DrawerContent = (props: DrawerState) => {
         isAuthenticated
     } = props
 
-    const loginAction = () => {
-        const resetAction = StackActions.popToTop();
-        props.navigation.dispatch(resetAction);
-    }
     return (
         <Drawer.Navigator
             drawerType="front"
@@ -228,7 +227,7 @@ export const DrawerContent = (props: DrawerState) => {
             <Drawer.Screen options={{
                 drawerLabel: 'Menü',
                 drawerIcon: ({ }) => <Menu size={20} color={theme.colors.white} />
-            }} name={screens.home} component={HomeTabs} />
+            }} name={screens.homeTabs} component={HomeTabs} />
             {USE_CAMPAIGN_MODULE && (
                 <Drawer.Screen
                     options={{
@@ -283,8 +282,10 @@ export const DrawerContent = (props: DrawerState) => {
                 <Drawer.Screen
                     options={{
                         title: 'Hesabım',
-                        drawerIcon: ({ }) => <User size={20} color={theme.colors.white} />
+                        drawerIcon: ({ }) => <User size={20} color={theme.colors.white} />,
+
                     }}
+
                     name={screens.profileNavigation}
                     component={ProfileStackScreen}
                 />
@@ -292,7 +293,7 @@ export const DrawerContent = (props: DrawerState) => {
             {USE_GUEST_MODULE && !isAuthenticated && (
                 <Drawer.Screen
                     name={screens.loginGuest}
-                    component={LoginGuestScreen}
+                    component={AuthStackScreen}
                     initialParams={{
                         action: props.loginAction
                     }}
