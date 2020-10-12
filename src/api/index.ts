@@ -473,7 +473,19 @@ export const dataManager = {
             ],
             action: 'public'
         })
-    }
+    },
+    loadMyBonusAsync: async function () {
+        let user = await userManager.get();
+        return await QueryableIO<IProc>({
+            model: 'MPOS_GUEST_BONUS_GET',
+            parameters: [
+                { key: "STOREID", value: user?.STOREID },
+                { key: "USERID", value: user?.ID }
+            ],
+            action: 'public'
+        })
+    },
+
 }
 
 async function errorPromise(message: string) {

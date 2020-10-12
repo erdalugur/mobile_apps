@@ -10,8 +10,6 @@ interface Props {
 }
 
 export function BonusCircle(props: Props) {
-    if (!props.bonus) return null
-
     return (
         <AnimatedCircularProgress
             size={120}
@@ -21,7 +19,7 @@ export function BonusCircle(props: Props) {
             tintColor={theme.colors.text}
             backgroundColor={theme.colors.border}
         >
-            {fill => <Text style={styles.points}>{`${props.bonus}/100`}</Text>}
+            {fill => <Text style={styles.points}>{`${props.bonus}/${props.limit}`}</Text>}
         </AnimatedCircularProgress>
     )
 }

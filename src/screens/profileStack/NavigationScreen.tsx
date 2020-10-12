@@ -4,13 +4,16 @@ import { Text, View, MenuItem, Layout, Button, MyCode, BonusCircle } from 'compo
 import { IAction, actionTypes } from 'myRedux/types';
 import { AuthContextProps, NavigationProps } from 'types';
 import { screens } from 'navigation';
-import { userManager } from 'utils';
+import { configurationManager, userManager } from 'utils';
 import { ArrowRight, QRCode } from 'icons';
 import theme from 'theme';
+import { dataManager } from 'api';
 
 interface State {
     loading: boolean
     userId: string
+    bonus: number
+    storeBonus: number
 }
 
 interface Props extends NavigationProps<{}, any>, AuthContextProps {
@@ -21,12 +24,26 @@ export class SettingNavigationScreen extends React.PureComponent<Props, State> {
 
     state: State = {
         userId: '',
-        loading: false
+        loading: false,
+        bonus: 0,
+        storeBonus: 15
     }
 
     componentDidMount = async () => {
+        this.loadBonusAsync();
+    }
+
+    loadBonusAsync = async () => {
         let user = await userManager.get();
-        this.setState({ userId: user?.ID || '' })
+        let store = await configurationManager.getPlace();
+        let result = await dataManager.loadMyBonusAsync();
+        if (result.statusCode === 200 && result.data) {
+            this.setState({
+                bonus: result.data[0].BONUS,
+                userId: user?.ID || '',
+                storeBonus: store?.MIN_BONUS_LIMIT || 15
+            })
+        }
     }
 
     renderMenuItem = () => {
@@ -60,7 +77,9 @@ export class SettingNavigationScreen extends React.PureComponent<Props, State> {
             return (
                 <View style={{ flexDirection: 'row' }}>
                     <View style={{ padding: 20, justifyContent: 'center', alignItems: 'center', width: '50%' }}>
-                        <BonusCircle bonus={14} limit={100} />
+                        <BonusCircle
+                            bonus={this.state.bonus}
+                            limit={this.state.storeBonus} />
                     </View>
                     <View style={{ padding: 20, justifyContent: 'flex-end', width: '50%' }}>
                         <TouchableOpacity style={[styles.button]} onPress={() => this.props.navigation.navigate(screens.myCodeScreen)}>

@@ -85,6 +85,7 @@ export interface PlaceModel {
     USE_ACTIVITY_MODULE: boolean,
     USE_RESERVATION_MODULE: boolean
     MIN_PRICE_FOR_PACKAGE_ORDER: number
+    MIN_BONUS_LIMIT: number
 }
 
 export interface DomainSettingModel extends PlaceModel { }
