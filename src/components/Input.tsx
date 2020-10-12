@@ -153,7 +153,6 @@ export class DateInput extends React.PureComponent<DateInputProps, DateInputStat
         this.props.onChange(`${this.state.year}-${this.state.month}-${value}`)
     }
     componentDidMount = () => {
-        debugger
         this.props.onChange(`${this.state.year}-${this.state.month}-${this.state.day}`)
     }
     render() {
@@ -231,7 +230,6 @@ export class TimeInput extends React.PureComponent<TimeInputProps, TimeInputStat
     }
 
     componentDidMount = () => {
-        debugger
         this.props.onChange(`${this.state.hour}:${this.state.minute}`)
     }
     render() {
