@@ -76,16 +76,15 @@ export class ContactRequestForm extends React.PureComponent<Props, State> {
                 <FormRow
                     label="Tarih"
                     errorMessage={this.state.error['REQUEST_DATE']}>
-                    <Input
+                    {/* <Input
                         placeholder="dd.mm.yyyy"
                         value={this.state.REQUEST_DATE}
-                        onChangeText={REQUEST_DATE => this.onDateChange(REQUEST_DATE)} />
+                        onChangeText={REQUEST_DATE => this.onDateChange(REQUEST_DATE)} /> */}
 
                     <DateInput
+                        minYear={0}
                         value={this.state.REQUEST_DATE}
-                        onChange={e => {
-                            debugger
-                        }} />
+                        onChange={this.onDateChange} />
                 </FormRow>
                 <FormRow label="Saat" errorMessage={this.state.error['REQUEST_TIME']}>
                     <Input
