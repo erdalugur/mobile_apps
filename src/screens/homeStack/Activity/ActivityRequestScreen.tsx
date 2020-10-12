@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, ContactRequestForm, Input, Layout, Text, View, FormRow } from 'components'
+import { Button, ContactRequestForm, Input, Layout, Text, View, FormRow, PhoneInput } from 'components'
 import { StyleSheet, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
 import theme from 'theme'
 import { messageBox, validationManager } from 'utils'
@@ -79,10 +79,15 @@ export class ActivityRequestScreen extends React.PureComponent<Props, State> {
                             onChangeText={LAST_NAME => this.setState({ LAST_NAME })} />
                     </FormRow>
                     <FormRow errorMessage={this.state.error['PHONE']} label="Telefon">
-                        <Input
+                        {/* <Input
                             placeholder="Telefon"
                             value={this.state.PHONE}
-                            onChangeText={PHONE => this.setState({ PHONE })} />
+                            onChangeText={PHONE => this.setState({ PHONE })} /> */}
+                        <PhoneInput
+                            placeholder="Telefon"
+                            value={this.state.PHONE}
+                            onChange={e => this.setState({ PHONE: e.target.value })}
+                        />
                     </FormRow>
                     <FormRow errorMessage={this.state.error['PAX']} label="Kişi Sayısı">
                         <Input

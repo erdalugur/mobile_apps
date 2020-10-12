@@ -189,3 +189,7 @@ export const validationManager = {
 export function daysInMonth(month: number, year: number) {
     return new Date(year, month, 0).getDate();
 }
+
+export const withZero = (value: number) => {
+    return value < 10 ? `0${value}` : value.toString()
+}

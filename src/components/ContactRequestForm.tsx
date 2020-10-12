@@ -5,7 +5,7 @@ import theme from 'theme'
 import { ContactRequestProps } from 'types'
 import { FormRow } from './FormRow'
 import { validationManager } from 'utils'
-import { PhoneInput, DateInput } from './Input'
+import { PhoneInput, DateInput, TimeInput } from './Input'
 const { height } = Dimensions.get('window')
 interface State extends ContactRequestProps {
     error: { [key: string]: string }
@@ -43,7 +43,7 @@ export class ContactRequestForm extends React.PureComponent<Props, State> {
         if (Object.keys(error).length > 0) {
             return
         }
-        PHONE = `0${validationManager.makePhone(PHONE)}`
+        PHONE = validationManager.makePhone(PHONE)
         this.props.submit({
             ...this.state, PHONE
         })
@@ -87,10 +87,15 @@ export class ContactRequestForm extends React.PureComponent<Props, State> {
                         onChange={this.onDateChange} />
                 </FormRow>
                 <FormRow label="Saat" errorMessage={this.state.error['REQUEST_TIME']}>
-                    <Input
+                    {/* <Input
                         placeholder="mm:hh"
                         value={this.state.REQUEST_TIME}
-                        onChangeText={REQUEST_TIME => this.setState({ REQUEST_TIME })} />
+                        onChangeText={REQUEST_TIME => this.setState({ REQUEST_TIME })} /> */}
+                    <TimeInput
+                        value={""}
+                        onChange={(REQUEST_TIME) => this.setState({ REQUEST_TIME })}
+                    />
+
                 </FormRow>
                 <FormRow label="Ad" errorMessage={this.state.error['FIRST_NAME']}>
                     <Input

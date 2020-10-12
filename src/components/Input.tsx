@@ -3,7 +3,7 @@ import { TextInput, TextInputProps, StyleSheet, Platform, View, Picker, Touchabl
 import theme from 'theme';
 import InputMasked, { MaskedInputProps } from 'react-text-mask'
 import { EyeOff, EyeOn } from 'icons';
-import { daysInMonth } from 'utils';
+import { daysInMonth, withZero } from 'utils';
 
 interface Props extends TextInputProps {
 
@@ -103,15 +103,11 @@ export class DateInput extends React.PureComponent<DateInputProps, DateInputStat
         this.state = {
             year: date.getFullYear().toString(),
             day: "01",
-            month: this.withZero(date.getMonth()),
+            month: withZero(date.getMonth()),
             yearOptons: this.getYearRange(),
             dayOptions: this.getDayRange(date.getFullYear().toString(), date.getMonth().toString()),
             monthOptions: this.getMonthRange()
         }
-    }
-
-    withZero = (value: number) => {
-        return value < 10 ? `0${value}` : value.toString()
     }
     getYearRange = () => {
         let date = new Date()
@@ -119,7 +115,7 @@ export class DateInput extends React.PureComponent<DateInputProps, DateInputStat
         let minYear = date.getFullYear() - (this.props.minYear !== undefined ? this.props.minYear : 100)
         let range: string[] = []
         for (let index = minYear; index < maxYear; index++) {
-            range.push(this.withZero(index))
+            range.push(withZero(index))
         }
         return range
     }
@@ -127,7 +123,7 @@ export class DateInput extends React.PureComponent<DateInputProps, DateInputStat
         let maxDay = daysInMonth(parseInt(month), parseInt(year))
         let range: string[] = []
         for (let index = 1; index <= maxDay; index++) {
-            range.push(this.withZero(index))
+            range.push(withZero(index))
         }
         return range
     }
@@ -155,6 +151,10 @@ export class DateInput extends React.PureComponent<DateInputProps, DateInputStat
     dayChange = (value: string) => {
         this.setState({ day: value })
         this.props.onChange(`${this.state.year}-${this.state.month}-${value}`)
+    }
+    componentDidMount = () => {
+        debugger
+        this.props.onChange(`${this.state.year}-${this.state.month}-${this.state.day}`)
     }
     render() {
         const { dayOptions, monthOptions, yearOptons, day, year, month } = this.state
@@ -188,6 +188,78 @@ export class DateInput extends React.PureComponent<DateInputProps, DateInputStat
     }
 }
 
+interface TimeInputProps {
+    value: string
+    onChange: (value: string) => void
+}
+
+interface TimeInputState {
+    hour: string
+    minute: string
+}
+
+export class TimeInput extends React.PureComponent<TimeInputProps, TimeInputState>{
+    constructor(props: TimeInputProps) {
+        super(props);
+        let date = new Date()
+        this.state = {
+            hour: withZero(date.getHours()),
+            minute: withZero(date.getMinutes())
+        }
+    }
+
+    handleChange = (value: string) => {
+        this.setState({
+            hour: value
+        })
+        this.props.onChange(`${value}:${this.state.minute}`)
+    }
+
+    minuteChange = (value: string) => {
+        this.setState({
+            minute: value
+        })
+        this.props.onChange(`${this.state.hour}:${value}`)
+    }
+
+    hours = () => {
+        return ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"]
+    }
+
+    minutes = () => {
+        return ["00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59"]
+    }
+
+    componentDidMount = () => {
+        debugger
+        this.props.onChange(`${this.state.hour}:${this.state.minute}`)
+    }
+    render() {
+        const { minute, hour } = this.state
+        const dateInputStyle = {
+            background: 'none',
+            border: 0,
+            color: '#e5e5e7',
+            width: 'auto',
+            padding: 7,
+        }
+        return (
+            <View style={{ flexDirection: 'row', maxWidth: 250 }}>
+                <Picker style={[dateInputStyle]} selectedValue={hour} onValueChange={this.handleChange}>
+                    {this.hours().map((x, i) => (
+                        <Picker.Item value={x} key={i} label={x} />
+                    ))}
+                </Picker>
+                <Picker style={[dateInputStyle]} selectedValue={minute} onValueChange={this.minuteChange}>
+                    {this.minutes().map((x, i) => (
+                        <Picker.Item value={x} key={i} label={x} />
+                    ))}
+                </Picker>
+            </View>
+
+        )
+    }
+}
 interface PasswordState {
     visible: boolean
 }
