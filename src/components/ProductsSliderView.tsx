@@ -9,7 +9,7 @@ import { Dispatch } from 'redux'
 import { IAction } from 'myRedux/types';
 import { screens } from 'navigation';
 
-const { width, height } = Dimensions.get("screen")
+const { width, height } = Dimensions.get('window')
 interface ItemProps {
     ID: number
     IMAGE_URL: string

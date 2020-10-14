@@ -7,7 +7,7 @@ import theme from 'theme';
 import { applicationManager } from 'utils';
 import { DiscoutnComponent } from './DiscountComponent';
 
-const { width, height } = Dimensions.get('screen')
+const { width, height } = Dimensions.get('window')
 
 interface Props {
 

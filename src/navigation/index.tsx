@@ -88,7 +88,7 @@ export default function ({ navigation }: any) {
         let user = await userManager.get();
         let domain = Platform.OS === 'web' && applicationManager.domain() || "";
         return {
-            storeId: user?.STOREID || "1",
+            storeId: user?.STOREID || "0",
             domain: domain,
             token: user?.token || ""
         }

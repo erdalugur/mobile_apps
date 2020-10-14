@@ -12,7 +12,7 @@ import { screens } from 'navigation'
 import { messageBox, messages } from 'utils'
 import { AddToCart } from './AddToCart'
 
-const { width } = Dimensions.get('screen')
+const { width } = Dimensions.get('window')
 interface State {
 
 }
